@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-zinc-950 text-zinc-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Matrix</title>
+    <!-- Simple, reliable Tailwind build via unpkg -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+</head>
+<body class="h-full font-sans antialiased">
+    <nav class="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-md">
+        <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <div class="flex h-14 items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <span class="text-xl font-bold tracking-tight text-white bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">§ Matrix</span>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="/" class="text-sm font-medium text-zinc-300 hover:text-white transition">Inventory</a>
+                    <a href="/admin" target="_blank" class="text-sm font-medium text-zinc-400 hover:text-zinc-200 transition">SQLAdmin →</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
