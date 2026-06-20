@@ -30,7 +30,32 @@ quest_crud = FastCRUD(Quest)
 PAGE_SIZE = 5
 
 @app.get("/")
+async def index(request: Request, db: AsyncSession = Depends(get_db)):
+  
+    # FIX: Pass 'request' as the FIRST argument, template name SECOND, and context dictionary
+    return templates.TemplateResponse(
+        request,
+        "index.html",
+        {
+            
+        }
+    )
+
+@app.get("/quests")
+async def quests(request: Request, db: AsyncSession = Depends(get_db)):
+  
+    # FIX: Pass 'request' as the FIRST argument, template name SECOND, and context dictionary
+    return templates.TemplateResponse(
+        request,
+        "quests.html",
+        {
+            
+        }
+    )
+
+@app.get("/quest_inventory")
 async def list_quests(request: Request, page: int = 1, db: AsyncSession = Depends(get_db)):
+  
     offset = (page - 1) * PAGE_SIZE
     
     crud_data = await quest_crud.get_multi(db=db, offset=offset, limit=PAGE_SIZE + 1)
@@ -42,7 +67,7 @@ async def list_quests(request: Request, page: int = 1, db: AsyncSession = Depend
     # FIX: Pass 'request' as the FIRST argument, template name SECOND, and context dictionary
     return templates.TemplateResponse(
         request,
-        "index.html",
+        "list_quest.html",
         {
             "quests": display_quests, 
             "page": page, 
@@ -67,7 +92,7 @@ async def create_quest(
 ):
     schema_data = QuestCreate(name=name, description=description, is_active=is_active)
     await quest_crud.create(db=db, object=schema_data)
-    return RedirectResponse(url="/", status_code=303)
+    return RedirectResponse(url="/quest_inventory", status_code=303)
 
 @app.get("/quests/{quest_id}/edit")
 async def edit_quest_form(request: Request, quest_id: int, db: AsyncSession = Depends(get_db)):
@@ -87,9 +112,9 @@ async def update_product(
 ):
     schema_data = QuestUpdate(name=name, description=description, is_active=is_active)
     await quest_crud.update(db=db, object=schema_data, id=quest_id)
-    return RedirectResponse(url="/", status_code=303)
+    return RedirectResponse(url="/quest_inventory", status_code=303)
 
 @app.post("/quests/{quest_id}/delete")
 async def delete_quest(quest_id: int, db: AsyncSession = Depends(get_db)):
     await quest_crud.delete(db=db, id=quest_id)
-    return RedirectResponse(url="/", status_code=303)
+    return RedirectResponse(url="/quest_inventory", status_code=303)
