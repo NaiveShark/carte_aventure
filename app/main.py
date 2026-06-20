@@ -31,36 +31,42 @@ PAGE_SIZE = 5
 
 @app.get("/")
 async def index(request: Request, db: AsyncSession = Depends(get_db)):
-  
+
     # FIX: Pass 'request' as the FIRST argument, template name SECOND, and context dictionary
     return templates.TemplateResponse(
         request,
         "index.html",
         {
-            
+
         }
     )
 
 @app.get("/quests")
 async def quests(request: Request, db: AsyncSession = Depends(get_db)):
-  
+
+    crud_data = await quest_crud.get_multi(db=db )
+    quests_list = crud_data.get("data", [])
+
+    display_quests = quests_list
+
+
     # FIX: Pass 'request' as the FIRST argument, template name SECOND, and context dictionary
     return templates.TemplateResponse(
         request,
         "quests.html",
         {
-            
+            "quests": display_quests,
         }
     )
 
 @app.get("/quest_inventory")
 async def list_quests(request: Request, page: int = 1, db: AsyncSession = Depends(get_db)):
-  
+
     offset = (page - 1) * PAGE_SIZE
-    
+
     crud_data = await quest_crud.get_multi(db=db, offset=offset, limit=PAGE_SIZE + 1)
     quests_list = crud_data.get("data", [])
-    
+
     has_next = len(quests_list) > PAGE_SIZE
     display_quests = quests_list[:PAGE_SIZE]
 
@@ -69,8 +75,8 @@ async def list_quests(request: Request, page: int = 1, db: AsyncSession = Depend
         request,
         "list_quest.html",
         {
-            "quests": display_quests, 
-            "page": page, 
+            "quests": display_quests,
+            "page": page,
             "has_next": has_next
         }
     )
@@ -80,14 +86,14 @@ async def new_quest_form(request: Request):
     # FIX: Pass 'request' as the FIRST argument
     return templates.TemplateResponse(
         request,
-        "edit_quest.html", 
+        "edit_quest.html",
         {"quest": None}
     )
 
 @app.post("/quests/new")
 async def create_quest(
-    name: str = Form(...), description: str = Form(None), 
-    #price: float = Form(...), 
+    name: str = Form(...), description: str = Form(None),
+    #price: float = Form(...),
     is_active: bool = Form(False), db: AsyncSession = Depends(get_db)
 ):
     schema_data = QuestCreate(name=name, description=description, is_active=is_active)
@@ -100,14 +106,14 @@ async def edit_quest_form(request: Request, quest_id: int, db: AsyncSession = De
     # FIX: Pass 'request' as the FIRST argument
     return templates.TemplateResponse(
         request,
-        "edit_quest.html", 
+        "edit_quest.html",
         {"quest": quest}
     )
 
 @app.post("/quests/{quest_id}/edit")
 async def update_product(
-    quest_id: int, name: str = Form(...), description: str = Form(None), 
-    #price: float = Form(...), 
+    quest_id: int, name: str = Form(...), description: str = Form(None),
+    #price: float = Form(...),
     is_active: bool = Form(False), db: AsyncSession = Depends(get_db)
 ):
     schema_data = QuestUpdate(name=name, description=description, is_active=is_active)

@@ -8,5 +8,30 @@
     
 </div>
 
+<div class="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/30 backdrop-blur-sm">
+    <table class="w-full text-left border-collapse">
+        <thead>
+            <tr class="border-b border-zinc-800 bg-zinc-900/50 text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                <th class="p-4">Item ID</th>
+                <th class="p-4">Details</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-zinc-800/60 text-sm">
+            {% for quest in quests %}
+            <tr class="hover:bg-zinc-900/40 transition">
+                <td class="p-4 font-mono text-zinc-500">#{{ quest['id'] }}</td>
+                <td class="p-4">
+                    <div class="font-medium text-zinc-200">{{ quest['name'] }}</div>
+                    <div class="text-xs text-zinc-500 mt-0.5">{{ quest['description'] or 'No description defined.' }}</div>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="p-12 text-center text-sm text-zinc-500">No registered objects inside database layer.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}
