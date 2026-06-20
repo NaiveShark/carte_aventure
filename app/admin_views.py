@@ -1,5 +1,5 @@
 from sqladmin import ModelView
-from app.models import User, Product
+from app.models import User, Quest
 
 class UserAdmin(ModelView, model=User):
     column_list = [User.id, User.username, User.email, User.is_active]
@@ -8,11 +8,11 @@ class UserAdmin(ModelView, model=User):
     form_columns = [User.username, User.email, User.is_active]
     icon = "fa-solid fa-user"
 
-class ProductAdmin(ModelView, model=Product):
-    column_list = [Product.id, Product.name, Product.price, Product.in_stock]
-    column_searchable_list = [Product.name]
-    column_sortable_list = [Product.id, Product.price]
-    form_columns = [Product.name, Product.description, Product.price, Product.in_stock]
+class QuestAdmin(ModelView, model=Quest):
+    column_list = [Quest.id, Quest.name, Quest.is_active]
+    column_searchable_list = [Quest.name]
+    column_sortable_list = [Quest.id]
+    form_columns = [Quest.name, Quest.description, Quest.is_active]
     icon = "fa-solid fa-box"
     
     

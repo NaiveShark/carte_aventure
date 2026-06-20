@@ -1,20 +1,18 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 
-class ProductBase(BaseModel):
+class QuestBase(BaseModel):
     name: str = Field(..., min_length=1)
     description: Optional[str] = None
-    price: float = Field(..., ge=0.0)
-    in_stock: bool = True
+    is_active: bool = True
 
-class ProductCreate(ProductBase):
+class QuestCreate(QuestBase):
     pass
 
-class ProductUpdate(ProductBase):
+class QuestUpdate(QuestBase):
     name: Optional[str] = None
-    price: Optional[float] = None
-
-class ProductResponse(ProductBase):
+    
+class QuestResponse(QuestBase):
     id: int
 
     class Config:

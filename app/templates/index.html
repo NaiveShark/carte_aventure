@@ -6,7 +6,7 @@
         <p class="mt-1 text-sm text-zinc-400">Manage internal product assets and pricing layers.</p>
     </div>
     <div class="mt-4 sm:mt-0">
-        <a href="/products/new" class="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-emerald-400 transition shadow-lg shadow-emerald-500/10">+ Add Product</a>
+        <a href="/quests/new" class="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-emerald-400 transition shadow-lg shadow-emerald-500/10">+ Add Product</a>
     </div>
 </div>
 
@@ -16,30 +16,29 @@
             <tr class="border-b border-zinc-800 bg-zinc-900/50 text-xs font-semibold tracking-wider text-zinc-400 uppercase">
                 <th class="p-4">Item ID</th>
                 <th class="p-4">Details</th>
-                <th class="p-4">Unit Price</th>
                 <th class="p-4">Availability</th>
                 <th class="p-4 text-right">Management</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-zinc-800/60 text-sm">
-            {% for product in products %}
+            {% for quest in quests %}
             <tr class="hover:bg-zinc-900/40 transition">
-                <td class="p-4 font-mono text-zinc-500">#{{ product['id'] }}</td>
+                <td class="p-4 font-mono text-zinc-500">#{{ quest['id'] }}</td>
                 <td class="p-4">
-                    <div class="font-medium text-zinc-200">{{ product['name'] }}</div>
-                    <div class="text-xs text-zinc-500 mt-0.5">{{ product['description'] or 'No description defined.' }}</div>
+                    <div class="font-medium text-zinc-200">{{ quest['name'] }}</div>
+                    <div class="text-xs text-zinc-500 mt-0.5">{{ quest['description'] or 'No description defined.' }}</div>
                 </td>
-                <td class="p-4 font-medium text-emerald-400">${{ "%.2f"|format(product['price']) }}</td>
+
                 <td class="p-4">
-                    {% if product['in_stock'] %}
+                    {% if quest['is_active'] %}
                     <span class="inline-flex items-center rounded-md bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-400 ring-1 ring-inset ring-emerald-500/20">Active Stock</span>
                     {% else %}
                     <span class="inline-flex items-center rounded-md bg-zinc-500/10 px-2 py-1 text-xs font-medium text-zinc-400 ring-1 ring-inset ring-zinc-500/20">Depleted</span>
                     {% endif %}
                 </td>
                 <td class="p-4 text-right space-x-3">
-                    <a href="/products/{{ product['id'] }}/edit" class="text-zinc-400 hover:text-amber-400 transition font-medium">Modify</a>
-                    <form action="/products/{{ product['id'] }}/delete" method="POST" class="inline" onsubmit="return confirm('Purge this record completely?');">
+                    <a href="/quests/{{ quest['id'] }}/edit" class="text-zinc-400 hover:text-amber-400 transition font-medium">Modify</a>
+                    <form action="/quests/{{ quest['id'] }}/delete" method="POST" class="inline" onsubmit="return confirm('Purge this record completely?');">
                         <button type="submit" class="text-zinc-600 hover:text-rose-400 transition font-medium bg-transparent border-0 p-0 cursor-pointer">Purge</button>
                     </form>
                 </td>
