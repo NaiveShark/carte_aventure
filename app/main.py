@@ -9,7 +9,7 @@ from sqladmin import Admin
 from app.config import engine, Base, get_db
 from app.models import Quest
 from app.schemas import QuestCreate, QuestUpdate
-from app.admin_views import QuestAdmin
+from app.admin_views import QuestAdmin, QuestionAdmin, AnswerVarAdmin, QuestQuestionAdmin
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -22,6 +22,9 @@ templates = Jinja2Templates(directory="app/templates")
 
 admin = Admin(app, engine, title="Admin Portal")
 admin.add_view(QuestAdmin)
+admin.add_view(QuestionAdmin)
+admin.add_view(AnswerVarAdmin)
+admin.add_view(QuestQuestionAdmin)
 
 quest_crud = FastCRUD(Quest)
 PAGE_SIZE = 5
