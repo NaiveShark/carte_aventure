@@ -16,13 +16,13 @@ CONST_QUESTS = [
  ]
 
 async def pop_data( DB : AsyncSession ):
-            
+
     check_query = select(Quest)
     result = await DB.execute(check_query)
     if result.scalars().first():
         return 0
-    
-   
+
+
     for сq_d in CONST_QUESTS:
         quest = Quest( name = сq_d["name"], description = сq_d["description"], is_active = True  )
         DB.add( quest )
@@ -32,8 +32,7 @@ async def pop_data( DB : AsyncSession ):
             DB.add( q )
             await DB.commit()
             if qd.get("answers"):
-                print( qd["answers"] )
-                
+
                 a = AnswerVar( answer_title = qd["answers"][0], question_id = q.id, right_message = qd["answers"][1], is_true_answer = qd["answers"][2], wrong_message = qd["answers"][3] )
                 DB.add( a )
                 await DB.commit()

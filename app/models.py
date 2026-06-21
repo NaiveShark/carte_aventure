@@ -4,7 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 # Auth and user tables
 from passlib.hash import pbkdf2_sha256
-from sqlalchemy import Boolean, Column, Integer, String, select
+from sqlalchemy import Boolean, Column, Integer, String, DateTime, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
 from starlette.requests import Request
@@ -78,7 +78,7 @@ class User(Base, UserMixin):
 # Data tables
 
 class Quest(Base):
-    __tablename__ = "quest"
+    #__tablename__ = "quest"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True, nullable=False)
@@ -86,25 +86,15 @@ class Quest(Base):
     is_active = Column(Boolean, default=True)
 
 class Question(Base):
-    __tablename__ = "question"
+    #__tablename__ = "question"
 
     id = Column(Integer, primary_key=True, index=True)
     question_description = Column(String, nullable=True)
     quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=False )
     quest = relationship( "Quest" )
     
-    @property
-    async def get_answers( cls ):
-        db = request.state.db
-        query = select(AnswerVar).where(AnswerVar.question_id == self.id)
-        result = await db.execute(query)
-        if result is None:
-            return None
-        else:
-            return result.scalars().all()
-
 class AnswerVar(Base):
-    __tablename__ = "answervar"
+    #__tablename__ = "answervar"
     id = Column(Integer, primary_key=True, index=True)
     answer_title = Column(String, nullable=True)
 
@@ -114,3 +104,20 @@ class AnswerVar(Base):
     right_message = Column(String, nullable=True)
     is_true_answer = Column(Boolean, default=True)
     wrong_message = Column(String, nullable=True)
+
+# quest played by player
+class Player_Quest(Base):
+    #__tablename__ = "question"
+
+    id = Column(Integer, primary_key=True, index=True)
+    
+    quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=False )
+    quest = relationship( "Quest" )
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False )
+    user = relationship( "User" )
+    
+    quest_began = Column( DateTime )
+    quest_end = Column( DateTime(timezone=True) )
+    
+#

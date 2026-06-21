@@ -19,7 +19,7 @@ from starlette_login.middleware import AuthenticationMiddleware
 
 from .admin_views import UserAdmin, QuestAdmin, QuestionAdmin, AnswerVarAdmin
 from .models import Base, User
-from .view import login_page, logout_page, home_page, quests_page, view_quest
+from .view import login_page, logout_page, home_page, quests_page, view_quest, play_quest
 from .pop import pop_data
 
 
@@ -53,6 +53,7 @@ app = FastAPI(
         Route('/', home_page, name='home'),
         Route('/quests', quests_page, name='quests_page'),
         Route("/view/quest/{quest_id}", view_quest, name='view_quest'),
+        Route("/quest/play_it/{quest_id}", play_quest, name='play_quest'),
         Route('/login', login_page, methods=['GET', 'POST'], name='login'),
         Route('/logout', logout_page, name='logout'),
     ]

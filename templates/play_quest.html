@@ -13,16 +13,14 @@
 {% for q in questions %}
 <li>{{q.question_description}} 
 
-{{q.get_answers}}
-{% if q.get_answers %}
-
-
-
-{% endif %}
 
 </li>
 {% endfor %}
-<ol>
+</ol>
+
+<form action="/quest/play_it/{{quest.id}}/" method="get">
+  <button type="submit">Play it!</button>
+</form>
 
 {% else %}
 You should login to play.

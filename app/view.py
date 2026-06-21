@@ -6,14 +6,15 @@ from starlette.responses import (
 )
 from starlette_login.decorator import login_required
 from starlette_login.utils import login_user, logout_user
+from datetime import datetime    
 
-from .models import User, Quest, Question
+from .models import User, Quest, Question, Player_Quest
 
 from starlette.templating import Jinja2Templates
 from starlette_login.login_manager import LoginManager
 
 from sqlalchemy import select
-#, delete 
+#, delete
 
 login_manager = LoginManager(redirect_to='login', secret_key='no_secret_here')
 template = Jinja2Templates(directory='templates' )
@@ -79,7 +80,7 @@ async def home_page(request: Request):
 async def quests_page(request: Request):
     # main.LocalDBSession
     db = request.state.db
-    
+
     query = select(Quest).where(Quest.is_active == True )
     result = await db.execute(query)
     if result is None:
@@ -90,13 +91,12 @@ async def quests_page(request: Request):
                  request,
                 'quests.html', context={ 'quests' : quests, }
             )
-            
 
 @login_required
 async def view_quest(request: Request):
     # main.LocalDBSession
     db = request.state.db
-    
+
     quest_id = request.path_params['quest_id']
     quest = await db.get(Quest, quest_id )
 
@@ -110,5 +110,37 @@ async def view_quest(request: Request):
                  request,
                 'play_quest.html', context={ 'quest' : quest, "questions" : questions.scalars().all() }
             )
-           
- 
+
+@login_required
+async def play_quest(request: Request):
+    # main.LocalDBSession
+    db = request.state.db
+
+    user = request.user
+
+    quest_id = request.path_params['quest_id']
+    quest = await db.get(Quest, quest_id )
+
+    questions_q = select(Question).where( Question.quest_id == quest_id )
+    questions = await db.execute( questions_q )
+
+    # check - may be quest is already played by user
+    pq_query = select(Player_Quest).where(Player_Quest.quest_id == quest_id, Player_Quest.user_id == user.id )
+    pq_e = await db.execute(pq_query)
+    pq = pq_e.scalar_one_or_none()
+    if pq:
+        print( 'ready' )
+    else:
+        pq = Player_Quest( quest_id = quest_id, user_id = user.id, quest_began = datetime.now() )
+        db.add( pq )
+        await db.commit()
+        print( 'new' )
+    
+    if quest is None:
+        return None
+    else:
+        return template.TemplateResponse(
+                 request,
+                'play_quest.html', context={ 'quest' : quest, "questions" : questions.scalars().all() }
+            )
+
