@@ -8,8 +8,14 @@ CONST_QUESTS = [
     { "name" : "Do you know the planets?",
       "description" : "Do you know the planets of Solar system?",
       "questions" : [
-          { "question_description" : "Earth", "answers" : [ "Is it a planet?", "Yes", True, "No" ] },
-          { "question_description" : "Moon", "answers" : [ "Is it a natural satellite?", "Yes", True, "No" ] } ]
+          { "question_description" : "Which planet from the Sun is Earth?", 
+            "answers" : [ 
+              [ "(2) Second", None, False, "No, second planet is a Venus." ], 
+              [ "(3) Third", "Yes", True, None ], 
+              [ "(4) Fourth", None, False, "No, fourth planet is a Mars." ], 
+               
+              ] },
+          { "question_description" : "Moon", "answers" : [ [ "Is it a natural satellite?", "Yes", True, "No" ] ] } ]
       },
 
     { "name" : "Do you know the Roman Empire?", "description" : "Do you know the history of ancient Roman Empire?", "questions" : [ { "question_description" : "Trajan" }, { "question_description" : "Marcus Aurelius" }, ] }
@@ -32,10 +38,10 @@ async def pop_data( DB : AsyncSession ):
             DB.add( q )
             await DB.commit()
             if qd.get("answers"):
-
-                a = AnswerVar( answer_title = qd["answers"][0], question_id = q.id, right_message = qd["answers"][1], is_true_answer = qd["answers"][2], wrong_message = qd["answers"][3] )
-                DB.add( a )
-                await DB.commit()
+                for answer in qd.get("answers"):
+                    a = AnswerVar( answer_title = answer[0], question_id = q.id, right_message = answer[1], is_true_answer = answer[2], wrong_message = answer[3] )
+                    DB.add( a )
+                    await DB.commit()
 
 
 #
