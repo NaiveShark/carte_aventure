@@ -90,3 +90,33 @@ async def quests_page(request: Request):
                  request,
                 'quests.html', context={ 'quests' : quests, }
             )
+            
+
+@login_required
+async def view_quest(request: Request):
+    # main.LocalDBSession
+    db = request.state.db
+    
+    quest_id = request.path_params['quest_id']
+    quest = await db.get(Quest, quest_id )
+
+#    fn = select(Node_Type_Product).where( Node_Type_Product.product_id == product_id, Node_Type_Product.out_flag == True )
+#    from_nodes = session.execute( fn ).scalars().all()
+
+#    tn = select(Node_Type_Product).where( Node_Type_Product.product_id == product_id, Node_Type_Product.out_flag == False )
+#    to_nodes = session.execute( tn ).scalars().all()
+
+    
+    
+    
+ #   query = select(Quest).where(Quest.is_active == True )
+ #   result = await db.execute(query)
+    if quest is None:
+        return None
+    else:
+        return template.TemplateResponse(
+                 request,
+                'play_quest.html', context={ 'quest' : quest, }
+            )
+           
+ 

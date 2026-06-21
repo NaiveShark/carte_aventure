@@ -19,7 +19,7 @@ from starlette_login.middleware import AuthenticationMiddleware
 
 from .admin_views import UserAdmin, QuestAdmin, QuestionAdmin, AnswerVarAdmin, QuestQuestionAdmin
 from .models import Base, User
-from .view import login_page, logout_page, home_page, quests_page
+from .view import login_page, logout_page, home_page, quests_page, view_quest
 
 
 SECRET_KEY = 'our_webapp_secret_key'
@@ -51,6 +51,7 @@ app = FastAPI(
     routes=[
         Route('/', home_page, name='home'),
         Route('/quests', quests_page, name='quests_page'),
+        Route("/view/quest/{quest_id}", view_quest, name='view_quest'),        
         Route('/login', login_page, methods=['GET', 'POST'], name='login'),
         Route('/logout', logout_page, name='logout'),
     ]
