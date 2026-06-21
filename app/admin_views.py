@@ -23,10 +23,10 @@ class QuestAdmin(ModelView, model=Quest):
     icon = "fa-solid fa-box"
 
 class QuestionAdmin(ModelView, model=Question):
-    column_list = [Question.id, Question.question_description]
-    column_searchable_list = [Question.question_description]
+    column_list = [Question.id, Question.question_title]
+    column_searchable_list = [Question.question_title]
     column_sortable_list = [Question.id]
-    form_columns = [Question.question_description]
+    form_columns = [Question.question_title]
     icon = "fa-solid fa-box"
 
 class AnswerVarAdmin(ModelView, model=AnswerVar):

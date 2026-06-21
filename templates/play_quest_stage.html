@@ -8,15 +8,43 @@
 {% if quest.description %}
 <p>{{quest.description}}</p>
 {% endif %}
+<p>You are playing this quest.</p>
 
 <ol>
 {% for q in questions %}
-<li>{{q.question_description}} 
-
-
-</li>
+{% if q.id == current_question_id|int %}
+<li>{{q.question_title}}</li>
+{% else %}
+<li><a href="?current_question_id={{q.id}}">{{q.question_title}}</a></li>
+{% endif %}
 {% endfor %}
 </ol>
+
+{% if answer_variants %}
+
+<form action="/quest/submit_form-qqa/{{player_quest_id}}/{{current_question_id}}" method="POST">
+  <p>Please select your answer:</p>
+
+{% for av in answer_variants %}
+
+  
+  <label>
+    <input type="radio" name="answer_var" value="{{av.id}}"    
+	
+	{% if loop.first %}checked{% endif %}
+	
+	> {{av.answer_title}}
+  </label><br>
+  
+
+
+{% endfor %}
+  <!-- Submit button to send the form data -->
+  <button type="submit">Submit Choice</button>
+</form>
+{% endif %}
+
+<p><a href="/view/quest/{{quest.id}}">Back to quest</a></p>
 
 
 {% else %}

@@ -58,7 +58,7 @@ class User(Base, UserMixin):
     @classmethod
     async def create_user(
         cls, db: AsyncSession,
-        username: str, password: str, 
+        username: str, password: str,
         is_admin: bool = False,
         is_editor: bool = False
     ):
@@ -85,10 +85,10 @@ class Quest(Base):
 
 class Question(Base):
     id = Column(Integer, primary_key=True, index=True)
-    question_description = Column(String, nullable=True)
+    question_title = Column(String, nullable=True)
     quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=False )
     quest = relationship( "Quest" )
-    
+
 class AnswerVar(Base):
     id = Column(Integer, primary_key=True, index=True)
     answer_title = Column(String, nullable=True)
@@ -97,20 +97,37 @@ class AnswerVar(Base):
     question = relationship( "Question" )
 
     right_message = Column(String, nullable=True)
-    is_true_answer = Column(Boolean, default=True)
+    is_true_answer = Column(Boolean, default=False, nullable=False )
     wrong_message = Column(String, nullable=True)
 
 # quest played by player
 class Player_Quest(Base):
     id = Column(Integer, primary_key=True, index=True)
-    
+
     quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=False )
     quest = relationship( "Quest" )
 
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False )
     user = relationship( "User" )
-    
-    quest_began = Column( DateTime )
+
+    quest_began = Column( DateTime, nullable=False )
     quest_end = Column( DateTime(timezone=True) )
+
+# quest played by player
+class Player_Quest_Answers(Base):
+    id = Column(Integer, primary_key=True, index=True)
+    player_quest_id: Mapped[int] = mapped_column(ForeignKey("player_quest.id"), nullable=False )
+    player_quest = relationship( "Player_Quest" )
+    answered_dt = Column( DateTime )
     
+    question_id: Mapped[int] = mapped_column(ForeignKey("question.id"), nullable=False )
+    question = relationship( "Question" )
+    
+    answervar_id: Mapped[int] = mapped_column(ForeignKey("answervar.id"), nullable=False )
+    answervar = relationship( "AnswerVar" )
+    
+    is_rigth_answer = Column(Boolean, nullable=False )
+    
+    
+
 #

@@ -15,7 +15,15 @@ CONST_QUESTS = [
               [ "(4) Fourth", None, False, "No, fourth planet is a Mars." ], 
                
               ] },
-          { "question_title" : "Moon", "answers" : [ [ "Is it a natural satellite?", "Yes", True, "No" ] ] } ]
+          { "question_title" : "Which planet is Titan a natural satellite of?", 
+            "answers" : [ 
+              [ "Mars", None, False, "No" ],
+              [ "Pluto", None, False, "No" ],
+              [ "Jupyter", None, False, "No" ],
+              [ "Saturn", "Yes", True, None ],
+              [ "Earth", None, False, "No" ],
+              ] } 
+              ]
       },
 
     { "name" : "Do you know the Roman Empire?", "description" : "Do you know the history of ancient Roman Empire?", "questions" : [ { "question_title" : "Trajan" }, { "question_title" : "Marcus Aurelius" }, ] }

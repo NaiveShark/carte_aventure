@@ -8,7 +8,7 @@ from starlette_login.decorator import login_required
 from starlette_login.utils import login_user, logout_user
 from datetime import datetime
 
-from .models import User, Quest, Question, Player_Quest
+from .models import User, Quest, Question, AnswerVar, Player_Quest
 
 from starlette.templating import Jinja2Templates
 from starlette_login.login_manager import LoginManager
@@ -134,8 +134,9 @@ async def play_quest(request: Request):
 
         return RedirectResponse(url='/quest/in_play_it/' + str( pq.id ) )
 
+# User in process of playing for this quest
 @login_required
-async def in_play_quest(request: Request):
+async def in_play_quest(request: Request ):
     # main.LocalDBSession
     db = request.state.db
 
@@ -144,23 +145,52 @@ async def in_play_quest(request: Request):
     player_quest_id = request.path_params['player_quest_id']
     player_quest = await db.get(Player_Quest, player_quest_id )
 
-
     if player_quest is None:
         return None
     else:
+        answer_variants = None
+        current_question_id = request.query_params.get("current_question_id", default=None)
+        
         quest_id = player_quest.quest_id
         quest = await db.get(Quest, quest_id )
         questions_q = select(Question).where( Question.quest_id == quest_id )
         questions = await db.execute( questions_q )
+        
+        if current_question_id:
+            av_query = select(AnswerVar).where( AnswerVar.question_id == current_question_id )
+            answer_await = await db.execute(av_query)
+            answer_variants = answer_await.scalars().all()
+            
 
         return template.TemplateResponse(
                  request,
                 'play_quest_stage.html', context={
-                'quest' : quest,
-                "questions" : questions.scalars().all()
+                    "quest" : quest,
+                    "player_quest_id" : player_quest_id,
+                    "questions" : questions.scalars().all(),
+                    "current_question_id" : current_question_id,
+                    "answer_variants" : answer_variants,
                 }
             )
 
+# user answered the question
+@login_required
+async def handle_qqa(request: Request ):
+    db = request.state.db
 
+    user = request.user
+
+    player_quest_id = request.path_params['player_quest_id']
+    player_quest = await db.get(Player_Quest, player_quest_id )
+    current_question_id = request.path_params['current_question_id']
+    print( player_quest_id )
+    print( current_question_id )
+
+    async with request.form() as form:
+        answer_var = form.get("answer_var")
+        print(answer_var)
+        
+        
+    return RedirectResponse(url='/quest/in_play_it/' + str( player_quest_id ) + '?current_question_id=' + str( current_question_id ), status_code=303 )
 
 #
