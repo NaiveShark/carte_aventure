@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block body %}
+<p>
+{% if request.user.is_authenticated %}
+
+<ul>
+{% for q in quests %}
+<li>{{q.name}} 
+{% if q.description %}
+{{q.description}}
+{% endif %}
+</li>
+{% endfor %}
+</ul>
+	
+{% else %}
+You should login to play.
+{% endif %}
+</p>
+{% endblock %}

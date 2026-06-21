@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block body %}
+<p>
+{% if request.user.is_authenticated %}
+You are logged in as {{ request.user.username }}.
+Go to <a href="/quests">Quests</a>.
+
+{% else %}
+You should login to play.
+{% endif %}
+</p>
+{% endblock %}

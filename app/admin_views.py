@@ -1,12 +1,19 @@
 from sqladmin import ModelView
-from app.models import User, Quest, Question, AnswerVar, QuestQuestion
+from .models import User, Quest, Question, AnswerVar, QuestQuestion
+from starlette.requests import Request
 
 class UserAdmin(ModelView, model=User):
-    column_list = [User.id, User.username, User.email, User.is_active]
-    column_searchable_list = [User.username, User.email]
-    column_sortable_list = [User.id]
-    form_columns = [User.username, User.email, User.is_active]
-    icon = "fa-solid fa-user"
+    column_list = [
+        User.id, User.username,
+        User.is_admin,
+        User.is_editor
+    ]
+    form_excluded_columns = [User.password]
+
+    def is_accessible(self, request: Request) -> bool:
+        """Restrict access only by admin"""
+        user = request.user
+        return user and user.is_authenticated and user.is_admin
 
 class QuestAdmin(ModelView, model=Quest):
     column_list = [Quest.id, Quest.name, Quest.is_active]
