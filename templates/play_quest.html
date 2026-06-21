@@ -6,8 +6,23 @@
 
 <h1>{{quest.name}}</h1>
 {% if quest.description %}
-{{quest.description}}
+<p>{{quest.description}}</p>
 {% endif %}
+
+<ol>
+{% for q in questions %}
+<li>{{q.question_description}} 
+
+{{q.get_answers}}
+{% if q.get_answers %}
+
+
+
+{% endif %}
+
+</li>
+{% endfor %}
+<ol>
 
 {% else %}
 You should login to play.

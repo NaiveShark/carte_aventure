@@ -1,5 +1,5 @@
 from sqladmin import ModelView
-from .models import User, Quest, Question, AnswerVar, QuestQuestion
+from .models import User, Quest, Question, AnswerVar
 from starlette.requests import Request
 
 class UserAdmin(ModelView, model=User):
@@ -36,9 +36,3 @@ class AnswerVarAdmin(ModelView, model=AnswerVar):
     #form_columns = [AnswerVar.answer_title]
     icon = "fa-solid fa-box"
     
-class QuestQuestionAdmin(ModelView, model=QuestQuestion):
-    column_list = [QuestQuestion.id, QuestQuestion.quest, AnswerVar.question]
-    #column_searchable_list = [QuestQuestion.question]
-    column_sortable_list = [QuestQuestion.id]
-    #form_columns = [AnswerVar.answer_title]
-    icon = "fa-solid fa-box"

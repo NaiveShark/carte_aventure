@@ -17,9 +17,10 @@ from starlette_login.backends import SessionAuthBackend
 from starlette_login.login_manager import LoginManager
 from starlette_login.middleware import AuthenticationMiddleware
 
-from .admin_views import UserAdmin, QuestAdmin, QuestionAdmin, AnswerVarAdmin, QuestQuestionAdmin
+from .admin_views import UserAdmin, QuestAdmin, QuestionAdmin, AnswerVarAdmin
 from .models import Base, User
 from .view import login_page, logout_page, home_page, quests_page, view_quest
+from .pop import pop_data
 
 
 SECRET_KEY = 'our_webapp_secret_key'
@@ -51,7 +52,7 @@ app = FastAPI(
     routes=[
         Route('/', home_page, name='home'),
         Route('/quests', quests_page, name='quests_page'),
-        Route("/view/quest/{quest_id}", view_quest, name='view_quest'),        
+        Route("/view/quest/{quest_id}", view_quest, name='view_quest'),
         Route('/login', login_page, methods=['GET', 'POST'], name='login'),
         Route('/logout', logout_page, name='logout'),
     ]
@@ -64,8 +65,7 @@ admin = Admin(app, db_engine, middlewares=middleware)
 admin.add_view(UserAdmin)
 admin.add_view(QuestAdmin )
 admin.add_view(QuestionAdmin )
-admin.add_view(AnswerVarAdmin ) 
-admin.add_view(QuestQuestionAdmin )
+admin.add_view(AnswerVarAdmin )
 
 @app.middleware('http')
 async def extensions(request: Request, call_next):
@@ -94,4 +94,6 @@ async def startup():
         await User.create_user(
             db, 'user', 'password', is_admin=False
         )
+
+    await pop_data( db )
     await db_engine.dispose()

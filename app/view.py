@@ -7,7 +7,7 @@ from starlette.responses import (
 from starlette_login.decorator import login_required
 from starlette_login.utils import login_user, logout_user
 
-from .models import User, Quest
+from .models import User, Quest, Question
 
 from starlette.templating import Jinja2Templates
 from starlette_login.login_manager import LoginManager
@@ -16,7 +16,7 @@ from sqlalchemy import select
 #, delete 
 
 login_manager = LoginManager(redirect_to='login', secret_key='no_secret_here')
-template = Jinja2Templates(directory='templates')
+template = Jinja2Templates(directory='templates' )
 
 
 HOME_PAGE = """
@@ -100,23 +100,15 @@ async def view_quest(request: Request):
     quest_id = request.path_params['quest_id']
     quest = await db.get(Quest, quest_id )
 
-#    fn = select(Node_Type_Product).where( Node_Type_Product.product_id == product_id, Node_Type_Product.out_flag == True )
-#    from_nodes = session.execute( fn ).scalars().all()
+    questions_q = select(Question).where( Question.quest_id == quest_id )
+    questions = await db.execute( questions_q )
 
-#    tn = select(Node_Type_Product).where( Node_Type_Product.product_id == product_id, Node_Type_Product.out_flag == False )
-#    to_nodes = session.execute( tn ).scalars().all()
-
-    
-    
-    
- #   query = select(Quest).where(Quest.is_active == True )
- #   result = await db.execute(query)
     if quest is None:
         return None
     else:
         return template.TemplateResponse(
                  request,
-                'play_quest.html', context={ 'quest' : quest, }
+                'play_quest.html', context={ 'quest' : quest, "questions" : questions.scalars().all() }
             )
            
  

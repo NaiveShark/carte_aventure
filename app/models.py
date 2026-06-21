@@ -90,16 +90,18 @@ class Question(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     question_description = Column(String, nullable=True)
-
-class QuestQuestion(Base):
-    __tablename__ = "questquestion"
-    id = Column(Integer, primary_key=True, index=True)
-    
     quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=False )
     quest = relationship( "Quest" )
-
-    question_id: Mapped[int] = mapped_column(ForeignKey("question.id"), nullable=False )
-    question = relationship( "Question" )
+    
+    @property
+    async def get_answers( cls ):
+        db = request.state.db
+        query = select(AnswerVar).where(AnswerVar.question_id == self.id)
+        result = await db.execute(query)
+        if result is None:
+            return None
+        else:
+            return result.scalars().all()
 
 class AnswerVar(Base):
     __tablename__ = "answervar"
@@ -109,6 +111,6 @@ class AnswerVar(Base):
     question_id: Mapped[int] = mapped_column(ForeignKey("question.id"), nullable=False )
     question = relationship( "Question" )
 
-    wrong_message = Column(String, nullable=True)
     right_message = Column(String, nullable=True)
     is_true_answer = Column(Boolean, default=True)
+    wrong_message = Column(String, nullable=True)
