@@ -18,15 +18,6 @@
 {% endfor %}
 </ol>
 
-{% if pq %}
-
-<p><a href="/quest/in_play_it/{{pq.id}}">You are in quest, proceed</a>.</p>
-{% else %}
-<form action="/quest/play_it/{{quest.id}}/" method="get">
-  <button type="submit">Play it!</button>
-</form>
-
-{% endif %}
 
 {% else %}
 You should login to play.

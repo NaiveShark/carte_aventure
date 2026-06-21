@@ -78,23 +78,18 @@ class User(Base, UserMixin):
 # Data tables
 
 class Quest(Base):
-    #__tablename__ = "quest"
-
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True, nullable=False)
     description = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
 
 class Question(Base):
-    #__tablename__ = "question"
-
     id = Column(Integer, primary_key=True, index=True)
     question_description = Column(String, nullable=True)
     quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=False )
     quest = relationship( "Quest" )
     
 class AnswerVar(Base):
-    #__tablename__ = "answervar"
     id = Column(Integer, primary_key=True, index=True)
     answer_title = Column(String, nullable=True)
 
@@ -107,8 +102,6 @@ class AnswerVar(Base):
 
 # quest played by player
 class Player_Quest(Base):
-    #__tablename__ = "question"
-
     id = Column(Integer, primary_key=True, index=True)
     
     quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=False )
