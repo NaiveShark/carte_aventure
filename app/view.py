@@ -8,7 +8,7 @@ from starlette_login.decorator import login_required
 from starlette_login.utils import login_user, logout_user
 from datetime import datetime
 
-from .models import User, Quest, Question, AnswerVar, Player_Quest
+from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers
 
 from starlette.templating import Jinja2Templates
 from starlette_login.login_manager import LoginManager
@@ -160,7 +160,7 @@ async def in_play_quest(request: Request ):
             av_query = select(AnswerVar).where( AnswerVar.question_id == current_question_id )
             answer_await = await db.execute(av_query)
             answer_variants = answer_await.scalars().all()
-            
+            # detect, may be already answered
 
         return template.TemplateResponse(
                  request,
@@ -189,7 +189,15 @@ async def handle_qqa(request: Request ):
     async with request.form() as form:
         answer_var = form.get("answer_var")
         print(answer_var)
-        
+        pqa = Player_Quest_Answers( 
+            player_quest_id = player_quest_id,
+            question_id = current_question_id,
+            answervar_id = answer_var,
+            answered_dt = datetime.now(),
+            is_rigth_answer = False
+        )
+        db.add( pqa )
+        await db.commit()
         
     return RedirectResponse(url='/quest/in_play_it/' + str( player_quest_id ) + '?current_question_id=' + str( current_question_id ), status_code=303 )
 
