@@ -1,126 +1,96 @@
-from contextlib import asynccontextmanager
-from fastapi import FastAPI, Depends, Request, Form
-from fastapi.responses import RedirectResponse
-from fastapi.templating import Jinja2Templates
-from sqlalchemy.ext.asyncio import AsyncSession
-from fastcrud import FastCRUD
+import logging
+
+from fastapi import FastAPI
+from starlette.requests import Request
+from starlette.responses import PlainTextResponse
+from starlette.routing import Route
+from starlette.middleware import Middleware
+from starlette.middleware.sessions import SessionMiddleware
+
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import NullPool
+
 from sqladmin import Admin
 
-from app.config import engine, Base, get_db
-from app.models import Quest
-from app.schemas import QuestCreate, QuestUpdate
-from app.admin_views import QuestAdmin, QuestionAdmin, AnswerVarAdmin, QuestQuestionAdmin
+from starlette_login.backends import SessionAuthBackend
+from starlette_login.login_manager import LoginManager
+from starlette_login.middleware import AuthenticationMiddleware
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    async with engine.begin() as conn:
+from .admin_views import UserAdmin, QuestAdmin, QuestionAdmin, AnswerVarAdmin, QuestQuestionAdmin
+from .models import Base, User
+from .view import login_page, logout_page, home_page, quests_page
+
+
+SECRET_KEY = 'our_webapp_secret_key'
+DB_URL = 'sqlite+aiosqlite:///./mq.db'
+
+logger = logging.getLogger('uvicorn.error')
+db_engine = create_async_engine(DB_URL, poolclass=NullPool)
+LocalDBSession = sessionmaker(
+    db_engine, class_=AsyncSession, expire_on_commit=False
+)
+
+login_manager = LoginManager(
+    redirect_to='/login', secret_key=SECRET_KEY
+)
+login_manager.set_user_loader(User.get_user_by_id)
+
+middleware = [
+    Middleware(SessionMiddleware, secret_key=SECRET_KEY),
+    Middleware(
+        AuthenticationMiddleware,
+        backend=SessionAuthBackend(login_manager),
+        login_manager=login_manager,
+        excluded_dirs=['/static']
+    )
+]
+
+app = FastAPI(
+    middleware=middleware,
+    routes=[
+        Route('/', home_page, name='home'),
+        Route('/quests', quests_page, name='quests_page'),
+        Route('/login', login_page, methods=['GET', 'POST'], name='login'),
+        Route('/logout', logout_page, name='logout'),
+    ]
+)
+app.state.login_manager = login_manager
+
+# Use `SessionMiddleware` and `AuthenticationMiddleware`
+# to secure admin pages
+admin = Admin(app, db_engine, middlewares=middleware)
+admin.add_view(UserAdmin)
+admin.add_view(QuestAdmin )
+admin.add_view(QuestionAdmin )
+admin.add_view(AnswerVarAdmin ) 
+admin.add_view(QuestQuestionAdmin )
+
+@app.middleware('http')
+async def extensions(request: Request, call_next):
+    try:
+        request.state.db = LocalDBSession()
+        response = await call_next(request)
+    except Exception as exc:
+        logger.exception(exc)
+        response = PlainTextResponse(f'error: {exc}')
+    finally:
+        return response
+
+
+@app.on_event('startup')
+async def startup():
+    async with db_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    yield
 
-app = FastAPI(title="FastCRUD UI Template", lifespan=lifespan)
-templates = Jinja2Templates(directory="app/templates")
-
-admin = Admin(app, engine, title="Admin Portal")
-admin.add_view(QuestAdmin)
-admin.add_view(QuestionAdmin)
-admin.add_view(AnswerVarAdmin)
-admin.add_view(QuestQuestionAdmin)
-
-quest_crud = FastCRUD(Quest)
-PAGE_SIZE = 5
-
-@app.get("/")
-async def index(request: Request, db: AsyncSession = Depends(get_db)):
-
-    # FIX: Pass 'request' as the FIRST argument, template name SECOND, and context dictionary
-    return templates.TemplateResponse(
-        request,
-        "index.html",
-        {
-
-        }
-    )
-
-@app.get("/quests")
-async def quests(request: Request, db: AsyncSession = Depends(get_db)):
-
-    crud_data = await quest_crud.get_multi(db=db )
-    quests_list = crud_data.get("data", [])
-
-    display_quests = quests_list
-
-
-    # FIX: Pass 'request' as the FIRST argument, template name SECOND, and context dictionary
-    return templates.TemplateResponse(
-        request,
-        "quests.html",
-        {
-            "quests": display_quests,
-        }
-    )
-
-@app.get("/quest_inventory")
-async def list_quests(request: Request, page: int = 1, db: AsyncSession = Depends(get_db)):
-
-    offset = (page - 1) * PAGE_SIZE
-
-    crud_data = await quest_crud.get_multi(db=db, offset=offset, limit=PAGE_SIZE + 1)
-    quests_list = crud_data.get("data", [])
-
-    has_next = len(quests_list) > PAGE_SIZE
-    display_quests = quests_list[:PAGE_SIZE]
-
-    # FIX: Pass 'request' as the FIRST argument, template name SECOND, and context dictionary
-    return templates.TemplateResponse(
-        request,
-        "list_quest.html",
-        {
-            "quests": display_quests,
-            "page": page,
-            "has_next": has_next
-        }
-    )
-
-@app.get("/quests/new")
-async def new_quest_form(request: Request):
-    # FIX: Pass 'request' as the FIRST argument
-    return templates.TemplateResponse(
-        request,
-        "edit_quest.html",
-        {"quest": None}
-    )
-
-@app.post("/quests/new")
-async def create_quest(
-    name: str = Form(...), description: str = Form(None),
-    #price: float = Form(...),
-    is_active: bool = Form(False), db: AsyncSession = Depends(get_db)
-):
-    schema_data = QuestCreate(name=name, description=description, is_active=is_active)
-    await quest_crud.create(db=db, object=schema_data)
-    return RedirectResponse(url="/quest_inventory", status_code=303)
-
-@app.get("/quests/{quest_id}/edit")
-async def edit_quest_form(request: Request, quest_id: int, db: AsyncSession = Depends(get_db)):
-    quest = await quest_crud.get(db=db, id=quest_id)
-    # FIX: Pass 'request' as the FIRST argument
-    return templates.TemplateResponse(
-        request,
-        "edit_quest.html",
-        {"quest": quest}
-    )
-
-@app.post("/quests/{quest_id}/edit")
-async def update_product(
-    quest_id: int, name: str = Form(...), description: str = Form(None),
-    #price: float = Form(...),
-    is_active: bool = Form(False), db: AsyncSession = Depends(get_db)
-):
-    schema_data = QuestUpdate(name=name, description=description, is_active=is_active)
-    await quest_crud.update(db=db, object=schema_data, id=quest_id)
-    return RedirectResponse(url="/quest_inventory", status_code=303)
-
-@app.post("/quests/{quest_id}/delete")
-async def delete_quest(quest_id: int, db: AsyncSession = Depends(get_db)):
-    await quest_crud.delete(db=db, id=quest_id)
-    return RedirectResponse(url="/quest_inventory", status_code=303)
+    # create admin user
+    db = LocalDBSession()
+    if not await User.get_user_by_username(db, 'admin'):
+        await User.create_user(
+            db, 'admin', 'password', is_admin=True
+        )
+    if not await User.get_user_by_username(db, 'user'):
+        await User.create_user(
+            db, 'user', 'password', is_admin=False
+        )
+    await db_engine.dispose()
