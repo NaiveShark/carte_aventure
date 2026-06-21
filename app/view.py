@@ -93,9 +93,6 @@ async def view_quest(request: Request):
     quest_id = request.path_params['quest_id']
     quest = await db.get(Quest, quest_id )
 
-    questions_q = select(Question).where( Question.quest_id == quest_id )
-    questions = await db.execute( questions_q )
-
     if quest is None:
         return None
     else:
@@ -107,7 +104,7 @@ async def view_quest(request: Request):
 
         return template.TemplateResponse(
                  request,
-                'play_quest.html', context={ 'quest' : quest, "questions" : questions.scalars().all(), "pq" : pq }
+                'play_quest.html', context={ 'quest' : quest, "pq" : pq }
             )
 
 @login_required
@@ -119,9 +116,6 @@ async def play_quest(request: Request):
 
     quest_id = request.path_params['quest_id']
     quest = await db.get(Quest, quest_id )
-
-    questions_q = select(Question).where( Question.quest_id == quest_id )
-    questions = await db.execute( questions_q )
 
     if quest is None:
         return None

@@ -9,15 +9,6 @@
 <p>{{quest.description}}</p>
 {% endif %}
 
-<ol>
-{% for q in questions %}
-<li>{{q.question_description}} 
-
-
-</li>
-{% endfor %}
-</ol>
-
 {% if pq %}
 
 <p><a href="/quest/in_play_it/{{pq.id}}">You are in quest, proceed</a>.</p>
