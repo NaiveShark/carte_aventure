@@ -125,7 +125,7 @@ class Player_Quest_Answers(Base):
     answervar_id: Mapped[int] = mapped_column(ForeignKey("answervar.id"), nullable=False )
     answervar = relationship( "AnswerVar" )
     
-    is_rigth_answer = Column(Boolean, nullable=False )
+    is_right_answer = Column(Boolean, nullable=False )
     
     
 
