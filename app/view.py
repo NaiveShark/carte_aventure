@@ -13,7 +13,7 @@ from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest
 from starlette.templating import Jinja2Templates
 from starlette_login.login_manager import LoginManager
 
-from sqlalchemy import select
+from sqlalchemy import select, exists
 
 login_manager = LoginManager(redirect_to='login', secret_key='no_secret_here')
 template = Jinja2Templates(directory='templates' )
@@ -187,25 +187,29 @@ async def handle_qqa(request: Request ):
     player_quest_id = request.path_params['player_quest_id']
     player_quest = await db.get(Player_Quest, player_quest_id )
     current_question_id = request.path_params['current_question_id']
-    print( player_quest_id )
-    print( current_question_id )
 
-    async with request.form() as form:
-        answer_var_id = form.get("answer_var")
-        
-        #detect the answer
-        answer_var = await db.get(AnswerVar, answer_var_id )
-        check_answer = answer_var.is_true_answer
+    # check - may be user is answering already (prevent second answering with BACK command)
 
-        pqa = Player_Quest_Answers(
-            player_quest_id = player_quest_id,
-            question_id = current_question_id,
-            answervar_id = answer_var_id,
-            answered_dt = datetime.now(),
-            is_right_answer = check_answer
-        )
-        db.add( pqa )
-        await db.commit()
+    pqa_exits_q = select(exists().where( Player_Quest_Answers.player_quest_id == player_quest_id, Player_Quest_Answers.question_id == current_question_id ) )
+    pqa_exits = await db.scalar(pqa_exits_q)
+    if not pqa_exits:
+        async with request.form() as form:
+            answer_var_id = form.get("answer_var")
+
+            #detect the answer
+            answer_var = await db.get(AnswerVar, answer_var_id )
+            check_answer = answer_var.is_true_answer
+
+            pqa = Player_Quest_Answers(
+                player_quest_id = player_quest_id,
+                question_id = current_question_id,
+                answervar_id = answer_var_id,
+                answered_dt = datetime.now(),
+                is_right_answer = check_answer
+            )
+            db.add( pqa )
+            await db.commit()
+            # check - may be a quest is done?
 
     return RedirectResponse(url='/quest/in_play_it/' + str( player_quest_id ) + '?current_question_id=' + str( current_question_id ), status_code=303 )
 
