@@ -26,7 +26,18 @@ CONST_QUESTS = [
               ]
       },
 
-    { "name" : "Do you know the Roman Empire?", "description" : "Do you know the history of ancient Roman Empire?", "questions" : [ { "question_title" : "Trajan" }, { "question_title" : "Marcus Aurelius" }, ] }
+    { "name" : "Do you know the Roman Empire?", 
+      "description" : "Do you know the history of ancient Roman Empire?", 
+      "questions" : [ 
+          { "question_title" : "Under which ruler did the Roman Empire reach its maximum territorial extent?", 
+             "answers" : [ 
+              [ "Hadrian", None, False, "No." ], 
+              [ "Trajan", "Yes", True, None ], 
+              [ "Nero", None, False, "No." ], 
+              [ "Julius Caesar", None, False, "No." ],         
+          ] }
+          ]
+     },
  ]
 
 async def pop_data( DB : AsyncSession ):
