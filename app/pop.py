@@ -32,7 +32,7 @@ CONST_QUESTS = [
           { "question_title" : "Under which ruler did the Roman Empire reach its maximum territorial extent?", 
              "answers" : [ 
               [ "Hadrian", None, False, "No." ], 
-              [ "Trajan", "Yes", True, None ], 
+              [ "Trajan", "Yes. Key geographic achievements under Trajan included Armenia, Assyria, Mesopotamia and Dacia.", True, None ], 
               [ "Nero", None, False, "No." ], 
               [ "Julius Caesar", None, False, "No." ],         
           ] }
