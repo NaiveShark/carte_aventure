@@ -202,7 +202,7 @@ async def handle_qqa(request: Request ):
             question_id = current_question_id,
             answervar_id = answer_var_id,
             answered_dt = datetime.now(),
-            is_rigth_answer = check_answer
+            is_right_answer = check_answer
         )
         db.add( pqa )
         await db.commit()

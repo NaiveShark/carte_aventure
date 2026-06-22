@@ -21,7 +21,14 @@
 </ol>
 
 {% if pqa %}
-<p>You answered at {{pqa.answered_dt}}. Your answer is <b>{{pqa.answervar.answer_title}}</b> and it's {{pqa.is_rigth_answer}}.</p>
+<p>You answered at {{pqa.answered_dt}}. Your answer is <b>{{pqa.answervar.answer_title}}</b> and it's {{pqa.is_right_answer}}.
+    
+	{% if pqa.is_right_answer %}
+	{{pqa.answervar.right_message}}
+	{% else %}
+    {{pqa.answervar.wrong_message}}
+	{% endif %}
+</p>
 
 {% else %}
 
