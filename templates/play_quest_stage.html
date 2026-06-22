@@ -20,6 +20,11 @@
 {% endfor %}
 </ol>
 
+{% if pqa %}
+<p>You answered at {{pqa.answered_dt}}. Your answer is <b>{{pqa.answervar.answer_title}}</b> and it's {{pqa.is_rigth_answer}}.</p>
+
+{% else %}
+
 {% if answer_variants %}
 
 <form action="/quest/submit_form-qqa/{{player_quest_id}}/{{current_question_id}}" method="POST">
@@ -43,6 +48,9 @@
   <button type="submit">Submit Choice</button>
 </form>
 {% endif %}
+
+{% endif %}
+
 
 <p><a href="/view/quest/{{quest.id}}">Back to quest</a></p>
 

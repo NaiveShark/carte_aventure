@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-
 # Auth and user tables
 from passlib.hash import pbkdf2_sha256
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, select

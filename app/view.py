@@ -14,7 +14,6 @@ from starlette.templating import Jinja2Templates
 from starlette_login.login_manager import LoginManager
 
 from sqlalchemy import select
-#, delete
 
 login_manager = LoginManager(redirect_to='login', secret_key='no_secret_here')
 template = Jinja2Templates(directory='templates' )
@@ -150,17 +149,21 @@ async def in_play_quest(request: Request ):
     else:
         answer_variants = None
         current_question_id = request.query_params.get("current_question_id", default=None)
-        
+
         quest_id = player_quest.quest_id
         quest = await db.get(Quest, quest_id )
         questions_q = select(Question).where( Question.quest_id == quest_id )
         questions = await db.execute( questions_q )
-        
+
+        pqa = None
         if current_question_id:
             av_query = select(AnswerVar).where( AnswerVar.question_id == current_question_id )
             answer_await = await db.execute(av_query)
             answer_variants = answer_await.scalars().all()
             # detect, may be already answered
+            pqa_query = select(Player_Quest_Answers).where(Player_Quest_Answers.player_quest_id == player_quest_id, Player_Quest_Answers.question_id == current_question_id )
+            pqa_e = await db.execute(pqa_query)
+            pqa = pqa_e.scalar_one_or_none()
 
         return template.TemplateResponse(
                  request,
@@ -170,6 +173,7 @@ async def in_play_quest(request: Request ):
                     "questions" : questions.scalars().all(),
                     "current_question_id" : current_question_id,
                     "answer_variants" : answer_variants,
+                    "pqa" : pqa,
                 }
             )
 
@@ -189,16 +193,19 @@ async def handle_qqa(request: Request ):
     async with request.form() as form:
         answer_var = form.get("answer_var")
         print(answer_var)
-        pqa = Player_Quest_Answers( 
+        #detect the answer
+        check_answer = False
+
+        pqa = Player_Quest_Answers(
             player_quest_id = player_quest_id,
             question_id = current_question_id,
             answervar_id = answer_var,
             answered_dt = datetime.now(),
-            is_rigth_answer = False
+            is_rigth_answer = check_answer
         )
         db.add( pqa )
         await db.commit()
-        
+
     return RedirectResponse(url='/quest/in_play_it/' + str( player_quest_id ) + '?current_question_id=' + str( current_question_id ), status_code=303 )
 
 #
