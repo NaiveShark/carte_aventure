@@ -191,15 +191,16 @@ async def handle_qqa(request: Request ):
     print( current_question_id )
 
     async with request.form() as form:
-        answer_var = form.get("answer_var")
-        print(answer_var)
+        answer_var_id = form.get("answer_var")
+        
         #detect the answer
-        check_answer = False
+        answer_var = await db.get(AnswerVar, answer_var_id )
+        check_answer = answer_var.is_true_answer
 
         pqa = Player_Quest_Answers(
             player_quest_id = player_quest_id,
             question_id = current_question_id,
-            answervar_id = answer_var,
+            answervar_id = answer_var_id,
             answered_dt = datetime.now(),
             is_rigth_answer = check_answer
         )
