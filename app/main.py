@@ -3,9 +3,10 @@ import logging
 from fastapi import FastAPI
 from starlette.requests import Request
 from starlette.responses import PlainTextResponse
-from starlette.routing import Route
+from starlette.routing import Route, Mount
 from starlette.middleware import Middleware
 from starlette.middleware.sessions import SessionMiddleware
+from starlette.staticfiles import StaticFiles
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
@@ -19,9 +20,12 @@ from starlette_login.middleware import AuthenticationMiddleware
 
 from .admin_views import UserAdmin, QuestAdmin, QuestionAdmin, AnswerVarAdmin
 from .models import Base, User
-from .view import login_page, logout_page, home_page, view_user_profile, quests_page, view_quest, play_quest, in_play_quest, handle_qqa
+from .view import login_page, logout_page, home_page, view_user_profile, quests_page, view_quest, play_quest, in_play_quest, handle_qqa, map_tools
 from .pop import pop_data
 
+import mimetypes
+mimetypes.add_type('text/javascript', '.js')
+mimetypes.add_type('text/css', '.css')
 
 SECRET_KEY = 'our_webapp_secret_key'
 DB_URL = 'sqlite+aiosqlite:///./mq.db'
@@ -43,9 +47,10 @@ middleware = [
         AuthenticationMiddleware,
         backend=SessionAuthBackend(login_manager),
         login_manager=login_manager,
-        excluded_dirs=['/static']
+        excluded_dirs=['/statics']
     )
 ]
+
 
 app = FastAPI(
     middleware=middleware,
@@ -59,6 +64,11 @@ app = FastAPI(
         Route("/quest/submit_form-qqa/{player_quest_id}/{current_question_id}", handle_qqa, methods=["POST"]),
         Route('/login', login_page, methods=['GET', 'POST'], name='login'),
         Route('/logout', logout_page, name='logout'),
+        
+        
+        Route('/map_tools', map_tools, name='map_tools'),
+        Mount("/statics", StaticFiles(directory="statics"), name="statics"),
+        
     ]
 )
 app.state.login_manager = login_manager

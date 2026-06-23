@@ -68,6 +68,12 @@ async def home_page(request: Request):
         'home.html', context={ }
     )
 
+async def map_tools(request: Request):
+    return template.TemplateResponse(
+    request,
+        'map_tools.html', context={ }
+    )
+
 @login_required
 async def view_user_profile(request: Request):
     # main.LocalDBSession
