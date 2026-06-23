@@ -6,7 +6,7 @@ from .models import Quest, Question, AnswerVar
 # CONST standart questions
 CONST_QUESTS = [
     { "name" : "Do you know the planets?",
-      "description" : "Do you know the planets of Solar system?",
+      "description" : "Do you know the planets of *Solar system*? ![Solar system](https://upload.wikimedia.org/wikipedia/commons/5/5b/Solar_System_XXIX.png)",
       "questions" : [
           { "question_title" : "Which planet from the Sun is Earth?",
             "answers" : [
@@ -80,7 +80,7 @@ CONST_QUESTS = [
       },
 
     { "name" : "Do you know the Roman Empire?",
-      "description" : "Do you know the history of ancient Roman Empire?",
+      "description" : "Do you know the history of ancient Roman Empire? ![SQPQR](https://upload.wikimedia.org/wikipedia/commons/d/d5/SPQR_skjaldamerki_R%C3%B3maveldis.png)",
       "questions" : [
           { "question_title" : "Under which ruler did the Roman Empire reach its maximum territorial extent?",
              "answers" : [
