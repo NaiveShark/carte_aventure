@@ -9,18 +9,37 @@
 
 {{ request.user.display_name }}
 
-<ul>
-{% for pq in quests %}
 
+<table border=1>
+<thead>
+<tr>
+<th>Quest</th>
+<th>Began</th>
+<th>End</th>
+</tr>
+</thead>
+<tbody>
+{% for pq in quests %}
+<tr>
+<td>
 {% if pq.quest_end %}
 <p><a href="/quest/in_play_it/{{pq.id}}">You are complete "{{pq.quest.name}}", you can view the log.</a>.</p>
 {% else %}
 <p><a href="/quest/in_play_it/{{pq.id}}">You are in "{{pq.quest.name}}", proceed</a>.</p>
 {% endif %}
+</td>
+
+
+<td>{{pq.quest_began}}</td>
+<td>{% if pq.quest_end %}{{pq.quest_end }}{% endif %}</td>
+
+</tr>
 
 
 {% endfor %}
-</ul>
+</tbody>
+
+</table>
 	
 {% else %}
 You should login.
