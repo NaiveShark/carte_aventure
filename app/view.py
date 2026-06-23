@@ -14,6 +14,7 @@ from starlette.templating import Jinja2Templates
 from starlette_login.login_manager import LoginManager
 
 from sqlalchemy import select, func, exists
+from sqlalchemy.orm import selectinload
 
 login_manager = LoginManager(redirect_to='login', secret_key='no_secret_here')
 template = Jinja2Templates(directory='templates' )
@@ -75,10 +76,13 @@ async def view_user_profile(request: Request):
     if user is None:
         return None
     else:
-        #quests = result.scalars().all()
+        query_q = select(Player_Quest).where(Player_Quest.user_id == user.id ).options(selectinload(Player_Quest.quest))
+        query_c = await db.execute(query_q)        
+        quests = query_c.scalars().all()
+        
         return template.TemplateResponse(
                  request,
-                'user_profile.html', context={  }
+                'user_profile.html', context={ "quests" : quests, }
             )
 
 

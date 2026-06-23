@@ -8,6 +8,19 @@
 <h1>Profile of {{ request.user.username }}</h1>
 
 {{ request.user.display_name }}
+
+<ul>
+{% for pq in quests %}
+
+{% if pq.quest_end %}
+<p><a href="/quest/in_play_it/{{pq.id}}">You are complete "{{pq.quest.name}}", you can view the log.</a>.</p>
+{% else %}
+<p><a href="/quest/in_play_it/{{pq.id}}">You are in "{{pq.quest.name}}", proceed</a>.</p>
+{% endif %}
+
+
+{% endfor %}
+</ul>
 	
 {% else %}
 You should login.
