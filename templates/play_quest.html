@@ -6,7 +6,8 @@
 
 <h1>{{quest.name}}</h1>
 {% if quest.description %}
-<p>{{quest.description}}</p>
+<p>{{quest.description | markdown | safe }}</p>
+
 {% endif %}
 
 {% if pq %}

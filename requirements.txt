@@ -9,3 +9,5 @@ uvicorn
 Starlette-Login
 sqlalchemy[asyncio]
 sqladmin
+
+markdown

@@ -16,8 +16,20 @@ from starlette_login.login_manager import LoginManager
 from sqlalchemy import select, func, exists
 from sqlalchemy.orm import selectinload
 
+import markdown
+
 login_manager = LoginManager(redirect_to='login', secret_key='no_secret_here')
 template = Jinja2Templates(directory='templates' )
+
+# Register custom markdown filter
+def render_markdown(text: str) -> str:
+    if not text:
+        return ""
+    # 'fenced_code' allows ```python ... ``` blocks
+    # 'tables' adds support for markdown tables
+    return markdown.markdown(text, extensions=['fenced_code', 'tables'])
+
+template.env.filters["markdown"] = render_markdown
 
 
 LOGIN_PAGE = """

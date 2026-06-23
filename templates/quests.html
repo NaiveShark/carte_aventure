@@ -9,11 +9,7 @@
 
 <ul>
 {% for q in quests %}
-<li><a href="/view/quest/{{q.id}}">{{q.name}}</a>
-{% if q.description %}
-{{q.description}}
-{% endif %}
-</li>
+<li><a href="/view/quest/{{q.id}}">{{q.name}}</a></li>
 {% endfor %}
 </ul>
 	
