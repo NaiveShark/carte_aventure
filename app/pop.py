@@ -51,7 +51,31 @@ CONST_QUESTS = [
               [ "Saturn", "Yes", True, None ],
               [ "Neptune", None, False, "No, Neptune's rings are very dark and thin." ],
               [ "Mars", None, False, "No, Mars has no rings." ]
-              ] }
+              ] },
+              
+          { "question_title" : "Which celestial body was reclassified as a dwarf planet in 2006?", 
+            "answers" : [ 
+              [ "Ceres", None, False, "No, Ceres was already considered an asteroid before becoming a dwarf planet." ],
+              [ "Pluto", "Yes", True, None ],
+              [ "Eris", None, False, "No, Eris was discovered around that time, forcing the new definition." ],
+              [ "Mercury", None, False, "No, Mercury is a major terrestrial planet." ]
+              ] },
+          { "question_title" : "Which planet does the moon 'Europa', which has a subsurface ocean, orbit?", 
+            "answers" : [ 
+              [ "Saturn", None, False, "No, Saturn's famous ocean moon is Enceladus." ],
+              [ "Mars", None, False, "No, Mars only has two small, dry moons." ],
+              [ "Jupiter", "Yes", True, None ],
+              [ "Neptune", None, False, "No, Neptune's largest moon is Triton." ]
+              ] },
+          { "question_title" : "Which space probe was the first to visit and photograph Pluto in 2015?", 
+            "answers" : [ 
+              [ "Voyager 1", None, False, "No, Voyager 1 left the Solar System without visiting Pluto." ],
+              [ "Cassini", None, False, "No, Cassini spent its mission studying Saturn." ],
+              [ "New Horizons", "Yes", True, None ],
+              [ "Curiosity", None, False, "No, Curiosity is a rover operating on Mars." ]
+              ] },
+              
+              
               ]
       },
 
