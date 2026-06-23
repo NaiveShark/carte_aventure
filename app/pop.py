@@ -22,9 +22,37 @@ CONST_QUESTS = [
               [ "Jupyter", None, False, "No" ],
               [ "Saturn", "Yes", True, None ],
               [ "Earth", None, False, "No" ],
+              ] },
+
+          { "question_title" : "Which planet is known as the Red Planet?",
+            "answers" : [
+              [ "Venus", None, False, "No, Venus is the brightest planet." ],
+              [ "Mars", "Yes", True, None ],
+              [ "Jupiter", None, False, "No, Jupiter is the largest gas giant." ],
+              [ "Mercury", None, False, "No, Mercury is closest to the Sun." ]
+              ] },
+          { "question_title" : "Which planet is the largest in the Solar System?",
+            "answers" : [
+              [ "Saturn", None, False, "No, Saturn is the second largest." ],
+              [ "Neptune", None, False, "No, Neptune is smaller than Uranus." ],
+              [ "Jupiter", "Yes", True, None ],
+              [ "Earth", None, False, "No, Earth is the largest terrestrial planet but much smaller than gas giants." ]
+              ] },
+          { "question_title" : "What is the hottest planet in our Solar System?",
+            "answers" : [
+              [ "Mercury", None, False, "No, despite being closest to the Sun, it has no atmosphere to trap heat." ],
+              [ "Mars", None, False, "No, Mars is actually very cold." ],
+              [ "Venus", "Yes", True, None ],
+              [ "Jupiter", None, False, "No, Jupiter is a cold gas giant." ]
+              ] },
+          { "question_title" : "Which planet is famous for its large, prominent ring system?",
+            "answers" : [
+              [ "Uranus", None, False, "No, Uranus has rings, but they are faint." ],
+              [ "Saturn", "Yes", True, None ],
+              [ "Neptune", None, False, "No, Neptune's rings are very dark and thin." ],
+              [ "Mars", None, False, "No, Mars has no rings." ]
               ] }
               ]
-
       },
 
     { "name" : "Do you know the Roman Empire?",
