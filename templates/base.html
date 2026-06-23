@@ -14,7 +14,7 @@
   {% endif %}
   
   {% if request.user.is_authenticated %}
-You are logged in as <a href="/profile">{{ request.user.username }}</a>
+You are logged in as <a href="/profile">{{ request.user.display_name }}</a>
   <a href="/logout">Logout Page</a>
 {% else %}
 You are not logged in

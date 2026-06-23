@@ -23,6 +23,7 @@ class User(Base, UserMixin):
     id = Column(Integer, primary_key=True)
     username = Column(String(150), unique=True)
     password = Column(String(128))
+    title_name = Column(String(150))
     is_admin = Column(Boolean, default=False)
     is_editor = Column(Boolean, default=False)
 
@@ -32,7 +33,7 @@ class User(Base, UserMixin):
 
     @property
     def display_name(self) -> str:
-        return ' '.join([self.first_name, self.last_name])
+        return self.title_name
 
     def set_password(self, password: str):
         self.password = pbkdf2_sha256.hash(password)
@@ -63,6 +64,7 @@ class User(Base, UserMixin):
     ):
         user = cls(
             username=username,
+            title_name = username,
             password=password,
             is_admin=is_admin,
             is_editor=is_editor
@@ -71,8 +73,6 @@ class User(Base, UserMixin):
         db.add(user)
         await db.commit()
         return user
-
-
 
 # Data tables
 
@@ -111,28 +111,28 @@ class Player_Quest(Base):
 
     quest_began = Column( DateTime, nullable=False )
     quest_end = Column( DateTime(timezone=True) )
-    
+
     questions_count = Column(Integer, nullable=False, default=0 )
     answered_count = Column(Integer, nullable=False, default=0 )
     answered_right_count = Column(Integer, nullable=False, default=0 )
     answered_wrong_count = Column(Integer, nullable=False, default=0 )
     final_score = Column(Integer, nullable=False, default=0 )
-    
+
 # quest played by player
 class Player_Quest_Answers(Base):
     id = Column(Integer, primary_key=True, index=True)
     player_quest_id: Mapped[int] = mapped_column(ForeignKey("player_quest.id"), nullable=False )
     player_quest = relationship( "Player_Quest" )
     answered_dt = Column( DateTime )
-    
+
     question_id: Mapped[int] = mapped_column(ForeignKey("question.id"), nullable=False )
     question = relationship( "Question" )
-    
+
     answervar_id: Mapped[int] = mapped_column(ForeignKey("answervar.id"), nullable=False )
     answervar = relationship( "AnswerVar" )
-    
+
     is_right_answer = Column(Boolean, nullable=False )
-    
-    
+
+
 
 #
