@@ -11,7 +11,13 @@
 
 {% if pq %}
 
+{% if pq.quest_end %}
+<p><a href="/quest/in_play_it/{{pq.id}}">You are complete this quest, you can view the log.</a>.</p>
+{% else %}
 <p><a href="/quest/in_play_it/{{pq.id}}">You are in quest, proceed</a>.</p>
+{% endif %}
+
+
 {% else %}
 <form action="/quest/play_it/{{quest.id}}/" method="get">
   <button type="submit">Play it!</button>

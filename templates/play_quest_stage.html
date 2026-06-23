@@ -8,7 +8,17 @@
 {% if quest.description %}
 <p>{{quest.description}}</p>
 {% endif %}
-<p>You are playing this quest.</p>
+<p>You are playing this quest. 
+
+<p>questions_count {{player_quest.questions_count}}</p>
+<p>answered_count {{player_quest.answered_count}}</p>
+<p>answered_right_count {{player_quest.answered_right_count}}</p>
+<p>answered_wrong_count {{player_quest.answered_wrong_count}}</p>
+<p>final_score {{player_quest.final_score}}</p>
+<p>quest_begun {{player_quest.quest_begun}}</p>
+<p>quest_end {{player_quest.quest_end}}</p>
+
+</p>
 
 <ol>
 {% for q in questions %}

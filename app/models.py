@@ -111,7 +111,13 @@ class Player_Quest(Base):
 
     quest_began = Column( DateTime, nullable=False )
     quest_end = Column( DateTime(timezone=True) )
-
+    
+    questions_count = Column(Integer, nullable=False, default=0 )
+    answered_count = Column(Integer, nullable=False, default=0 )
+    answered_right_count = Column(Integer, nullable=False, default=0 )
+    answered_wrong_count = Column(Integer, nullable=False, default=0 )
+    final_score = Column(Integer, nullable=False, default=0 )
+    
 # quest played by player
 class Player_Quest_Answers(Base):
     id = Column(Integer, primary_key=True, index=True)

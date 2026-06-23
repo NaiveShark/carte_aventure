@@ -13,7 +13,7 @@ from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest
 from starlette.templating import Jinja2Templates
 from starlette_login.login_manager import LoginManager
 
-from sqlalchemy import select, exists
+from sqlalchemy import select, func, exists
 
 login_manager = LoginManager(redirect_to='login', secret_key='no_secret_here')
 template = Jinja2Templates(directory='templates' )
@@ -127,6 +127,14 @@ async def play_quest(request: Request):
             print( 'ready' )
         else:
             pq = Player_Quest( quest_id = quest_id, user_id = user.id, quest_began = datetime.now() )
+
+            # calc question count at start
+
+            pq_query = select(Player_Quest).where(Player_Quest.quest_id == quest_id, Player_Quest.user_id == user.id )
+
+            question_count_q = ( select(func.count(Question.id)).where(Question.quest_id == quest_id ) )
+            pq.questions_count = await db.scalar(question_count_q)
+
             db.add( pq )
             await db.commit()
             print( 'new' )
@@ -170,6 +178,7 @@ async def in_play_quest(request: Request ):
                 'play_quest_stage.html', context={
                     "quest" : quest,
                     "player_quest_id" : player_quest_id,
+                    "player_quest" : player_quest,
                     "questions" : questions.scalars().all(),
                     "current_question_id" : current_question_id,
                     "answer_variants" : answer_variants,
@@ -210,6 +219,18 @@ async def handle_qqa(request: Request ):
             db.add( pqa )
             await db.commit()
             # check - may be a quest is done?
+            player_quest.final_score = player_quest.final_score + 1
+            player_quest.answered_count = player_quest.answered_count + 1
+
+            if check_answer:
+                player_quest.answered_right_count = player_quest.answered_right_count + 1
+            else:
+                player_quest.answered_wrong_count = player_quest.answered_wrong_count + 1
+
+            if player_quest.questions_count == player_quest.answered_count:
+                player_quest.quest_end = datetime.now()
+
+            await db.commit()
 
     return RedirectResponse(url='/quest/in_play_it/' + str( player_quest_id ) + '?current_question_id=' + str( current_question_id ), status_code=303 )
 
