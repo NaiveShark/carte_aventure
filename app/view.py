@@ -68,6 +68,21 @@ async def home_page(request: Request):
     )
 
 @login_required
+async def view_user_profile(request: Request):
+    # main.LocalDBSession
+    db = request.state.db
+    user = request.user
+    if user is None:
+        return None
+    else:
+        #quests = result.scalars().all()
+        return template.TemplateResponse(
+                 request,
+                'user_profile.html', context={  }
+            )
+
+
+@login_required
 async def quests_page(request: Request):
     # main.LocalDBSession
     db = request.state.db
