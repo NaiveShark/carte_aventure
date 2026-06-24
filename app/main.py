@@ -105,10 +105,10 @@ async def startup():
         await User.create_user(
             db, 'admin', 'password', is_admin=True
         )
-    if not await User.get_user_by_username(db, 'user'):
-        await User.create_user(
-            db, 'user', 'password', is_admin=False
-        )
+    #if not await User.get_user_by_username(db, 'user'):
+    #    await User.create_user(
+    #        db, 'user', 'password', is_admin=False
+    #    )
 
     await pop_data( db )
     await db_engine.dispose()
