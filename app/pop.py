@@ -56,7 +56,64 @@ CONST_QUESTS_MAP = [
 
           ]
      },
+
+    {
+        "name": "Do you know Caribbean geography?",
+        "description": "Test your knowledge of the islands, history, and pirate havens of the Caribbean Sea! ![Caribbean](https://upload.wikimedia.org/wikipedia/commons/c/c4/Caribbean_Sea_and_West_Indies.png)",
+        "questions": [
+            {
+                "question_title": "Which major Caribbean capital city was founded by Diego Columbus (son of Christopher Columbus) in 1498?",
+                "question_map_X": -69.8908,
+                "question_map_Y": 18.4861,
+                "question_map_ZOOM": 12,
+                "answers": [
+                    ["Havana", None, False, "No, that is in Cuba."],
+                    ["San Juan", None, False, "No, that is in Puerto Rico."],
+                    ["Santo Domingo", "Yes.", True, None],
+                    ["Kingston", None, False, "No, that is in Jamaica."],
+                    ["Nassau", None, False, "No, that is in the Bahamas."],
+                ]
+            },
+            {
+                "question_title": "This city was known as the 'Richest and Wickedest City in the World' until a massive earthquake sank most of it into the sea in 1692. What was its name?",
+                "question_map_X": -76.8408,
+                "question_map_Y": 17.9378,
+                "question_map_ZOOM": 14,
+                "answers": [
+                    ["Tortuga", None, False, "No, Tortuga is an island north of Haiti."],
+                    ["Nassau", None, False, "No, Nassau became a pirate hub later."],
+                    ["Port Royal", "Yes.", True, None],
+                    ["St. Augustine", None, False, "No, that is in Florida."],
+                    ["Willemstad", None, False, "No, that is in Curaçao."],
+                ]
+            },
+            {
+                "question_title": "In 1995, the Soufrière Hills volcano erupted, burying the capital city of this island in ash and turning the southern half of the island into an exclusion zone. Name the buried capital.",
+                "question_map_X": -62.2147,
+                "question_map_Y": 16.7014,
+                "question_map_ZOOM": 13,
+                "answers": [
+                    ["Basseterre", None, False, "No, that is the capital of St. Kitts and Nevis."],
+                    ["Plymouth", "Yes.", True, None],
+                    ["Roseau", None, False, "No, that is the capital of Dominica."],
+                    ["Kingstown", None, False, "No, that is the capital of St. Vincent."],
+                ]
+            },
+            {
+                "question_title": "The famous naval Battle of the Saintes took place in 1782 between British and French fleets. Place the dot on the map as close as you can to where it occurred.",
+                "question_map_X": -61.6,
+                "question_map_Y": 15.8,
+                "question_map_ZOOM": 8,
+                "question_map_data": "{  ____ }",
+                "answers": [
+                    ["Place the dot on the map as close as you can to target place.", "Yes.", True, None],
+                ]
+            }
+        ]
+    }
     ]
+
+
 
 # CONST standart questions
 CONST_QUESTS_TEXT = [
