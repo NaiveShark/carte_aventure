@@ -63,9 +63,10 @@ async def logout_page(request: Request):
     if request.user.is_authenticated:
         content = 'Logged out'
         await logout_user(request)
+        return RedirectResponse('/', status_code=303)
     else:
         content = 'You not logged in'
-    return PlainTextResponse(content)
+        return PlainTextResponse(content)
 
 async def reg_new_user(request: Request):
     db = request.state.db
