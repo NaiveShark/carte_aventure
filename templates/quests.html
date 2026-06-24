@@ -9,7 +9,7 @@
 
 <ul>
 {% for q in quests %}
-<li><a href="/view/quest/{{q.id}}">{{q.name}}</a></li>
+<li><a href="/view/quest/{{q.id}}">{{q.name}}</a> (difficulty {{q.difficulty_coefficient}})</li>
 {% endfor %}
 </ul>
 	

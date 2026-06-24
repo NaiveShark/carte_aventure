@@ -81,6 +81,8 @@ class Quest(Base):
     name = Column(String, index=True, nullable=False)
     description = Column(Text, nullable=True)
     is_active = Column(Boolean, default=True)
+    # difficulty coefficient
+    difficulty_coefficient = Column(Integer, nullable=False, default=1)
 
 # question types const
 # 0 is for simple quiz with text variants

@@ -680,7 +680,7 @@ async def pop_data( DB : AsyncSession ):
         return 0
 
     for cqm in CONST_QUESTS_MAP:
-        quest = Quest( name = cqm["name"], description = cqm["description"], is_active = True  )
+        quest = Quest( name = cqm["name"], description = cqm["description"], is_active = True, difficulty_coefficient = 3  )
         DB.add( quest )
         await DB.commit()
         for qd in cqm["questions"]:

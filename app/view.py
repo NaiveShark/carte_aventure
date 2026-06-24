@@ -277,6 +277,7 @@ async def handle_qqa(request: Request ):
 
     player_quest_id = request.path_params['player_quest_id']
     player_quest = await db.get(Player_Quest, player_quest_id )
+    quest = await db.get(Quest, player_quest.quest_id )
     current_question_id = request.path_params['current_question_id']
 
     # check - may be user is answering already (prevent second answering with BACK command)
@@ -305,7 +306,7 @@ async def handle_qqa(request: Request ):
 
             if check_answer:
                 player_quest.answered_right_count = player_quest.answered_right_count + 1
-                player_quest.final_score = player_quest.final_score + 1
+                player_quest.final_score = player_quest.final_score + quest.difficulty_coefficient
             else:
                 player_quest.answered_wrong_count = player_quest.answered_wrong_count + 1
 
