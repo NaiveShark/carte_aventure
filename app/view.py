@@ -128,6 +128,18 @@ async def view_user_profile(request: Request):
                 'user_profile.html', context={ "quests" : quests, }
             )
 
+@login_required
+async def view_quiz_top(request: Request):
+    # main.LocalDBSession
+    db = request.state.db
+    player_quests_q = select(Player_Quest).where(Player_Quest.quest_end != None).options( selectinload( Player_Quest.quest ), selectinload( Player_Quest.user ) ).order_by(Player_Quest.final_score.desc())
+    player_quests_d = await db.execute(player_quests_q)
+    player_quests = player_quests_d.scalars().all()
+
+    return template.TemplateResponse(
+                request,
+                'view_quiz_top.html', context={ "player_quests" : player_quests, }
+            )
 
 @login_required
 async def quests_page(request: Request):
@@ -289,11 +301,11 @@ async def handle_qqa(request: Request ):
             db.add( pqa )
             await db.commit()
             # check - may be a quest is done?
-            player_quest.final_score = player_quest.final_score + 1
             player_quest.answered_count = player_quest.answered_count + 1
 
             if check_answer:
                 player_quest.answered_right_count = player_quest.answered_right_count + 1
+                player_quest.final_score = player_quest.final_score + 1
             else:
                 player_quest.answered_wrong_count = player_quest.answered_wrong_count + 1
 

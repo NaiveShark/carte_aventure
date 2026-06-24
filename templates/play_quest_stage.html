@@ -44,8 +44,8 @@
 <td>{{player_quest.answered_right_count}}</td>
 <td>{{player_quest.answered_wrong_count}}</td>
 <td>{{player_quest.final_score}}</td>
-<td>{{player_quest.quest_began}}</td>
-<td>{% if player_quest.quest_end %}{{player_quest.quest_end}}{% endif %}</td>
+<td>{{player_quest.quest_began.strftime('%Y-%m-%d %H:%M')}}</td>
+<td>{% if player_quest.quest_end %}{{player_quest.quest_end.strftime('%Y-%m-%d %H:%M')}}{% endif %}</td>
 </tr>
 </tbody>
 </table>
@@ -103,7 +103,7 @@
 
 
 {% if pqa %}
-<p>You answered at {{pqa.answered_dt}}. Your answer is <b>{{pqa.answervar.answer_title}}</b> and it's {{pqa.is_right_answer}}.
+<p>You answered at {{pqa.answered_dt.strftime('%Y-%m-%d %H:%M')}}. Your answer is <b>{{pqa.answervar.answer_title}}</b> and it's {{pqa.is_right_answer}}.
 
 	{% if pqa.is_right_answer %}
 	{{pqa.answervar.right_message}}
