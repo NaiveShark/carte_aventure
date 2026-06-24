@@ -178,9 +178,9 @@ CONST_QUESTS_MAP = [
             },
             {
                 "question_title": "Zavodovski Island is internationally famous for hosting the world's largest colony of which specific type of penguin?",
-                "question_map_X": -26.4600,
-                "question_map_Y": -56.3100,
-                "question_map_ZOOM": 12,
+                "question_map_X": -27.5667,
+                "question_map_Y": -56.3,
+                "question_map_ZOOM": 13,
                 "answers": [
                     ["Emperor Penguin", None, False, "No, Emperors breed further south on continental ice."],
                     ["Chinstrap Penguin", "Yes.", True, None],
