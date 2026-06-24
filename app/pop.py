@@ -110,7 +110,157 @@ CONST_QUESTS_MAP = [
                 ]
             }
         ]
-    }
+    },
+
+    {
+        "name": "Do you know South Georgia and the South Sandwich Islands geography?",
+        "description": "Test your knowledge on one of the most remote, mountainous, and wildlife-rich British Overseas Territories in the sub-Antarctic! ![SGSSI](https://upload.wikimedia.org/wikipedia/commons/a/a3/Grytviken_Church%2C_South_Georgia_%287413025656%29.jpg)",
+        "questions": [
+            {
+                "question_title": "What is the name of the historic, abandoned Norwegian whaling station on South Georgia where legendary explorer Sir Ernest Shackleton is buried?",
+                "question_map_X": -36.5087,
+                "question_map_Y": -54.2811,
+                "question_map_ZOOM": 13,
+                "answers": [
+                    ["Stromness", None, False, "No, though Shackleton did hike there to get rescue."],
+                    ["Husvik", None, False, "No, that is another whaling station nearby."],
+                    ["Grytviken", "Yes.", True, None],
+                    ["Leith Harbour", None, False, "No, Leith was the largest station but not his burial site."],
+                ]
+            },
+            {
+                "question_title": "Rising to 2,934 meters (9,626 ft) in the Allardyce Range, what is the highest peak in this territory (and across all UK sovereign territories outside Antarctica)?",
+                "question_map_X": -36.5278,
+                "question_map_Y": -54.4461,
+                "question_map_ZOOM": 10,
+                "answers": [
+                    ["Mount Hope", None, False, "No, Mount Hope is located in the British Antarctic Territory."],
+                    ["Mount Paget", "Yes.", True, None],
+                    ["Mount Carse", None, False, "No, that is in the southern part of the island."],
+                    ["Mount Belinda", None, False, "No, that is an active volcano in the South Sandwich chain."],
+                ]
+            },
+            {
+                "question_title": "Which island at the northwestern tip of South Georgia is famous for hosting a major British Antarctic Survey research station dedicated to seabirds and seals?",
+                "question_map_X": -38.0500,
+                "question_map_Y": -54.0083,
+                "question_map_ZOOM": 11,
+                "answers": [
+                    ["Annenkov Island", None, False, "No, Annenkov sits off the central western coast."],
+                    ["Cooper Island", None, False, "No, Cooper Island is at the southeastern tip."],
+                    ["Bird Island", "Yes.", True, None],
+                    ["Thule Island", None, False, "No, Thule is far away in the South Sandwich Islands."],
+                ]
+            },
+            {
+                "question_title": "During the 1982 Falklands War, Argentine forces briefly occupied South Georgia. At which administrative outpost on Cumberland East Bay did the main military clash occur?",
+                "question_map_X": -36.4961,
+                "question_map_Y": -54.2872,
+                "question_map_ZOOM": 14,
+                "answers": [
+                    ["King Edward Point", "Yes.", True, None],
+                    ["Prion Island", None, False, "No, Prion Island is an unpopulated wildlife sanctuary."],
+                    ["Godthul", None, False, "No, that was a minor whaling harbor."],
+                    ["St. Andrews Bay", None, False, "No, that is home to king penguins, not the garrison."],
+                ]
+            },
+            {
+                "question_title": "What is the name of the northernmost active volcanic island in the South Sandwich Islands chain?",
+                "question_map_X": -26.4500,
+                "question_map_Y": -56.3000,
+                "question_map_ZOOM": 9,
+                "answers": [
+                    ["Zavodovski Island", "Yes.", True, None],
+                    ["Visokoi Island", None, False, "No, Visokoi is slightly further south."],
+                    ["Bristol Island", None, False, "No, Bristol is near the southern end of the arc."],
+                    ["Saunders Island", None, False, "No, Saunders is located in the middle of the chain."],
+                ]
+            },
+            {
+                "question_title": "Zavodovski Island is internationally famous for hosting the world's largest colony of which specific type of penguin?",
+                "question_map_X": -26.4600,
+                "question_map_Y": -56.3100,
+                "question_map_ZOOM": 12,
+                "answers": [
+                    ["Emperor Penguin", None, False, "No, Emperors breed further south on continental ice."],
+                    ["Chinstrap Penguin", "Yes.", True, None],
+                    ["King Penguin", None, False, "No, Kings prefer the flat glacial plains of South Georgia."],
+                    ["Adélie Penguin", None, False, "No, Adélies prefer true Antarctic pack ice zones."],
+                ]
+            },
+            {
+                "question_title": "Which prominent bay on South Georgia's north coast is renowned for hosting the island's single largest breeding colony of King Penguins, numbering over 100,000 pairs?",
+                "question_map_X": -36.1667,
+                "question_map_Y": -54.4333,
+                "question_map_ZOOM": 11,
+                "answers": [
+                    ["Fortuna Bay", None, False, "No, though Fortuna does have a notable smaller colony."],
+                    ["St. Andrews Bay", "Yes.", True, None],
+                    ["Royal Bay", None, False, "No, Royal Bay is further south."],
+                    ["Elsehul", None, False, "No, Elsehul is primarily known for fur seals."],
+                ]
+            },
+            {
+                "question_title": "In 1775, which famous European explorer made the first definitive landing on South Georgia, mapping it and claiming it for Great Britain?",
+                "question_map_X": -36.0000,
+                "question_map_Y": -54.5000,
+                "question_map_ZOOM": 7,
+                "answers": [
+                    ["Captain James Cook", "Yes.", True, None],
+                    ["Sir Francis Drake", None, False, "No, Drake sailed much further north and west."],
+                    ["James Weddell", None, False, "No, Weddell explored the area decades later in the 1820s."],
+                    ["Thaddeus Bellingshausen", None, False, "No, Bellingshausen mapped the South Sandwich chain later."],
+                ]
+            },
+            {
+                "question_title": "At the southern tip of the South Sandwich Islands lies Thule Island. What is the name of the secret military naval station Argentina illegally maintained there from 1976 to 1982?",
+                "question_map_X": -27.3000,
+                "question_map_Y": -59.4500,
+                "question_map_ZOOM": 11,
+                "answers": [
+                    ["Corbeta Uruguay", "Yes.", True, None],
+                    ["Base Orcadas", None, False, "No, Orcadas is in the South Orkney Islands."],
+                    ["Base Marambio", None, False, "No, Marambio is on the Antarctic Peninsula."],
+                    ["Puerto Belgrano", None, False, "No, that is a major naval base in mainland Argentina."],
+                ]
+            },
+            {
+                "question_title": "South Georgia successfully completed the world's largest island rodent eradication program in 2018. Which invasive species, brought by historical ships, was completely wiped out to save native bird populations?",
+                "question_map_X": -36.6000,
+                "question_map_Y": -54.2500,
+                "question_map_ZOOM": 8,
+                "answers": [
+                    ["Black Rat", None, False, "No, it was specifically the brown/Norway rat."],
+                    ["Norway (Brown) Rat", "Yes.", True, None],
+                    ["House Mouse", None, False, "No, mice were only an issue on neighboring islands like Gough."],
+                    ["European Rabbit", None, False, "No, rabbits were never successfully established here."],
+                ]
+            },
+            {
+                "question_title": "What is the name of the narrow, dramatic maritime passage at the southeastern tip of South Georgia that separates the main island from Cooper Island?",
+                "question_map_X": -35.8000,
+                "question_map_Y": -54.7800,
+                "question_map_ZOOM": 11,
+                "answers": [
+                    ["Drygalski Fjord", None, False, "No, Drygalski is a nearby fjord, not a strait."],
+                    ["Cooper Sound", "Yes.", True, None],
+                    ["Drake Passage", None, False, "No, the Drake Passage separates South America from Antarctica."],
+                    ["Cumberland Sound", None, False, "No, Cumberland is the massive bay near Grytviken."],
+                ]
+            },
+            {
+                "question_title": "The South Sandwich Trench is one of the deepest oceanic trenches in the world. Place the dot on the map as close as you can to where this deep underwater abyss runs parallel to the east of the island chain.",
+                "question_map_X": -24.0000,
+                "question_map_Y": -55.0000,
+                "question_map_ZOOM": 5,
+                "question_map_data": "{  ____ }",
+                "answers": [
+                    ["Place the dot on the map as close as you can to target place.", "Yes.", True, None],
+                ]
+            }
+        ]
+    },
+
     ]
 
 
