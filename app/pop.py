@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from .models import Quest, Question, AnswerVar
+from .models import Quest, Question, AnswerVar, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS
 
 # CONST map questions
 CONST_QUESTS_MAP = [
@@ -673,7 +673,7 @@ async def pop_data( DB : AsyncSession ):
         await DB.commit()
         for qd in cqm["questions"]:
             q = Question( question_title = qd["question_title"],
-                              question_type = 1,
+                              question_type = CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS,
                               question_map_X = qd["question_map_X"],
                               question_map_Y = qd["question_map_Y"],
                               question_map_ZOOM = qd["question_map_ZOOM"],

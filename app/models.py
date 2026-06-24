@@ -82,6 +82,14 @@ class Quest(Base):
     description = Column(Text, nullable=True)
     is_active = Column(Boolean, default=True)
 
+# question types const
+# 0 is for simple quiz with text variants
+CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS = 0
+# 1 is for map center on X,Y,ZOOM, answers is simple text variant
+CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS = 1
+# 2 is for map description for questions, answers is simple text variant
+#
+
 class Question(Base):
     id = Column(Integer, primary_key=True, index=True)
     question_title = Column(Text, nullable=True)
@@ -89,11 +97,7 @@ class Question(Base):
     quest = relationship( "Quest" )
     
     # question_type
-    # 0 is for simple quiz with text variants
-    # 1 is for map center on X,Y,ZOOM, answers is simple text variant
-    # 2 is for map description for questions, answers is simple text variant
-    #
-    question_type = Column(Integer, nullable=False, default = 0 )
+    question_type = Column(Integer, nullable=False, default = CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS )
     
     question_map_X = Column(Float, nullable = True )
     question_map_Y = Column(Float, nullable = True )
