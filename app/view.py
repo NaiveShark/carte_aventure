@@ -32,16 +32,6 @@ def render_markdown(text: str) -> str:
 template.env.filters["markdown"] = render_markdown
 
 
-LOGIN_PAGE = """
-<h4>{error}<h4>
-<form method="POST">
-<label>username <input name="username"></label>
-<label>Password <input name="password" type="password"></label>
-<button type="submit">Login</button>
-</form>
-"""
-
-
 async def login_page(request: Request):
     db = request.state.db
     error = ''
@@ -63,7 +53,11 @@ async def login_page(request: Request):
                     error = "Invalid password"
             else:
                 error = "User not found"
-    return HTMLResponse(LOGIN_PAGE.format(error=error))
+    
+    return template.TemplateResponse(
+    request,
+        'login.html', context={ "error" : error  }
+    )
 
 
 async def logout_page(request: Request):
