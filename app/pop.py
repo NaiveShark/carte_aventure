@@ -21,7 +21,6 @@ CONST_QUESTS_MAP = [
               [ "Caesarpolis", None, False, "No." ],
           ] },
 
-
           { "question_title" : "What was the name of the ancient Phoenician city located here that was destroyed after the Punic War?",
              "question_map_X" : 10.3233,
              "question_map_Y" : 36.8528,
@@ -33,6 +32,19 @@ CONST_QUESTS_MAP = [
               [ "Ugarit", None, False, "No." ],
               [ "Sidon", None, False, "No." ],
           ] },
+
+          { "question_title" : "When did the eruption that destroyed Pompeii and Herculaneum occur?",
+             "question_map_X" : 14.442778,
+             "question_map_Y" : 40.821389,
+             "question_map_ZOOM" : 13,
+             "answers" : [
+              [ "79 BC", None, False, "No." ],
+              [ "97 BC", None, False, "No." ],
+              [ "79 AD", "Yes.", True, None ],
+              [ "97 AD", None, False, "No." ],
+          ] },
+
+
           ]
      },
     ]
