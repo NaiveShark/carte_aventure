@@ -87,24 +87,40 @@ class Quest(Base):
 # question types const
 # 0 is for simple quiz with text variants
 CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS = 0
-# 1 is for map center on X,Y,ZOOM, answers is simple text variant
+# 1 is for map description for questions, center on X,Y,ZOOM, answers is simple text variant
 CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS = 1
-# 2 is for map description for questions, answers is simple text variant
-#
+# 2 is for map description for questions, center on X,Y,ZOOM, answers is user placed dot
+CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER = 2
 
 class Question(Base):
     id = Column(Integer, primary_key=True, index=True)
     question_title = Column(Text, nullable=True)
     quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=False )
     quest = relationship( "Quest" )
-    
+
     # question_type
     question_type = Column(Integer, nullable=False, default = CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS )
-    
+
+    # if question_type is [CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER ],
+    # then X, Y, ZOOM is visible position of map in question description
     question_map_X = Column(Float, nullable = True )
     question_map_Y = Column(Float, nullable = True )
     question_map_ZOOM = Column(Integer, nullable = True )
-    
+
+    # if question_type is [CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER ],
+    # then question_map_data contain geojson for question target dot
+    #  {
+    #  "type": "FeatureCollection",
+    #  "features": [
+    #      {
+    #      "type": "Feature",
+    #      "geometry": {
+    #          "type": "Point",
+    #          "coordinates": [30.2957, 59.9391]
+    #      },
+    #      }
+    #  ]
+    #  }
     question_map_data = Column(Text)
 
 class AnswerVar(Base):

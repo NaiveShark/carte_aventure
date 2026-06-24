@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from .models import Quest, Question, AnswerVar, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS
+from .models import Quest, Question, AnswerVar, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER
 
 # CONST map questions
 CONST_QUESTS_MAP = [
@@ -42,6 +42,15 @@ CONST_QUESTS_MAP = [
               [ "97 BC", None, False, "No." ],
               [ "79 AD", "Yes.", True, None ],
               [ "97 AD", None, False, "No." ],
+          ] },
+
+          { "question_title" : "The Battle of Messana in 264 BC was the first military clash between the Roman Republic and Carthage. Place the dot on map there it was occure.",
+             "question_map_X" : 15,
+             "question_map_Y" : 41,
+             "question_map_ZOOM" : 4,
+             "question_map_data" : "{  ____ }",
+             "answers" : [
+              [ "Place the dot on the map as close as you can to target place.", "Yes.", True, None ],
           ] },
 
 
@@ -684,12 +693,22 @@ async def pop_data( DB : AsyncSession ):
         DB.add( quest )
         await DB.commit()
         for qd in cqm["questions"]:
-            q = Question( question_title = qd["question_title"],
-                              question_type = CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS,
-                              question_map_X = qd["question_map_X"],
-                              question_map_Y = qd["question_map_Y"],
-                              question_map_ZOOM = qd["question_map_ZOOM"],
-                          quest_id = quest.id )
+            if qd.get("question_map_data"):
+                q = Question( question_title = qd["question_title"],
+                                  question_type = CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER,
+                                  question_map_X = qd["question_map_X"],
+                                  question_map_Y = qd["question_map_Y"],
+                                  question_map_ZOOM = qd["question_map_ZOOM"],
+                                  question_map_data = qd["question_map_data"],
+                              quest_id = quest.id )
+            else:
+                q = Question( question_title = qd["question_title"],
+                                  question_type = CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS,
+                                  question_map_X = qd["question_map_X"],
+                                  question_map_Y = qd["question_map_Y"],
+                                  question_map_ZOOM = qd["question_map_ZOOM"],
+                              quest_id = quest.id )
+
             DB.add( q )
             await DB.commit()
             if qd.get("answers"):
