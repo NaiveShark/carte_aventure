@@ -53,12 +53,11 @@ async def login_page(request: Request):
                     error = "Invalid password"
             else:
                 error = "User not found"
-    
+
     return template.TemplateResponse(
     request,
         'login.html', context={ "error" : error  }
     )
-
 
 async def logout_page(request: Request):
     if request.user.is_authenticated:
@@ -67,6 +66,37 @@ async def logout_page(request: Request):
     else:
         content = 'You not logged in'
     return PlainTextResponse(content)
+
+async def reg_new_user(request: Request):
+    db = request.state.db
+    error = ''
+    if request.method == 'POST':
+        body = (await request.body()).decode()
+        data = dict(parse_qsl(body))
+        username = data.get('username')
+        password = data.get('password')
+
+        if username is None or password is None:
+            error = "Invalid username or password"
+        else:
+            user = await User.get_user_by_username(db, username)
+            if user:
+                error = "User name taken. Choose another name"
+            else:
+                await User.create_user( db, username, password, is_admin=False )
+
+                user = await User.get_user_by_username(db, username)
+                if user:
+                    if user.check_password(password) is True:
+                        await login_user(request, user)
+                        return RedirectResponse('/', status_code=302)
+                    else:
+                        error = "Invalid password"
+
+    return template.TemplateResponse(
+    request,
+        'reg.html', context={ "error" : error  }
+    )
 
 async def home_page(request: Request):
     return template.TemplateResponse(
@@ -89,9 +119,9 @@ async def view_user_profile(request: Request):
         return None
     else:
         query_q = select(Player_Quest).where(Player_Quest.user_id == user.id ).options(selectinload(Player_Quest.quest))
-        query_c = await db.execute(query_q)        
+        query_c = await db.execute(query_q)
         quests = query_c.scalars().all()
-        
+
         return template.TemplateResponse(
                  request,
                 'user_profile.html', context={ "quests" : quests, }
@@ -197,11 +227,11 @@ async def in_play_quest(request: Request ):
 
         pqa = None
         question_need_map = False
-        
+
         if current_question_id:
             current_question = await db.get(Question, current_question_id )
             question_need_map = ( current_question.question_type == CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS )
-            
+
             av_query = select(AnswerVar).where( AnswerVar.question_id == current_question_id )
             answer_await = await db.execute(av_query)
             answer_variants = answer_await.scalars().all()

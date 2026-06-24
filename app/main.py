@@ -20,7 +20,7 @@ from starlette_login.middleware import AuthenticationMiddleware
 
 from .admin_views import UserAdmin, QuestAdmin, QuestionAdmin, AnswerVarAdmin
 from .models import Base, User
-from .view import login_page, logout_page, home_page, view_user_profile, quests_page, view_quest, play_quest, in_play_quest, handle_qqa, map_tools
+from .view import login_page, logout_page, reg_new_user, home_page, view_user_profile, quests_page, view_quest, play_quest, in_play_quest, handle_qqa, map_tools
 from .pop import pop_data
 
 import mimetypes
@@ -62,6 +62,7 @@ app = FastAPI(
         Route("/quest/play_it/{quest_id}", play_quest, name='play_quest'),
         Route("/quest/in_play_it/{player_quest_id}", in_play_quest, name='in_play_quest'),
         Route("/quest/submit_form-qqa/{player_quest_id}/{current_question_id}", handle_qqa, methods=["POST"]),
+        Route('/reg_new_user', reg_new_user, methods=['GET', 'POST'], name='reg_new_user'),
         Route('/login', login_page, methods=['GET', 'POST'], name='login'),
         Route('/logout', logout_page, name='logout'),
         
