@@ -45,7 +45,7 @@
 <td>{{player_quest.answered_wrong_count}}</td>
 <td>{{player_quest.final_score}}</td>
 <td>{{player_quest.quest_began}}</td>
-<td>{{player_quest.quest_end}}</td>
+<td>{% if player_quest.quest_end %}{{player_quest.quest_end}}{% endif %}</td>
 </tr>
 </tbody>
 </table>
