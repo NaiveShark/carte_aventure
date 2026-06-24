@@ -16,6 +16,7 @@
 <th>Quest</th>
 <th>Began</th>
 <th>End</th>
+<th>Score</th>
 </tr>
 </thead>
 <tbody>
@@ -32,6 +33,7 @@
 
 <td>{{pq.quest_began}}</td>
 <td>{% if pq.quest_end %}{{pq.quest_end }}{% endif %}</td>
+<td>{% if pq.quest_end %}{{pq.final_score }}{% endif %}</td>
 
 </tr>
 

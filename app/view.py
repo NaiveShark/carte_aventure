@@ -198,10 +198,16 @@ async def in_play_quest(request: Request ):
         quest_id = player_quest.quest_id
         quest = await db.get(Quest, quest_id )
         questions_q = select(Question).where( Question.quest_id == quest_id )
+        current_question = None
         questions = await db.execute( questions_q )
 
         pqa = None
+        question_need_map = False
+        
         if current_question_id:
+            current_question = await db.get(Question, current_question_id )
+            question_need_map = current_question.question_type == 1
+            
             av_query = select(AnswerVar).where( AnswerVar.question_id == current_question_id )
             answer_await = await db.execute(av_query)
             answer_variants = answer_await.scalars().all()
@@ -218,6 +224,8 @@ async def in_play_quest(request: Request ):
                     "player_quest" : player_quest,
                     "questions" : questions.scalars().all(),
                     "current_question_id" : current_question_id,
+                    "current_question" : current_question,
+                    "question_need_map" : question_need_map,
                     "answer_variants" : answer_variants,
                     "pqa" : pqa,
                 }

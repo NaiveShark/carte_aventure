@@ -1,22 +1,54 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock %}
+
+{% if question_need_map %}
+{% block addition_style %}
+
+    <!-- Relative paths point directly to local Starlette files -->
+    <link rel="stylesheet" href="/statics/ol/ol.css">
+    <script src="/statics/ol/ol.js"></script>
+    <style>
+        body { margin: 0; padding: 0; font-family: sans-serif; }
+        #map { width: 50vw; height: 50vh; }
+    </style>
+{% endblock %}
+{% endif %}
+
 {% block body %}
 <p>
 {% if request.user.is_authenticated %}
 
 <h1>{{quest.name}}</h1>
 {% if quest.description %}
-<p>{{quest.description}}</p>
+<p>{{quest.description | markdown | safe }}</p>
 {% endif %}
-<p>You are playing this quest. 
+<p>You are playing this quest.
 
-<p>questions_count {{player_quest.questions_count}}</p>
-<p>answered_count {{player_quest.answered_count}}</p>
-<p>answered_right_count {{player_quest.answered_right_count}}</p>
-<p>answered_wrong_count {{player_quest.answered_wrong_count}}</p>
-<p>final_score {{player_quest.final_score}}</p>
-<p>quest_began {{player_quest.quest_began}}</p>
-<p>quest_end {{player_quest.quest_end}}</p>
+<table border=1>
+<thead>
+<tr>
+<th>questions_count</th>
+<th>answered_count</th>
+<th>answered_right_count</th>
+<th>answered_wrong_count</th>
+<th>final_score</th>
+<th>quest_began</th>
+<th>quest_end</th>
+
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>{{player_quest.questions_count}}</td>
+<td>{{player_quest.answered_count}}</td>
+<td>{{player_quest.answered_right_count}}</td>
+<td>{{player_quest.answered_wrong_count}}</td>
+<td>{{player_quest.final_score}}</td>
+<td>{{player_quest.quest_began}}</td>
+<td>{{player_quest.quest_end}}</td>
+</tr>
+</tbody>
+</table>
 
 </p>
 
@@ -30,9 +62,53 @@
 {% endfor %}
 </ol>
 
+{% if question_need_map %}
+
+	
+<div id="map"></div>
+
+    <script>
+        // 1. Create a local source and layer to hold the drawings
+        const vectorSource = new ol.source.Vector();
+        const vectorLayer = new ol.layer.Vector({
+            source: vectorSource,
+            style: new ol.style.Style({
+                fill: new ol.style.Fill({ color: 'rgba(255, 255, 255, 0.4)' }),
+                stroke: new ol.style.Stroke({ color: '#ffcc33', width: 3 }),
+                image: new ol.style.Circle({
+                    radius: 7,
+                    fill: new ol.style.Fill({ color: '#ffcc33' })
+                })
+            })
+        });
+
+        // 2. Initialize Map
+        const map = new ol.Map({
+            target: 'map',
+            layers: [
+                new ol.layer.Tile({ source: new ol.source.OSM() }), // Base Layer
+                vectorLayer // Drawing Layer
+            ],
+            view: new ol.View({
+                center: ol.proj.fromLonLat([  {{current_question.question_map_X}}, {{current_question.question_map_Y}} ]),
+                zoom: {{current_question.question_map_ZOOM}}
+            })
+        });
+
+
+		
+		
+		
+    </script>	
+	
+	
+
+{% endif %}
+
+
 {% if pqa %}
 <p>You answered at {{pqa.answered_dt}}. Your answer is <b>{{pqa.answervar.answer_title}}</b> and it's {{pqa.is_right_answer}}.
-    
+
 	{% if pqa.is_right_answer %}
 	{{pqa.answervar.right_message}}
 	{% else %}
@@ -49,15 +125,15 @@
 
 {% for av in answer_variants %}
 
-  
+
   <label>
-    <input type="radio" name="answer_var" value="{{av.id}}"    
-	
+    <input type="radio" name="answer_var" value="{{av.id}}"
+
 	{% if loop.first %}checked{% endif %}
-	
+
 	> {{av.answer_title}}
   </label><br>
-  
+
 
 
 {% endfor %}

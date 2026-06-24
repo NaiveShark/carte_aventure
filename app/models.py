@@ -3,7 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 # Auth and user tables
 from passlib.hash import pbkdf2_sha256
-from sqlalchemy import Boolean, Column, Integer, String, DateTime, select
+from sqlalchemy import Boolean, Column, Integer, String, DateTime, Text, Float, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
 from starlette.requests import Request
@@ -79,14 +79,27 @@ class User(Base, UserMixin):
 class Quest(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True, nullable=False)
-    description = Column(String, nullable=True)
+    description = Column(Text, nullable=True)
     is_active = Column(Boolean, default=True)
 
 class Question(Base):
     id = Column(Integer, primary_key=True, index=True)
-    question_title = Column(String, nullable=True)
+    question_title = Column(Text, nullable=True)
     quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=False )
     quest = relationship( "Quest" )
+    
+    # question_type
+    # 0 is for simple quiz with text variants
+    # 1 is for map center on X,Y,ZOOM, answers is simple text variant
+    # 2 is for map description for questions, answers is simple text variant
+    #
+    question_type = Column(Integer, nullable=False, default = 0 )
+    
+    question_map_X = Column(Float, nullable = True )
+    question_map_Y = Column(Float, nullable = True )
+    question_map_ZOOM = Column(Integer, nullable = True )
+    
+    question_map_data = Column(Text)
 
 class AnswerVar(Base):
     id = Column(Integer, primary_key=True, index=True)

@@ -3,8 +3,42 @@ from sqlalchemy import select
 
 from .models import Quest, Question, AnswerVar
 
+# CONST map questions
+CONST_QUESTS_MAP = [
+
+   { "name" : "Do you know the Roman Empire's age geography?",
+      "description" : "Do you know the geography  of ancient Roman Empire? ![SQPQR](https://upload.wikimedia.org/wikipedia/commons/d/d5/SPQR_skjaldamerki_R%C3%B3maveldis.png)",
+      "questions" : [
+          { "question_title" : "What was this city named during most of the period of Roman rule in Britannia?",
+             "question_map_X" : 0,
+             "question_map_Y" : 51.5,
+             "question_map_ZOOM" : 12,
+             "answers" : [
+              [ "London", None, False, "No." ],
+              [ "Landum", None, False, "No." ],
+              [ "Londinium", "Yes.", True, None ],
+              [ "Londonum", None, False, "No." ],
+              [ "Caesarpolis", None, False, "No." ],
+          ] },
+
+
+          { "question_title" : "What was the name of the ancient Phoenician city located here that was destroyed after the Punic War?",
+             "question_map_X" : 10.3233,
+             "question_map_Y" : 36.8528,
+             "question_map_ZOOM" : 10,
+             "answers" : [
+              [ "Byblos", None, False, "No." ],
+              [ "Tyre", None, False, "No." ],
+              [ "Carthage", "Yes.", True, None ],
+              [ "Ugarit", None, False, "No." ],
+              [ "Sidon", None, False, "No." ],
+          ] },
+          ]
+     },
+    ]
+
 # CONST standart questions
-CONST_QUESTS = [
+CONST_QUESTS_TEXT = [
     { "name" : "Do you know the planets?",
       "description" : "Do you know the planets of *Solar system*? ![Solar system](https://upload.wikimedia.org/wikipedia/commons/5/5b/Solar_System_XXIX.png)",
       "questions" : [
@@ -52,30 +86,30 @@ CONST_QUESTS = [
               [ "Neptune", None, False, "No, Neptune's rings are very dark and thin." ],
               [ "Mars", None, False, "No, Mars has no rings." ]
               ] },
-              
-          { "question_title" : "Which celestial body was reclassified as a dwarf planet in 2006?", 
-            "answers" : [ 
+
+          { "question_title" : "Which celestial body was reclassified as a dwarf planet in 2006?",
+            "answers" : [
               [ "Ceres", None, False, "No, Ceres was already considered an asteroid before becoming a dwarf planet." ],
               [ "Pluto", "Yes", True, None ],
               [ "Eris", None, False, "No, Eris was discovered around that time, forcing the new definition." ],
               [ "Mercury", None, False, "No, Mercury is a major terrestrial planet." ]
               ] },
-          { "question_title" : "Which planet does the moon 'Europa', which has a subsurface ocean, orbit?", 
-            "answers" : [ 
+          { "question_title" : "Which planet does the moon 'Europa', which has a subsurface ocean, orbit?",
+            "answers" : [
               [ "Saturn", None, False, "No, Saturn's famous ocean moon is Enceladus." ],
               [ "Mars", None, False, "No, Mars only has two small, dry moons." ],
               [ "Jupiter", "Yes", True, None ],
               [ "Neptune", None, False, "No, Neptune's largest moon is Triton." ]
               ] },
-          { "question_title" : "Which space probe was the first to visit and photograph Pluto in 2015?", 
-            "answers" : [ 
+          { "question_title" : "Which space probe was the first to visit and photograph Pluto in 2015?",
+            "answers" : [
               [ "Voyager 1", None, False, "No, Voyager 1 left the Solar System without visiting Pluto." ],
               [ "Cassini", None, False, "No, Cassini spent its mission studying Saturn." ],
               [ "New Horizons", "Yes", True, None ],
               [ "Curiosity", None, False, "No, Curiosity is a rover operating on Mars." ]
               ] },
-              
-              
+
+
               ]
       },
 
@@ -141,14 +175,14 @@ CONST_QUESTS = [
 },
 {
     "name": "The Punic Wars",
-    "description": "Questions about Rome's legendary conflicts with Carthage.",
+    "description": "Questions about Rome's legendary conflicts with Carthage. ![](https://upload.wikimedia.org/wikipedia/commons/c/c8/TSC_hannibal_elephant.jpg))",
     "questions": [
         {
             "question_title": "Which brilliant Carthaginian general famously crossed the Alps with war elephants to attack Rome?",
             "answers": [
-                ["Hannibal Barca", "Yes. Hannibal infamously invaded Italy during the Second Punic War, winning the Battle of Cannae.", True, "None"],
-                ["Hamilcar Barca", "None", False, "No."],
                 ["Scipio Africanus", "None", False, "No."],
+                ["Hamilcar Barca", "None", False, "No."],
+                ["Hannibal Barca", "Yes. Hannibal infamously invaded Italy during the Second Punic War, winning the Battle of Cannae.", True, "None"],
                 ["Hasdrubal", "None", False, "No."]
             ]
         }
@@ -633,8 +667,27 @@ async def pop_data( DB : AsyncSession ):
     if result.scalars().first():
         return 0
 
+    for cqm in CONST_QUESTS_MAP:
+        quest = Quest( name = cqm["name"], description = cqm["description"], is_active = True  )
+        DB.add( quest )
+        await DB.commit()
+        for qd in cqm["questions"]:
+            q = Question( question_title = qd["question_title"],
+                              question_type = 1,
+                              question_map_X = qd["question_map_X"],
+                              question_map_Y = qd["question_map_Y"],
+                              question_map_ZOOM = qd["question_map_ZOOM"],
+                          quest_id = quest.id )
+            DB.add( q )
+            await DB.commit()
+            if qd.get("answers"):
+                for answer in qd.get("answers"):
+                    a = AnswerVar( answer_title = answer[0], question_id = q.id, right_message = answer[1], is_true_answer = answer[2], wrong_message = answer[3] )
+                    DB.add( a )
+                    await DB.commit()
 
-    for сq_d in CONST_QUESTS:
+
+    for сq_d in CONST_QUESTS_TEXT:
         quest = Quest( name = сq_d["name"], description = сq_d["description"], is_active = True  )
         DB.add( quest )
         await DB.commit()
