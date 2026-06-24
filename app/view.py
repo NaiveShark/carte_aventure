@@ -8,7 +8,7 @@ from starlette_login.decorator import login_required
 from starlette_login.utils import login_user, logout_user
 from datetime import datetime
 
-from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS
+from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER
 
 from starlette.templating import Jinja2Templates
 from starlette_login.login_manager import LoginManager
@@ -243,8 +243,10 @@ async def in_play_quest(request: Request ):
 
         if current_question_id:
             current_question = await db.get(Question, current_question_id )
-            question_need_map = ( current_question.question_type == CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS )
-
+            question_need_map = ( current_question.question_type == CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS ) or ( current_question.question_type == CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER )
+            print( current_question.question_type )
+            print( question_need_map )
+            
             av_query = select(AnswerVar).where( AnswerVar.question_id == current_question_id )
             answer_await = await db.execute(av_query)
             answer_variants = answer_await.scalars().all()
