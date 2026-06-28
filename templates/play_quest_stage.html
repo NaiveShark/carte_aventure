@@ -20,10 +20,7 @@
 <p>
 {% if request.user.is_authenticated %}
 
-<h1>{{quest.name}} (difficulty {{quest.difficulty_coefficient}})</h1>
-{% if quest.description %}
-<p>{{quest.description | markdown | safe }}</p>
-{% endif %}
+<h1>{{quest.name}} (difficulty {{quest.difficulty_coefficient}}) <a href="/view/quest/{{quest.id}}">Back to quest</a></h1>
 <p>You are playing this quest.
 
 <table border=1>
