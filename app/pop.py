@@ -71,7 +71,7 @@ CONST_QUESTS_MAP = [
           ] },
 
           { "question_title" : "Where is the westernmost point of the Roman Empire on the continental mainland?",
-             "question_map_X" : -9.5,
+             "question_map_X" : -10,
              "question_map_Y" : 39,
              "question_map_ZOOM" : 8,
              "dot_answer" : [
