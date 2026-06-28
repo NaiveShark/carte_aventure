@@ -8,7 +8,7 @@ from starlette_login.decorator import login_required
 from starlette_login.utils import login_user, logout_user
 from datetime import datetime
 
-from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER
+from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER
 
 from starlette.templating import Jinja2Templates
 from starlette_login.login_manager import LoginManager
@@ -239,40 +239,27 @@ async def in_play_quest(request: Request ):
         questions = await db.execute( questions_q )
 
         pqa = None
+        # we need to show the map for question
         question_need_map = False
+        # we need to show the dot moving for map for question answering
+        question_need_map_dot = False
 
         if current_question_id:
             current_question = await db.get(Question, current_question_id )
+            # if question contain MAP QUIZ or "Place the dot in the right place"
             question_need_map = ( current_question.question_type == CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS ) or ( current_question.question_type == CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER )
-            print( current_question.question_type )
-            print( question_need_map )
-            #print( current_question.question_map_data )
+            # if question is "Place the dot in the right place"
+            question_need_map_dot = ( current_question.question_type == CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER )
 
+            # we need the answer variants?
+            if ( current_question.question_type == CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS ) or ( current_question.question_type == CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS ):
+                av_query = select(AnswerVar).where( AnswerVar.question_id == current_question_id )
+                answer_await = await db.execute(av_query)
+                answer_variants = answer_await.scalars().all()
 
-
-            import json
-
-            #geojson_string = '{ "type": "Feature", "geometry": { "type": "Point", "coordinates": [-122.4194, 37.7749] } }'
-            #geojson_string = current_question.question_map_data
-
-            # Convert string to dictionary
-            #data = json.loads(geojson_string)
-
-            # Access geometry or properties
-            #coords = data["geometry"]["coordinates"]
-            #city_name = data["properties"]["name"]
-
-            #print(f"Coordinates: {coords}")
-
-
-
-
-
-            av_query = select(AnswerVar).where( AnswerVar.question_id == current_question_id )
-            answer_await = await db.execute(av_query)
-            answer_variants = answer_await.scalars().all()
             # detect, may be already answered
-            pqa_query = select(Player_Quest_Answers).where(Player_Quest_Answers.player_quest_id == player_quest_id, Player_Quest_Answers.question_id == current_question_id )
+            pqa_query = select(Player_Quest_Answers).where(Player_Quest_Answers.player_quest_id == player_quest_id, Player_Quest_Answers.question_id == current_question_id ).options(selectinload(Player_Quest_Answers.answervar))
+
             pqa_e = await db.execute(pqa_query)
             pqa = pqa_e.scalar_one_or_none()
 
@@ -286,6 +273,7 @@ async def in_play_quest(request: Request ):
                     "current_question_id" : current_question_id,
                     "current_question" : current_question,
                     "question_need_map" : question_need_map,
+                    "question_need_map_dot" : question_need_map_dot,
                     "answer_variants" : answer_variants,
                     "pqa" : pqa,
                 }
@@ -309,11 +297,23 @@ async def handle_qqa(request: Request ):
     pqa_exits = await db.scalar(pqa_exits_q)
     if not pqa_exits:
         async with request.form() as form:
-            answer_var_id = form.get("answer_var")
+            print( form )
 
-            #detect the answer
-            answer_var = await db.get(AnswerVar, answer_var_id )
-            check_answer = answer_var.is_true_answer
+            # this is a text varion choosed
+            answer_var_id = form.get("answer_var")
+            if answer_var_id:
+                #detect the answer
+                answer_var = await db.get(AnswerVar, answer_var_id )
+                check_answer = answer_var.is_true_answer
+
+            else:
+               # it's a dot placed answer with coord
+               answer_var_q = select( AnswerVar ).where( AnswerVar.question_id == current_question_id )
+               answer_var_e = await db.execute(answer_var_q)
+               answer_var = answer_var_e.scalars( ).first()
+               answer_var_id = answer_var.id
+               check_answer = False
+
 
             pqa = Player_Quest_Answers(
                 player_quest_id = player_quest_id,

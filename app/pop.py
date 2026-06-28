@@ -51,14 +51,26 @@ CONST_QUESTS_MAP = [
              "dot_answer" : [
               { "dot_question" : "Place the dot on the map as close as you can to target place.",
                 "true_map_data" : '{ "type": "Feature", "geometry": { "type": "Point", "coordinates": [15, 41] } }',
-                "rigth_message" : "Yes.",
+                "right_message" : "Yes.",
+                "wrong_message" : "No",
+              },
+          ] },
+
+          { "question_title" : "The Battle of the Aegates was a naval battle fought on 10 March 241 BC between the fleets of Carthage and Rome during the First Punic War. It took place among the Aegates Islands, off the western coast of the island of Sicily. It was the final and deciding battle of the 23-year-long First Punic War. Place the dot on map there it was occure.",
+             "question_map_X" : 11,
+             "question_map_Y" : 39,
+             "question_map_ZOOM" : 4,
+             "dot_answer" : [
+              { "dot_question" : "Place the dot on the map as close as you can to target place.",
+                "true_map_data" : '{ "type": "Feature", "geometry": { "type": "Point", "coordinates": [12.2, 37.97] } }',
+                "right_message" : "Yes.",
                 "wrong_message" : "No",
               },
           ] },
 
 
           ]
-     },
+     }  ,
 
     {
         "name": "Do you know Caribbean geography?",
@@ -108,9 +120,16 @@ CONST_QUESTS_MAP = [
                 "question_map_Y": 15.8,
                 "question_map_ZOOM": 8,
                 "question_map_data": "{  ____ }",
-                "answers": [
-                    ["Place the dot on the map as close as you can to target place.", "Yes.", True, None],
-                ]
+                
+                
+                
+                "dot_answer" : [
+              { "dot_question" : "Place the dot on the map as close as you can to target place.",
+                "true_map_data" : '{ "type": "Feature", "geometry": { "type": "Point", "coordinates": [15, 41] } }',
+                "right_message" : "Yes.",
+                "wrong_message" : "No",
+              }, ]
+                
             }
         ]
     },
@@ -915,8 +934,8 @@ async def pop_data( DB : AsyncSession ):
                 for answer in qd.get("dot_answer"):
                     a = AnswerVar( question_id = q.id,
                                    answer_title = answer["dot_question"],
-                                   right_message = answer["rigth_message"],
-                                   is_true_answer = True,
+                                   right_message = answer["right_message"],
+                                   is_true_answer = False,
                                    wrong_message = answer["wrong_message"],
                                    true_map_data = answer["true_map_data"]
                                    )

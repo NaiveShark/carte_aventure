@@ -3,7 +3,8 @@
 
 {% if question_need_map %}
 {% block addition_style %}
-
+	
+	{% if question_need_map %}
     <!-- Relative paths point directly to local Starlette files -->
     <link rel="stylesheet" href="/statics/ol/ol.css">
     <script src="/statics/ol/ol.js"></script>
@@ -11,6 +12,7 @@
         body { margin: 0; padding: 0; font-family: sans-serif; }
         #map { width: 50vw; height: 50vh; }
     </style>
+	{% endif %}
 {% endblock %}
 {% endif %}
 
@@ -65,7 +67,24 @@
 
 <h1>{{current_question.question_title}}</h1>
 
+
 {% if question_need_map %}
+
+{% if question_need_map_dot and ( not pqa ) %}
+	<button id="toggle-edit-btn" style="margin-bottom: 10px; padding: 8px 16px; cursor: pointer;">
+		Move the map dot
+	</button>
+
+	<!-- HTML for to send map dot to server -->
+	<form id="coords-form" action="/quest/submit_form-qqa/{{player_quest_id}}/{{current_question_id}}" method="POST">
+		<input type="hidden" id="input-lon" name="longitude" value="{{current_question.question_map_X}}">
+		<input type="hidden" id="input-lat" name="latitude" value="{{current_question.question_map_Y}}">
+		
+		<button type="submit" id="submit-btn" style="display: none; padding: 8px 16px; background-color: #008CBA; color: white; border: none; cursor: pointer;">
+			Send dot as your answer
+		</button>
+	</form>
+{% endif %}
 
 <div id="map"></div>
 
@@ -99,10 +118,7 @@
 
 
 
-
-
-
-
+{% if question_need_map_dot %}
 
 
 // ==========================================
@@ -134,6 +150,58 @@
 
 
 
+// ==========================================
+    // Move the map dot mode
+    // ==========================================
+
+    // Tool for geometry
+    const modifyInteraction = new ol.interaction.Modify({
+        source: vectorSource,
+        deleteCondition: ol.events.condition.never
+    });
+
+    // Editing mode var
+	let isEditing = false;
+    const editBtn = document.getElementById('toggle-edit-btn');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // Swithing mode
+    function toggleEditMode() {
+        isEditing = !isEditing;
+
+        if (isEditing) {
+            // Swithcing mode ON
+            map.addInteraction(modifyInteraction);
+            editBtn.innerText = 'Fix the dot';
+            editBtn.style.backgroundColor = '#e7e7e7';
+            editBtn.style.color = 'black';
+            submitBtn.style.display = 'none'; // Hide submit
+        } else {
+            // Swithcing mode OFF
+            map.removeInteraction(modifyInteraction);
+            editBtn.innerText = 'Move the dot again';
+            editBtn.style.backgroundColor = '';
+            editBtn.style.color = '';
+
+            // Extract the coords
+            const currentCoords = dotFeature.getGeometry().getCoordinates();
+            const lonLat = ol.proj.toLonLat(currentCoords);
+            
+            // place to form
+            document.getElementById('input-lon').value = lonLat[0];
+            document.getElementById('input-lat').value = lonLat[1];
+
+            // Show the send button
+            submitBtn.style.display = 'inline-block';
+        }
+    }
+
+
+    // Link the event
+    editBtn.addEventListener('click', toggleEditMode);
+
+	{% endif %}
+
 
     </script>
 
@@ -141,6 +209,7 @@
 
 
 {% if pqa %}
+
 <p>You answered at {{pqa.answered_dt.strftime('%Y-%m-%d %H:%M')}}. Your answer is <b>{{pqa.answervar.answer_title}}</b> and it's {{pqa.is_right_answer}}.
 
 	{% if pqa.is_right_answer %}
@@ -168,7 +237,6 @@
 	> {{av.answer_title}}
 	
 	
-	{{av.true_map_data}}
 	
   </label><br>
 
@@ -178,6 +246,8 @@
   <!-- Submit button to send the form data -->
   <button type="submit">Submit Choice</button>
 </form>
+
+
 {% endif %}
 
 {% endif %}
