@@ -50,8 +50,8 @@ CONST_QUESTS_MAP = [
              "question_map_ZOOM" : 4,
              "dot_answer" : [
               { "dot_question" : "Place the dot on the map as close as you can to target place.",
-                "true_answer_map_X" : 15,
-                "true_answer_map_Y" : 41,
+                "true_answer_map_X" : 15.5614, 
+                "true_answer_map_Y" : 38.18,
                 "right_message" : "Yes.",
                 "wrong_message" : "No",
               },
