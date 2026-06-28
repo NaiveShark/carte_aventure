@@ -243,6 +243,10 @@ async def in_play_quest(request: Request ):
         question_need_map = False
         # we need to show the dot moving for map for question answering
         question_need_map_dot = False
+        question_need_map_dot_mover = False
+        start_dot_X = None
+        start_dot_Y = None
+        dot_color = ''
 
         if current_question_id:
             current_question = await db.get(Question, current_question_id )
@@ -262,7 +266,25 @@ async def in_play_quest(request: Request ):
 
             pqa_e = await db.execute(pqa_query)
             pqa = pqa_e.scalar_one_or_none()
-
+            # edit dot
+            question_need_map_dot_mover = question_need_map_dot and (not pqa )
+            if question_need_map_dot_mover:
+                dot_color = "'#FFFF00'" # Yellow color
+            else:
+                if pqa.is_right_answer:
+                    dot_color = "'#008000'" # Green color
+                else:
+                    dot_color = "'#ff0000'" # Red color
+            # started dot
+            if question_need_map_dot:
+                # if qestion is answered
+                if pqa:
+                    start_dot_X = pqa.answer_map_X
+                    start_dot_Y = pqa.answer_map_Y
+                else:
+                    start_dot_X = current_question.question_map_X
+                    start_dot_Y = current_question.question_map_Y
+                    
         return template.TemplateResponse(
                  request,
                 'play_quest_stage.html', context={
@@ -274,6 +296,10 @@ async def in_play_quest(request: Request ):
                     "current_question" : current_question,
                     "question_need_map" : question_need_map,
                     "question_need_map_dot" : question_need_map_dot,
+                    "question_need_map_dot_mover" : question_need_map_dot_mover,
+                    "dot_color" : dot_color,
+                    "start_dot_X" : start_dot_X,
+                    "start_dot_Y" : start_dot_Y,
                     "answer_variants" : answer_variants,
                     "pqa" : pqa,
                 }
@@ -296,11 +322,11 @@ async def handle_qqa(request: Request ):
     pqa_exits_q = select(exists().where( Player_Quest_Answers.player_quest_id == player_quest_id, Player_Quest_Answers.question_id == current_question_id ) )
     pqa_exits = await db.scalar(pqa_exits_q)
     if not pqa_exits:
-        longitude = None 
+        longitude = None
         latitude  = None
         distance = None
         async with request.form() as form:
-            
+
             # this is a text varion choosed
             answer_var_id = form.get("answer_var")
             if answer_var_id:
@@ -318,7 +344,7 @@ async def handle_qqa(request: Request ):
                longitude = float( form.get("longitude") )
                latitude  = float( form.get("latitude") )
                distance = dist( answer_var.true_answer_map_X, answer_var.true_answer_map_Y, longitude, latitude)
-               
+
                check_answer = ( distance < CONST_PERMISSIBLE_DISTANCE_DEVIATION )
 
 
@@ -327,7 +353,7 @@ async def handle_qqa(request: Request ):
                 question_id = current_question_id,
                 answervar_id = answer_var_id,
                 answered_dt = datetime.now(),
-                answer_map_X = longitude, 
+                answer_map_X = longitude,
                 answer_map_Y = latitude,
                 answer_distance = distance,
                 is_right_answer = check_answer

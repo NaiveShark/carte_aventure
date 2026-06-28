@@ -3,7 +3,7 @@
 
 {% if question_need_map %}
 {% block addition_style %}
-	
+
 	{% if question_need_map %}
     <!-- Relative paths point directly to local Starlette files -->
     <link rel="stylesheet" href="/statics/ol/ol.css">
@@ -67,8 +67,8 @@
 
 {% if question_need_map %}
 
-{% if question_need_map_dot and ( not pqa ) %}
-	<p>Place the dot on map there it was occure.</p>
+{% if question_need_map_dot_mover %}
+	<p>Move the yellow dot on map there it was occure.</p>
 
 	<button id="toggle-edit-btn" style="margin-bottom: 10px; padding: 8px 16px; cursor: pointer;">
 		Move the map dot
@@ -76,9 +76,9 @@
 
 	<!-- HTML for to send map dot to server -->
 	<form id="coords-form" action="/quest/submit_form-qqa/{{player_quest_id}}/{{current_question_id}}" method="POST">
-		<input type="hidden" id="input-lon" name="longitude" value="{{current_question.question_map_X}}">
-		<input type="hidden" id="input-lat" name="latitude" value="{{current_question.question_map_Y}}">
-		
+		<input type="hidden" id="input-lon" name="longitude" value="{{start_dot_X}}">
+		<input type="hidden" id="input-lat" name="latitude" value="{{start_dot_Y}}">
+
 		<button type="submit" id="submit-btn" style="display: none; padding: 8px 16px; background-color: #008CBA; color: white; border: none; cursor: pointer;">
 			Send dot as your answer
 		</button>
@@ -110,7 +110,7 @@
                 vectorLayer // Drawing Layer
             ],
             view: new ol.View({
-                center: ol.proj.fromLonLat([  {{current_question.question_map_X}}, {{current_question.question_map_Y}} ]),
+                center: ol.proj.fromLonLat([  {{start_dot_X}}, {{start_dot_Y}} ]),
                 zoom: {{current_question.question_map_ZOOM}}
             })
         });
@@ -123,9 +123,9 @@
 // ==========================================
     // ADDED: Create and Add the Dot
     // ==========================================
-    
+
     // 1. Define the dot coordinates (using your template variables)
-    const dotCoords = [ {{current_question.question_map_X}}, {{current_question.question_map_Y}} ];
+    const dotCoords = [ {{start_dot_X}}, {{start_dot_Y}} ];
 
     // 2. Create the feature with a Point geometry
     const dotFeature = new ol.Feature({
@@ -135,12 +135,12 @@
     // 3. Create a unique style for this specific dot (Red with white border)
     const dotStyle = new ol.style.Style({
         image: new ol.style.Circle({
-            radius: 12,
-            fill: new ol.style.Fill({ color: '#ff0000' }), // Red color
+            radius: {% if question_need_map_dot_mover %} 15 {% else %} 10 {% endif %},
+            fill: new ol.style.Fill({ color: {{dot_color | safe}} }),
             stroke: new ol.style.Stroke({ color: '#ffffff', width: 2 }) // White border
         })
     });
-    
+
     // 4. Apply the style to the feature
     dotFeature.setStyle(dotStyle);
 
@@ -148,7 +148,7 @@
     vectorSource.addFeature(dotFeature);
 
 
-
+{% if question_need_map_dot_mover %}
 // ==========================================
     // Move the map dot mode
     // ==========================================
@@ -185,7 +185,7 @@
             // Extract the coords
             const currentCoords = dotFeature.getGeometry().getCoordinates();
             const lonLat = ol.proj.toLonLat(currentCoords);
-            
+
             // place to form
             document.getElementById('input-lon').value = lonLat[0];
             document.getElementById('input-lat').value = lonLat[1];
@@ -198,6 +198,8 @@
 
     // Link the event
     editBtn.addEventListener('click', toggleEditMode);
+
+	{% endif %}
 
 	{% endif %}
 
@@ -234,9 +236,9 @@
 	{% if loop.first %}checked{% endif %}
 
 	> {{av.answer_title}}
-	
-	
-	
+
+
+
   </label><br>
 
 
