@@ -103,12 +103,24 @@ class Question(Base):
 
     # if question_type is [CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER ],
     # then X, Y, ZOOM is visible position of map in question description
+    # this is not an answer or targed dot, this is a map start position only
     question_map_X = Column(Float, nullable = True )
     question_map_Y = Column(Float, nullable = True )
     question_map_ZOOM = Column(Integer, nullable = True )
 
-    # if question_type is [CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER ],
-    # then question_map_data contain geojson for question target dot
+class AnswerVar(Base):
+    id = Column(Integer, primary_key=True, index=True)
+    answer_title = Column(String, nullable=True)
+
+    question_id: Mapped[int] = mapped_column(ForeignKey("question.id"), nullable=False )
+    question = relationship( "Question" )
+
+    right_message = Column(String, nullable=True)
+    is_true_answer = Column(Boolean, default=False, nullable=False )
+    wrong_message = Column(String, nullable=True)
+
+    # if question.question_type is [CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER ],
+    # then true_map_data contain geojson for answer trut target dot
     #  {
     #  "type": "FeatureCollection",
     #  "features": [
@@ -121,18 +133,8 @@ class Question(Base):
     #      }
     #  ]
     #  }
-    question_map_data = Column(Text)
+    true_map_data = Column(Text)
 
-class AnswerVar(Base):
-    id = Column(Integer, primary_key=True, index=True)
-    answer_title = Column(String, nullable=True)
-
-    question_id: Mapped[int] = mapped_column(ForeignKey("question.id"), nullable=False )
-    question = relationship( "Question" )
-
-    right_message = Column(String, nullable=True)
-    is_true_answer = Column(Boolean, default=False, nullable=False )
-    wrong_message = Column(String, nullable=True)
 
 # quest played by player
 class Player_Quest(Base):

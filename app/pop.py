@@ -48,9 +48,12 @@ CONST_QUESTS_MAP = [
              "question_map_X" : 15,
              "question_map_Y" : 41,
              "question_map_ZOOM" : 4,
-             "question_map_data" : "{  ____ }",
-             "answers" : [
-              [ "Place the dot on the map as close as you can to target place.", "Yes.", True, None ],
+             "dot_answer" : [
+              { "dot_question" : "Place the dot on the map as close as you can to target place.",
+                "true_map_data" : '{ "type": "Feature", "geometry": { "type": "Point", "coordinates": [15, 41] } }',
+                "rigth_message" : "Yes.",
+                "wrong_message" : "No",
+              },
           ] },
 
 
@@ -900,14 +903,26 @@ async def pop_data( DB : AsyncSession ):
         DB.add( quest )
         await DB.commit()
         for qd in cqm["questions"]:
-            if qd.get("question_map_data"):
+            if qd.get("dot_answer"):
                 q = Question( question_title = qd["question_title"],
                                   question_type = CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER,
                                   question_map_X = qd["question_map_X"],
                                   question_map_Y = qd["question_map_Y"],
                                   question_map_ZOOM = qd["question_map_ZOOM"],
-                                  question_map_data = qd["question_map_data"],
                               quest_id = quest.id )
+                DB.add( q )
+                await DB.commit()
+                for answer in qd.get("dot_answer"):
+                    a = AnswerVar( question_id = q.id,
+                                   answer_title = answer["dot_question"],
+                                   right_message = answer["rigth_message"],
+                                   is_true_answer = True,
+                                   wrong_message = answer["wrong_message"],
+                                   true_map_data = answer["true_map_data"]
+                                   )
+
+                    DB.add( a )
+                    await DB.commit()
             else:
                 q = Question( question_title = qd["question_title"],
                                   question_type = CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS,
@@ -916,13 +931,13 @@ async def pop_data( DB : AsyncSession ):
                                   question_map_ZOOM = qd["question_map_ZOOM"],
                               quest_id = quest.id )
 
-            DB.add( q )
-            await DB.commit()
-            if qd.get("answers"):
-                for answer in qd.get("answers"):
-                    a = AnswerVar( answer_title = answer[0], question_id = q.id, right_message = answer[1], is_true_answer = answer[2], wrong_message = answer[3] )
-                    DB.add( a )
-                    await DB.commit()
+                DB.add( q )
+                await DB.commit()
+                if qd.get("answers"):
+                    for answer in qd.get("answers"):
+                        a = AnswerVar( answer_title = answer[0], question_id = q.id, right_message = answer[1], is_true_answer = answer[2], wrong_message = answer[3] )
+                        DB.add( a )
+                        await DB.commit()
 
 
     for сq_d in CONST_QUESTS_TEXT:

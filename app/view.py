@@ -246,7 +246,28 @@ async def in_play_quest(request: Request ):
             question_need_map = ( current_question.question_type == CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS ) or ( current_question.question_type == CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER )
             print( current_question.question_type )
             print( question_need_map )
-            
+            #print( current_question.question_map_data )
+
+
+
+            import json
+
+            #geojson_string = '{ "type": "Feature", "geometry": { "type": "Point", "coordinates": [-122.4194, 37.7749] } }'
+            #geojson_string = current_question.question_map_data
+
+            # Convert string to dictionary
+            #data = json.loads(geojson_string)
+
+            # Access geometry or properties
+            #coords = data["geometry"]["coordinates"]
+            #city_name = data["properties"]["name"]
+
+            #print(f"Coordinates: {coords}")
+
+
+
+
+
             av_query = select(AnswerVar).where( AnswerVar.question_id == current_question_id )
             answer_await = await db.execute(av_query)
             answer_variants = answer_await.scalars().all()

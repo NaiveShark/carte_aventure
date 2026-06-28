@@ -97,6 +97,44 @@
             })
         });
 
+
+
+
+
+
+
+
+
+// ==========================================
+    // ADDED: Create and Add the Dot
+    // ==========================================
+    
+    // 1. Define the dot coordinates (using your template variables)
+    const dotCoords = [ {{current_question.question_map_X}}, {{current_question.question_map_Y}} ];
+
+    // 2. Create the feature with a Point geometry
+    const dotFeature = new ol.Feature({
+        geometry: new ol.geom.Point(ol.proj.fromLonLat(dotCoords))
+    });
+
+    // 3. Create a unique style for this specific dot (Red with white border)
+    const dotStyle = new ol.style.Style({
+        image: new ol.style.Circle({
+            radius: 12,
+            fill: new ol.style.Fill({ color: '#ff0000' }), // Red color
+            stroke: new ol.style.Stroke({ color: '#ffffff', width: 2 }) // White border
+        })
+    });
+    
+    // 4. Apply the style to the feature
+    dotFeature.setStyle(dotStyle);
+
+    // 5. Push the feature into your existing layer source
+    vectorSource.addFeature(dotFeature);
+
+
+
+
     </script>
 
 {% endif %}
@@ -128,6 +166,10 @@
 	{% if loop.first %}checked{% endif %}
 
 	> {{av.answer_title}}
+	
+	
+	{{av.true_map_data}}
+	
   </label><br>
 
 
