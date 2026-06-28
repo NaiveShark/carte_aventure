@@ -31,8 +31,8 @@
 </td>
 
 
-<td>{{pq.quest_began}}</td>
-<td>{% if pq.quest_end %}{{pq.quest_end }}{% endif %}</td>
+<td>{{pq.quest_began.strftime('%Y-%m-%d %H:%M')}}</td>
+<td>{% if pq.quest_end %}{{pq.quest_end.strftime('%Y-%m-%d %H:%M') }}{% endif %}</td>
 <td>{% if pq.quest_end %}{{pq.final_score }}{% endif %}</td>
 
 </tr>
