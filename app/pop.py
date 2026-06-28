@@ -44,13 +44,13 @@ CONST_QUESTS_MAP = [
               [ "97 AD", None, False, "No." ],
           ] },
 
-          { "question_title" : "The Battle of Messana in 264 BC was the first military clash between the Roman Republic and Carthage. Place the dot on map there it was occure.",
+          { "question_title" : "The Battle of Messana in 264 BC was the first military clash between the Roman Republic and Carthage.",
              "question_map_X" : 15,
              "question_map_Y" : 41,
              "question_map_ZOOM" : 4,
              "dot_answer" : [
-              { "dot_question" : "Place the dot on the map as close as you can to target place.",
-                "true_answer_map_X" : 15.5614, 
+              { "dot_question" : "Yes, you've placed the dot on the map very close to the target place.",
+                "true_answer_map_X" : 15.5614,
                 "true_answer_map_Y" : 38.18,
                 "right_message" : "Yes.",
                 "wrong_message" : "No",
@@ -62,7 +62,7 @@ CONST_QUESTS_MAP = [
              "question_map_Y" : 39,
              "question_map_ZOOM" : 4,
              "dot_answer" : [
-              { "dot_question" : "Place the dot on the map as close as you can to target place.",
+              { "dot_question" : "Yes, you've placed the dot on the map very close to the target place.",
                 "true_answer_map_X" : 12.2,
                 "true_answer_map_Y" : 37.97,
                 "right_message" : "Yes.",
@@ -70,7 +70,18 @@ CONST_QUESTS_MAP = [
               },
           ] },
 
-
+          { "question_title" : "Where is the westernmost point of the Roman Empire on the continental mainland?",
+             "question_map_X" : -9.5,
+             "question_map_Y" : 39,
+             "question_map_ZOOM" : 8,
+             "dot_answer" : [
+              { "dot_question" : "Yes, you've placed the dot on the map very close to the target place. It's a Cabo da Roca, now Portugal, westernmost point of continental Europe.",
+                "true_answer_map_X" : -9.500556, 
+                "true_answer_map_Y" : 38.780833,
+                "right_message" : "Yes.",
+                "wrong_message" : "No",
+              },
+          ] },
           ]
      }  ,
 
@@ -117,22 +128,19 @@ CONST_QUESTS_MAP = [
                 ]
             },
             {
-                "question_title": "The famous naval Battle of the Saintes took place in 1782 between British and French fleets. Place the dot on the map as close as you can to where it occurred.",
+                "question_title": "The famous naval Battle of the Saintes took place in 1782 between British and French fleets.",
                 "question_map_X": -61.6,
                 "question_map_Y": 15.8,
                 "question_map_ZOOM": 8,
-                "question_map_data": "{  ____ }",
-                
-                
-                
+
                 "dot_answer" : [
-              { "dot_question" : "Place the dot on the map as close as you can to target place.",
+              { "dot_question" : "Yes, you've placed the dot on the map very close to the target place.",
                 "true_answer_map_X" : -61.6,
                 "true_answer_map_Y" : 15.8,
                 "right_message" : "Yes.",
                 "wrong_message" : "No",
               }, ]
-                
+
             }
         ]
     },
@@ -278,9 +286,8 @@ CONST_QUESTS_MAP = [
                 "question_map_X": -24.0000,
                 "question_map_Y": -55.0000,
                 "question_map_ZOOM": 5,
-                "question_map_data": "{  ____ }",
                 "answers": [
-                    ["Place the dot on the map as close as you can to target place.", "Yes.", True, None],
+                    ["Yes, you've placed the dot on the map very close to the target place.", "Yes.", True, None],
                 ]
             }
         ]
