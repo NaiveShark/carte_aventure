@@ -120,21 +120,9 @@ class AnswerVar(Base):
     wrong_message = Column(String, nullable=True)
 
     # if question.question_type is [CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER ],
-    # then true_map_data contain geojson for answer trut target dot
-    #  {
-    #  "type": "FeatureCollection",
-    #  "features": [
-    #      {
-    #      "type": "Feature",
-    #      "geometry": {
-    #          "type": "Point",
-    #          "coordinates": [30.2957, 59.9391]
-    #      },
-    #      }
-    #  ]
-    #  }
-    true_map_data = Column(Text)
-
+    # then true_map_data contain geojson for answer true target dot
+    true_answer_map_X = Column( Float )
+    true_answer_map_Y = Column( Float )
 
 # quest played by player
 class Player_Quest(Base):
@@ -169,6 +157,9 @@ class Player_Quest_Answers(Base):
     answervar = relationship( "AnswerVar" )
 
     is_right_answer = Column(Boolean, nullable=False )
+    # for map dot quiz CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER
+    true_answer_map_X = Column( Float )
+    true_answer_map_Y = Column( Float )
 
 
 

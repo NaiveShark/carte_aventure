@@ -50,7 +50,8 @@ CONST_QUESTS_MAP = [
              "question_map_ZOOM" : 4,
              "dot_answer" : [
               { "dot_question" : "Place the dot on the map as close as you can to target place.",
-                "true_map_data" : '{ "type": "Feature", "geometry": { "type": "Point", "coordinates": [15, 41] } }',
+                "true_answer_map_X" : 15,
+                "true_answer_map_Y" : 41,
                 "right_message" : "Yes.",
                 "wrong_message" : "No",
               },
@@ -62,7 +63,8 @@ CONST_QUESTS_MAP = [
              "question_map_ZOOM" : 4,
              "dot_answer" : [
               { "dot_question" : "Place the dot on the map as close as you can to target place.",
-                "true_map_data" : '{ "type": "Feature", "geometry": { "type": "Point", "coordinates": [12.2, 37.97] } }',
+                "true_answer_map_X" : 12.2,
+                "true_answer_map_Y" : 37.97,
                 "right_message" : "Yes.",
                 "wrong_message" : "No",
               },
@@ -125,7 +127,8 @@ CONST_QUESTS_MAP = [
                 
                 "dot_answer" : [
               { "dot_question" : "Place the dot on the map as close as you can to target place.",
-                "true_map_data" : '{ "type": "Feature", "geometry": { "type": "Point", "coordinates": [15, 41] } }',
+                "true_answer_map_X" : -61.6,
+                "true_answer_map_Y" : 15.8,
                 "right_message" : "Yes.",
                 "wrong_message" : "No",
               }, ]
@@ -936,8 +939,9 @@ async def pop_data( DB : AsyncSession ):
                                    answer_title = answer["dot_question"],
                                    right_message = answer["right_message"],
                                    is_true_answer = False,
+                                   true_answer_map_Y = answer["true_answer_map_Y"],
                                    wrong_message = answer["wrong_message"],
-                                   true_map_data = answer["true_map_data"]
+                                   true_answer_map_X = answer["true_answer_map_X"],
                                    )
 
                     DB.add( a )
