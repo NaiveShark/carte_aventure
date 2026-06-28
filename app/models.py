@@ -92,6 +92,9 @@ CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS = 1
 # 2 is for map description for questions, center on X,Y,ZOOM, answers is user placed dot
 CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER = 2
 
+# permissible distance deviation for answer X,Y from true X,Y
+CONST_PERMISSIBLE_DISTANCE_DEVIATION = 0.5
+
 class Question(Base):
     id = Column(Integer, primary_key=True, index=True)
     question_title = Column(Text, nullable=True)
@@ -158,9 +161,9 @@ class Player_Quest_Answers(Base):
 
     is_right_answer = Column(Boolean, nullable=False )
     # for map dot quiz CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER
-    true_answer_map_X = Column( Float )
-    true_answer_map_Y = Column( Float )
-
+    answer_map_X = Column( Float )
+    answer_map_Y = Column( Float )
+    answer_distance = Column( Float )
 
 
 #

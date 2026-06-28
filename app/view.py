@@ -8,7 +8,8 @@ from starlette_login.decorator import login_required
 from starlette_login.utils import login_user, logout_user
 from datetime import datetime
 
-from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER
+from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_PERMISSIBLE_DISTANCE_DEVIATION
+from .gis import dist
 
 from starlette.templating import Jinja2Templates
 from starlette_login.login_manager import LoginManager
@@ -30,7 +31,6 @@ def render_markdown(text: str) -> str:
     return markdown.markdown(text, extensions=['fenced_code', 'tables'])
 
 template.env.filters["markdown"] = render_markdown
-
 
 async def login_page(request: Request):
     db = request.state.db
@@ -297,8 +297,7 @@ async def handle_qqa(request: Request ):
     pqa_exits = await db.scalar(pqa_exits_q)
     if not pqa_exits:
         async with request.form() as form:
-            print( form )
-
+            
             # this is a text varion choosed
             answer_var_id = form.get("answer_var")
             if answer_var_id:
@@ -312,7 +311,12 @@ async def handle_qqa(request: Request ):
                answer_var_e = await db.execute(answer_var_q)
                answer_var = answer_var_e.scalars( ).first()
                answer_var_id = answer_var.id
-               check_answer = False
+               # check for coordinates distant
+               longitude = float( form.get("longitude") )
+               latitude  = float( form.get("latitude") )
+               distance = dist( answer_var.true_answer_map_X, answer_var.true_answer_map_Y, longitude, latitude)
+               
+               check_answer = ( distance < CONST_PERMISSIBLE_DISTANCE_DEVIATION )
 
 
             pqa = Player_Quest_Answers(
@@ -320,6 +324,9 @@ async def handle_qqa(request: Request ):
                 question_id = current_question_id,
                 answervar_id = answer_var_id,
                 answered_dt = datetime.now(),
+                answer_map_X = longitude, 
+                answer_map_Y = latitude,
+                answer_distance = distance,
                 is_right_answer = check_answer
             )
             db.add( pqa )
