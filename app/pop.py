@@ -76,7 +76,7 @@ CONST_QUESTS_MAP = [
              "question_map_ZOOM" : 8,
              "dot_answer" : [
               { "dot_question" : "Yes, you've placed the dot on the map very close to the target place. It's a Cabo da Roca, now Portugal, westernmost point of continental Europe.",
-                "true_answer_map_X" : -9.500556, 
+                "true_answer_map_X" : -9.500556,
                 "true_answer_map_Y" : 38.780833,
                 "right_message" : "Yes.",
                 "wrong_message" : "No",
@@ -282,14 +282,24 @@ CONST_QUESTS_MAP = [
                 ]
             },
             {
-                "question_title": "The South Sandwich Trench is one of the deepest oceanic trenches in the world. Place the dot on the map as close as you can to where this deep underwater abyss runs parallel to the east of the island chain.",
-                "question_map_X": -24.0000,
-                "question_map_Y": -55.0000,
+                "question_title": "The South Sandwich Trench is one of the deepest oceanic trenches in the world. Place the dot on the map as close as you can to Meteor Deep, where this deep underwater abyss runs parallel to the east of the island chain. The deepest point in the entire trench is the Meteor Deep, whose location prior to February 2019 was identified at a depth of 8,202 metres (26,909 ft).",
+                "question_map_X": -26.5000,
+                "question_map_Y": -55.5000,
                 "question_map_ZOOM": 5,
-                "answers": [
-                    ["Yes, you've placed the dot on the map very close to the target place.", "Yes.", True, None],
-                ]
-            }
+
+                   "dot_answer" : [
+              { "dot_question" : "Where is Meteor Deep?",
+                "true_answer_map_X" : -26.404667,
+                "true_answer_map_Y" : -55.418667,
+                "right_message" : "Yes, you've placed the dot on the map very close to the target place. It's a Meteor Deep.",
+                "wrong_message" : "No",
+              },
+          ] },
+
+
+
+               
+            
         ]
     },
 
