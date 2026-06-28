@@ -296,6 +296,9 @@ async def handle_qqa(request: Request ):
     pqa_exits_q = select(exists().where( Player_Quest_Answers.player_quest_id == player_quest_id, Player_Quest_Answers.question_id == current_question_id ) )
     pqa_exits = await db.scalar(pqa_exits_q)
     if not pqa_exits:
+        longitude = None 
+        latitude  = None
+        distance = None
         async with request.form() as form:
             
             # this is a text varion choosed
