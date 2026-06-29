@@ -271,19 +271,21 @@ async def in_play_quest(request: Request ):
             if question_need_map_dot_mover:
                 dot_color = "'#FFFF00'" # Yellow color
             else:
-                if pqa.is_right_answer:
-                    dot_color = "'#008000'" # Green color
-                else:
-                    dot_color = "'#ff0000'" # Red color
-            # started dot
-            if question_need_map_dot:
-                # if qestion is answered
                 if pqa:
-                    start_dot_X = pqa.answer_map_X
-                    start_dot_Y = pqa.answer_map_Y
-                else:
-                    start_dot_X = current_question.question_map_X
-                    start_dot_Y = current_question.question_map_Y
+                    if pqa.is_right_answer:
+                        dot_color = "'#008000'" # Green color
+                    else:
+                        dot_color = "'#ff0000'" # Red color
+            # started dot
+            if question_need_map:
+                start_dot_X = current_question.question_map_X
+                start_dot_Y = current_question.question_map_Y
+                start_dot_Y = current_question.question_map_Y
+                if question_need_map_dot:
+                    # if qestion is answered
+                    if pqa:
+                        start_dot_X = pqa.answer_map_X
+                        start_dot_Y = pqa.answer_map_Y
                     
         return template.TemplateResponse(
                  request,
