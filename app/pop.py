@@ -176,7 +176,149 @@ CONST_QUESTS_MAP = [
                     "wrong_message": "No"
                 }
             ] 
+        },
+        
+
+
+        { 
+            "question_title": "According to the Landnámabók (Book of Settlements), this Irish-born Viking was the first to intentionally sail to Iceland and spend a winter there, naming it 'Garðarshólmur' after himself. Where did he land?",
+            "question_map_X": -17.3,
+            "question_map_Y": 66.0,
+            "question_map_ZOOM": 10,
+            "answers": [
+                [ "Reykjavík", None, False, "No." ],
+                [ "Húsavík", "Yes.", True, None ],
+                [ "Seyðisfjörður", None, False, "No." ],
+                [ "Vestmannaeyjar", None, False, "No." ]
+            ] 
+        },
+        { 
+            "question_title": "Iceland sits directly on top of the meeting point between two massive tectonic plates that are pulling apart. What are these two plates?",
+            "question_map_X": -19.0,
+            "question_map_Y": 65.0,
+            "question_map_ZOOM": 6,
+            "answers": [
+                [ "Pacific and North American", None, False, "No." ],
+                [ "Eurasian and African", None, False, "No." ],
+                [ "North American and Eurasian", "Yes.", True, None ],
+                [ "Nazca and South American", None, False, "No." ]
+            ] 
+        },
+        { 
+            "question_title": "In 1963, a brand new island was born off the southern coast of Iceland due to a massive underwater volcanic eruption. What is the name of this UNESCO protected island?",
+            "question_map_X": -20.6,
+            "question_map_Y": 63.3,
+            "question_map_ZOOM": 11,
+            "answers": [
+                [ "Heimaey", None, False, "No." ],
+                [ "Surtsey", "Yes.", True, None ],
+                [ "Grimsey", None, False, "No." ],
+                [ "Flatey", None, False, "No." ]
+            ] 
+        },
+        { 
+            "question_title": "Where is the legendary active volcano Hekla located, which was feared in medieval Europe and often called the 'Gateway to Hell'?",
+            "question_map_X": -19.66,
+            "question_map_Y": 63.99,
+            "question_map_ZOOM": 10,
+            "answers": [
+                [ "Hekla", "Yes.", True, None ],
+                [ "Katla", None, False, "No." ],
+                [ "Katla", None, False, "No." ],
+                [ "Krafla", None, False, "No." ]
+            ] 
+        },
+        { 
+            "question_title": "Before the Norse arrived, Iceland was briefly inhabited by Gaelic monks who sought absolute isolation for religious reflection. What were these early Christian hermits called?",
+            "question_map_X": -14.5,
+            "question_map_Y": 63.8,
+            "question_map_ZOOM": 8,
+            "answers": [
+                [ "Skalds", None, False, "No." ],
+                [ "Papar", "Yes.", True, None ],
+                [ "Jarls", None, False, "No." ],
+                [ "Thralls", None, False, "No." ]
+            ] 
+        },
+
+        # --- Dot Answers ---
+        { 
+            "question_title": "Place the dot on Vatnajökull, the largest and most voluminous ice cap in Iceland (and one of the largest in Europe by area), which covers around 8% of the country.",
+            "question_map_X": -16.8,
+            "question_map_Y": 64.4,
+            "question_map_ZOOM": 7,
+            "dot_answer": [
+                { 
+                    "dot_question": "Yes, you've placed the dot right on the massive Vatnajökull glacier.",
+                    "true_answer_map_X": -16.81,
+                    "true_answer_map_Y": 64.42,
+                    "right_message": "Yes, this is Vatnajökull.",
+                    "wrong_message": "No"
+                }
+            ] 
+        },
+        { 
+            "question_title": "The Snaefellsjökull volcano is famous worldwide as the entry point to the center of the Earth in Jules Verne's sci-fi novel 'Journey to the Center of the Earth'. Place the dot on the western tip of this peninsula.",
+            "question_map_X": -23.7,
+            "question_map_Y": 64.8,
+            "question_map_ZOOM": 9,
+            "dot_answer": [
+                { 
+                    "dot_question": "Excellent! You've located the Snæfellsjökull glacier-capped volcano at the edge of the peninsula.",
+                    "true_answer_map_X": -23.7766,
+                    "true_answer_map_Y": 64.8081,
+                    "right_message": "Yes, that's Snæfellsjökull.",
+                    "wrong_message": "No"
+                }
+            ] 
+        },
+        { 
+            "question_title": "In the year 1000 AD, Iceland officially converted to Christianity at the Althing. To symbolize this, the Lawspeaker Thorgeir threw his pagan idols of the Norse gods into a spectacular waterfall. Place the dot on this 'Waterfall of the Gods' (Goðafoss) in northern Iceland.",
+            "question_map_X": -17.5,
+            "question_map_Y": 65.6,
+            "question_map_ZOOM": 9,
+            "dot_answer": [
+                { 
+                    "dot_question": "Correct! You successfully located Goðafoss waterfall along the Skjálfandafljót river.",
+                    "true_answer_map_X": -17.5502,
+                    "true_answer_map_Y": 65.6828,
+                    "right_message": "Yes, this is Goðafoss.",
+                    "wrong_message": "No"
+                }
+            ] 
+        },
+        { 
+            "question_title": "Before discovering Greenland, Viking explorers used the Faroe Islands as a crucial stepping stone between Norway and Iceland. Place a dot on this small island archipelago in the middle of the North Atlantic.",
+            "question_map_X": -6.7,
+            "question_map_Y": 62.0,
+            "question_map_ZOOM": 6,
+            "dot_answer": [
+                { 
+                    "dot_question": "Perfect! You found the Faroe Islands, the vital mid-way hub for ancient Norse longships.",
+                    "true_answer_map_X": -6.78,
+                    "true_answer_map_Y": 62.01,
+                    "right_message": "Yes, these are the Faroe Islands.",
+                    "wrong_message": "No"
+                }
+            ] 
+        },
+        { 
+            "question_title": "Where is the diamond-shaped black sand beach known as 'Diamond Beach' located, where glittering icebergs from the Jökulsárlón glacier lagoon wash ashore?",
+            "question_map_X": -16.1,
+            "question_map_Y": 64.0,
+            "question_map_ZOOM": 11,
+            "dot_answer": [
+                { 
+                    "dot_question": "Great job! You pointed right to the outlet channel where the glacier lagoon meets the Atlantic ocean.",
+                    "true_answer_map_X": -16.178,
+                    "true_answer_map_Y": 64.043,
+                    "right_message": "Yes, this is Diamond Beach.",
+                    "wrong_message": "No"
+                }
+            ] 
         }
+        
+        
     ]
 }     ,
      
