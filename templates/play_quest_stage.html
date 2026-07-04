@@ -57,10 +57,29 @@
   {% for q in questions %}
 
 <li>
-{% if q.id == current_question_id|int %}
+
+{% if q.max_sub_id %}
+
+{% if q.is_right_answer %}
+<button class="chip large large-elevate vertical">
+  <i>done</i>
+  <span>Right</span>
+</button>
+{% else %}
+<button class="chip large large-elevate vertical">
+  <i>close</i>
+  <span>Fail</span>
+</button>
+{% endif %}
+
+{% endif %}
+
+{% if q.Question.id == current_question_id|int %}
 <button class="chip">Selected</button>
 {% endif %}
-<a href="?current_question_id={{q.id}}">{{q.question_title}}</a>
+<a href="?current_question_id={{q.Question.id}}">{{q.Question.question_title}}</a>
+
+
 </li>
 {% endfor %}
 </ol>
@@ -256,10 +275,6 @@
 {% endif %}
 
 {% endif %}
-
-
-<p><a class="button" href="/view/quest/{{quest.id}}">Back to quest card</a></p>
-
 
 {% else %}
 You should login to play.

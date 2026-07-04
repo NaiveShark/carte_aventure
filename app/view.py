@@ -234,10 +234,18 @@ async def in_play_quest(request: Request ):
 
         quest_id = player_quest.quest_id
         quest = await db.get(Quest, quest_id )
-        questions_q = select(Question).where( Question.quest_id == quest_id )
         current_question = None
+        
+        subq = select(
+            Player_Quest_Answers.question_id, Player_Quest_Answers.is_right_answer,
+            func.max(Player_Quest_Answers.id).label('max_sub_id')
+        ).where(Player_Quest_Answers.player_quest_id==player_quest_id).group_by(Player_Quest_Answers.question_id).subquery()
+        
+        questions_q = select(Question, subq).outerjoin( subq, Question.id == subq.c.question_id).where( Question.quest_id == quest_id )
+        print( str( questions_q ) )
         questions = await db.execute( questions_q )
 
+        
         pqa = None
         # we need to show the map for question
         question_need_map = False
@@ -293,7 +301,7 @@ async def in_play_quest(request: Request ):
                     "quest" : quest,
                     "player_quest_id" : player_quest_id,
                     "player_quest" : player_quest,
-                    "questions" : questions.scalars().all(),
+                    "questions" : questions.all(),
                     "current_question_id" : current_question_id,
                     "current_question" : current_question,
                     "question_need_map" : question_need_map,
