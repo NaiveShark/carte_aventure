@@ -84,6 +84,103 @@ CONST_QUESTS_MAP = [
           ] },
           ]
      }  ,
+     
+{
+    "name": "Iceland History, Geography & Ancient Travels",
+    "description": "Test your knowledge on the land of fire and ice, Viking settlements, and ancient North Atlantic voyages! ![Iceland](https://wikimedia.org)",
+    "questions": [
+        { 
+            "question_title": "Where did Iceland's historic Althing (parliament) meet from 930 AD until 1798?",
+            "question_map_X": -21.12,
+            "question_map_Y": 64.25,
+            "question_map_ZOOM": 11,
+            "answers": [
+                [ "Reykjavík", None, False, "No." ],
+                [ "Þingvellir (Thingvellir)", "Yes.", True, None ],
+                [ "Akureyri", None, False, "No." ],
+                [ "Húsavík", None, False, "No." ],
+                [ "Skálholt", None, False, "No." ]
+            ] 
+        },
+
+        { 
+            "question_title": "In 1783, a massive, catastrophic volcanic eruption began here, creating a global climate crisis. What was the name of the fissure system?",
+            "question_map_X": -18.23,
+            "question_map_Y": 64.06,
+            "question_map_ZOOM": 10,
+            "answers": [
+                [ "Eyjafjallajökull", None, False, "No." ],
+                [ "Katla", None, False, "No." ],
+                [ "Hekla", None, False, "No." ],
+                [ "Laki", "Yes.", True, None ],
+                [ "Askja", None, False, "No." ]
+            ] 
+        },
+
+        { 
+            "question_title": "Leif Erikson sailed from Iceland and established a settlement in Vinland (North America) around 1000 AD. Where is this modern-day archaeological site located?",
+            "question_map_X": -55.53,
+            "question_map_Y": 51.59,
+            "question_map_ZOOM": 12,
+            "answers": [
+                [ "Greenland", None, False, "No." ],
+                [ "Baffin Island", None, False, "No." ],
+                [ "L'Anse aux Meadows", "Yes.", True, None ],
+                [ "Cape Cod", None, False, "No." ]
+            ] 
+        },
+
+        { 
+            "question_title": "The Sagas state that Ingólfur Arnarson became the first permanent Norse settler in Iceland around 874 AD. Place a dot on the map where he founded his settlement, which later became Iceland's capital.",
+            "question_map_X": -22,
+            "question_map_Y": 65,
+            "question_map_ZOOM": 6,
+            "dot_answer": [
+                { 
+                    "dot_question": "Yes, you've placed the dot on the map very close to the target place.",
+                    "true_answer_map_X": -21.9426,
+                    "true_answer_map_Y": 64.1466,
+                    "right_message": "Yes, this is Reykjavík.",
+                    "wrong_message": "No"
+                }
+            ] 
+        },
+
+        { 
+            "question_title": "Erik the Red fled Iceland after being outlawed for manslaughter and went on to establish the first Norse settlement in Greenland. Place a dot on the southwestern coast of Greenland where his estate, Brattahlíð, was founded.",
+            "question_map_X": -45.0,
+            "question_map_Y": 62.0,
+            "question_map_ZOOM": 6,
+            "dot_answer": [
+                { 
+                    "dot_question": "Yes, you've placed the dot on the map very close to the target place.",
+                    "true_answer_map_X": -45.5186,
+                    "true_answer_map_Y": 61.1558,
+                    "right_message": "Yes, this is the Eastern Settlement area (Tunulliarfik Fjord).",
+                    "wrong_message": "No"
+                }
+            ] 
+        },
+
+        { 
+            "question_title": "Where is the northernmost point of mainland Iceland, located just a few kilometers south of the Arctic Circle?",
+            "question_map_X": -17,
+            "question_map_Y": 66,
+            "question_map_ZOOM": 8,
+            "dot_answer": [
+                { 
+                    "dot_question": "Yes, you've placed the dot on the map very close to the target place. It's Hraunhafnartangi, the northernmost point of the mainland.",
+                    "true_answer_map_X": -16.5411,
+                    "true_answer_map_Y": 66.5375,
+                    "right_message": "Yes.",
+                    "wrong_message": "No"
+                }
+            ] 
+        }
+    ]
+}     ,
+     
+     
 
     {
         "name": "Do you know Caribbean geography?",
