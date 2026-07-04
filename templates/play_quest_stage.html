@@ -21,16 +21,39 @@
 {% if request.user.is_authenticated %}
 
 <h1>{{quest.name}} (difficulty {{quest.difficulty_coefficient}}) <a class="button" href="/view/quest/{{quest.id}}">Back to quest card</a></h1>
-<p>You are playing this quest.</p>
 
+<p>
+{% if player_quest.quest_end %}
+You are done this quest.
+<progress class="wavy light-green-text" value="{{player_quest.answered_count}}" max="{{player_quest.questions_count}}"></progress>
+{% else %}
+You are playing this quest.
 <progress class="wavy orange-text" value="{{player_quest.answered_count}}" max="{{player_quest.questions_count}}"></progress>
+{% endif %}
+</p>
+
 
 <div class="padding">
   <h5 class="bold">Steps to follow:</h5>
-  <ol class="padding">
+
+
+
+<table class="border">
+  <thead>
+    <tr>
+      <th>State</th>
+      <th>Question</th>
+    </tr>
+  </thead>
+  <tbody>
+
+
+
   {% for q in questions %}
 
-<li>
+    <tr>
+      <td>
+	  
 
 {% if q.max_sub_id %}
 
@@ -48,15 +71,28 @@
 
 {% endif %}
 
+	  </td>
+	  
+      <td>
 {% if q.Question.id == current_question_id|int %}
 <button class="chip">Selected</button>
 {% endif %}
 <a href="?current_question_id={{q.Question.id}}">{{q.Question.question_title}}</a>
 
 
-</li>
+
+	  </td>
+    </tr>
+
 {% endfor %}
-</ol>
+
+
+  </tbody>
+</table>
+
+
+
+
 </div>
 
 <h1>{{current_question.question_title}}</h1>
