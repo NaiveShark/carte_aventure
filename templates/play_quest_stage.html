@@ -51,16 +51,20 @@
 
 </p>
 
-<ol>
-{% for q in questions %}
+<div class="padding">
+  <h5 class="bold">Steps to follow:</h5>
+  <ol class="padding">
+  {% for q in questions %}
+
+<li>
 {% if q.id == current_question_id|int %}
-<li>{{q.question_title}}</li>
-{% else %}
-<li><a href="?current_question_id={{q.id}}">{{q.question_title}}</a></li>
+<button class="chip">Selected</button>
 {% endif %}
+<a href="?current_question_id={{q.id}}">{{q.question_title}}</a>
+</li>
 {% endfor %}
 </ol>
-
+</div>
 
 <h1>{{current_question.question_title}}</h1>
 
