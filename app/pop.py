@@ -87,7 +87,7 @@ CONST_QUESTS_MAP = [
      
 {
     "name": "Iceland History, Geography & Ancient Travels",
-    "description": "Test your knowledge on the land of fire and ice, Viking settlements, and ancient North Atlantic voyages! ![Iceland](https://wikimedia.org)",
+    "description": "Test your knowledge on the land of fire and ice, Viking settlements, and ancient North Atlantic voyages! ![Iceland](https://upload.wikimedia.org/wikipedia/commons/a/ab/Iceland_%286111906083%29.jpg)",
     "questions": [
         { 
             "question_title": "Where did Iceland's historic Althing (parliament) meet from 930 AD until 1798?",
