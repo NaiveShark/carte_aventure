@@ -7,9 +7,9 @@
 <p>
 {% if request.user.is_authenticated %}
 
-<ul>
+<ul class="list">
 {% for q in quests %}
-<li><a href="/view/quest/{{q.id}}">{{q.name}}</a> (difficulty {{q.difficulty_coefficient}})</li>
+<li><a href="/view/quest/{{q.id}}" class="row wave">{{q.name}}</a> (difficulty {{q.difficulty_coefficient}})</li>
 {% endfor %}
 </ul>
 	
