@@ -316,8 +316,133 @@ CONST_QUESTS_MAP = [
                     "wrong_message": "No"
                 }
             ] 
-        }
+        },
         
+        
+        { 
+            "question_title": "Viking navigators used a mysterious crystal called a 'Sunstone' (silfrið berg) to find the sun's position even through thick fog or storm clouds. What local Icelandic mineral is this historically famous sunstone believed to be?",
+            "question_map_X": -14.6,
+            "question_map_Y": 65.0,
+            "question_map_ZOOM": 10,
+            "answers": [
+                [ "Obsidian (Volcanic glass)", None, False, "No." ],
+                [ "Iceland Spar (Optical Calcite)", "Yes.", True, None ],
+                [ "Basalt", None, False, "No." ],
+                [ "Sulfur", None, False, "No." ]
+            ] 
+        },
+        { 
+            "question_title": "In 1262, after decades of bloody internal civil war between powerful clans (the Age of the Sturlungs), Iceland lost its independence and signed an agreement submitting to the rule of which foreign king?",
+            "question_map_X": 10.7,
+            "question_map_Y": 59.9,
+            "question_map_ZOOM": 5,
+            "answers": [
+                [ "King of Denmark", None, False, "No, Denmark came much later." ],
+                [ "King of England", None, False, "No." ],
+                [ "King of Norway", "Yes.", True, None ],
+                [ "King of Sweden", None, False, "No." ]
+            ] 
+        },
+        { 
+            "question_title": "According to the Grœnlendinga saga, who was the very first Norse explorer to sight the coast of North America when his ship was blown off course in a storm, before Leif Erikson actually went there to build houses?",
+            "question_map_X": -53.0,
+            "question_map_Y": 47.0,
+            "question_map_ZOOM": 4,
+            "answers": [
+                [ "Bjarni Herjólfsson", "Yes.", True, None ],
+                [ "Thorvald Erikson", None, False, "No." ],
+                [ "Thorfinn Karlsefni", None, False, "No." ],
+                [ "Freydís Eiríksdóttir", None, False, "No." ]
+            ] 
+        },
+        { 
+            "question_title": "Which active stratovolcano located in southern Iceland is one of the island's most dangerous, famous for erupting underneath the Mýrdalsjökull ice cap and causing catastrophic glacial floods (jökulhlaups)?",
+            "question_map_X": -19.0,
+            "question_map_Y": 63.6,
+            "question_map_ZOOM": 10,
+            "answers": [
+                [ "Grímsvötn", None, False, "No." ],
+                [ "Katla", "Yes.", True, None ],
+                [ "Bárðarbunga", None, False, "No." ],
+                [ "Eyjafjallajökull", None, False, "No." ]
+            ] 
+        },
+
+        { 
+            "question_title": "Viking explorers sailed even further west than Vinland. Archaeological evidence suggests they regularly visited this massive island (which they called Helluland, meaning 'Land of Flat Stones') to gather timber and trade with indigenous peoples. Place the dot on Baffin Island.",
+            "question_map_X": -70.0,
+            "question_map_Y": 69.0,
+            "question_map_ZOOM": 3,
+            "dot_answer": [
+                { 
+                    "dot_question": "Perfect! You've located Baffin Island, known to the ancient Norse as Helluland.",
+                    "true_answer_map_X": -68.84,
+                    "true_answer_map_Y": 66.52,
+                    "right_message": "Yes, this is Helluland (Baffin Island).",
+                    "wrong_message": "No"
+                }
+            ] 
+        },
+        { 
+            "question_title": "The Western Settlement was a group of farms established by Icelandic vikings in Greenland around 985 AD, but it mysteriously vanished entirely in the 14th century. Place a dot on the Nuuk fjord region where this remote outpost once stood.",
+            "question_map_X": -51.0,
+            "question_map_Y": 64.2,
+            "question_map_ZOOM": 5,
+            "dot_answer": [
+                { 
+                    "dot_question": "Excellent! You found the area of the lost Western Settlement near modern-day Nuuk.",
+                    "true_answer_map_X": -50.25,
+                    "true_answer_map_Y": 64.50,
+                    "right_message": "Yes, this is the Western Settlement area.",
+                    "wrong_message": "No"
+                }
+            ] 
+        },
+        { 
+            "question_title": "Where is the island of Grímsey located? It is the only part of Icelandic territory that is actually crossed by the official Arctic Circle line.",
+            "question_map_X": -18.0,
+            "question_map_Y": 66.5,
+            "question_map_ZOOM": 9,
+            "dot_answer": [
+                { 
+                    "dot_question": "Great eye! You found Grímsey, sitting right on the edge of the Arctic Circle.",
+                    "true_answer_map_X": -18.00,
+                    "true_answer_map_Y": 66.55,
+                    "right_message": "Yes, this is Grímsey island.",
+                    "wrong_message": "No"
+                }
+            ] 
+        },
+        { 
+            "question_title": "Reynisdrangar are famous, jagged basalt sea stacks poking out of the ocean. According to local folklore, they were formed when two trolls tried to drag a three-masted ship to shore but were turned to stone by the sunrise. Place a dot on this southern black sand beach near Vík í Mýrdal.",
+            "question_map_X": -19.0,
+            "question_map_Y": 63.4,
+            "question_map_ZOOM": 11,
+            "dot_answer": [
+                { 
+                    "dot_question": "Spot on! You pointed right to the dramatic southern coast of Vík.",
+                    "true_answer_map_X": -19.02,
+                    "true_answer_map_Y": 63.40,
+                    "right_message": "Yes, these are the Reynisdrangar sea stacks.",
+                    "wrong_message": "No"
+                }
+            ] 
+        },
+        { 
+            "question_title": "During the Little Ice Age, sea ice completely blocked Iceland's trade routes for months. Ships from the Hanseatic League and Britain had to brave terrifying winter storms to reach Iceland's main trading outpost in the Westfjords. Place a dot on the historic trading town of Ísafjörður.",
+            "question_map_X": -23.1,
+            "question_map_Y": 66.0,
+            "question_map_ZOOM": 9,
+            "dot_answer": [
+                { 
+                    "dot_question": "Correct! You successfully carved your way into the deep fjords to locate Ísafjörður.",
+                    "true_answer_map_X": -23.12,
+                    "true_answer_map_Y": 66.07,
+                    "right_message": "Yes, this is Ísafjörður in the Westfjords.",
+                    "wrong_message": "No"
+                }
+            ] 
+        }
         
     ]
 }     ,
