@@ -5,8 +5,18 @@
 <h4>Error: {{ error }}</h4>
 {% endif %}
 <form method="POST">
-<label>Username <input name="username"></label>
-<label>Password <input name="password" type="password" value=""></label>
+
+<label>Username 
+	<div class="field border">
+	<input name="username" type="text">
+	</div>
+</label>
+
+<label>Password 
+<div class="field border">
+	<input name="password" type="password" value=""></label>
+</div>
 <button type="submit">Registrate new user</button>
+
 </form>
 {% endblock %}
