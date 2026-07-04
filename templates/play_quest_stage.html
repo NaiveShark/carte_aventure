@@ -112,28 +112,33 @@ You are playing this quest.
 
 {% if answer_variants %}
 <p>
-<form action="/quest/submit_form-qqa/{{player_quest_id}}/{{current_question_id}}" method="POST">
-  <p>Please select your answer:</p>
-
+<form action="/quest/submit_form-qqa/{{player_quest_id}}/{{current_question_id}}" method="POST" class="padding">
+  <legend>Please select your answer:</legend>
+  <div class="vertical">
 {% for av in answer_variants %}
 
 
-  <label>
+  <label class="radio extra">
     <input type="radio" name="answer_var" value="{{av.id}}"
 
 	{% if loop.first %}checked{% endif %}
 
-	> {{av.answer_title}}
+	> <span>{{av.answer_title}}</span>
 
-
-
-  </label><br>
-
-
+  </label>
+ 
 
 {% endfor %}
+</div>
   <!-- Submit button to send the form data -->
-  <button type="submit">Submit Choice</button>
+  
+  <div class="field top-margin">
+    <button type="submit" class="responsive">
+      <i>check</i>
+      <span>Submit Choice</span>
+    </button>
+  </div>
+
 </form>
 
 </p>
