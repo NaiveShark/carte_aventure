@@ -97,6 +97,56 @@ You are playing this quest.
 
 <h1>{{current_question.question_title}}</h1>
 
+{% if pqa %}
+
+<p>You answered at {{pqa.answered_dt.strftime('%Y-%m-%d %H:%M')}}. Your answer is <b>{{pqa.answervar.answer_title}}</b> and it's {{pqa.is_right_answer}}.
+
+	{% if pqa.is_right_answer %}
+	{{pqa.answervar.right_message}}
+	{% else %}
+    {{pqa.answervar.wrong_message}}
+	{% endif %}
+</p>
+
+{% else %}
+
+{% if answer_variants %}
+<p>
+<form action="/quest/submit_form-qqa/{{player_quest_id}}/{{current_question_id}}" method="POST">
+  <p>Please select your answer:</p>
+
+{% for av in answer_variants %}
+
+
+  <label>
+    <input type="radio" name="answer_var" value="{{av.id}}"
+
+	{% if loop.first %}checked{% endif %}
+
+	> {{av.answer_title}}
+
+
+
+  </label><br>
+
+
+
+{% endfor %}
+  <!-- Submit button to send the form data -->
+  <button type="submit">Submit Choice</button>
+</form>
+
+</p>
+
+{% endif %}
+
+{% endif %}
+
+{% else %}
+<p>You should login to play.</p>
+{% endif %}
+
+
 
 {% if question_need_map %}
 
@@ -239,55 +289,6 @@ You are playing this quest.
 
     </script>
 
-{% endif %}
-
-
-{% if pqa %}
-
-<p>You answered at {{pqa.answered_dt.strftime('%Y-%m-%d %H:%M')}}. Your answer is <b>{{pqa.answervar.answer_title}}</b> and it's {{pqa.is_right_answer}}.
-
-	{% if pqa.is_right_answer %}
-	{{pqa.answervar.right_message}}
-	{% else %}
-    {{pqa.answervar.wrong_message}}
-	{% endif %}
-</p>
-
-{% else %}
-
-{% if answer_variants %}
-
-<form action="/quest/submit_form-qqa/{{player_quest_id}}/{{current_question_id}}" method="POST">
-  <p>Please select your answer:</p>
-
-{% for av in answer_variants %}
-
-
-  <label>
-    <input type="radio" name="answer_var" value="{{av.id}}"
-
-	{% if loop.first %}checked{% endif %}
-
-	> {{av.answer_title}}
-
-
-
-  </label><br>
-
-
-
-{% endfor %}
-  <!-- Submit button to send the form data -->
-  <button type="submit">Submit Choice</button>
-</form>
-
-
-{% endif %}
-
-{% endif %}
-
-{% else %}
-You should login to play.
 {% endif %}
 
 {% endblock %}
