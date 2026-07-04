@@ -223,7 +223,7 @@ You are playing this quest.
     // 3. Create a unique style for this specific dot (Red with white border)
     const dotStyle = new ol.style.Style({
         image: new ol.style.Circle({
-            radius: {% if question_need_map_dot_mover %} 15 {% else %} 10 {% endif %},
+            radius: {% if question_need_map_dot_mover %} 25 {% else %} 10 {% endif %},
             fill: new ol.style.Fill({ color: {{dot_color | safe}} }),
             stroke: new ol.style.Stroke({ color: '#ffffff', width: 2 }) // White border
         })
