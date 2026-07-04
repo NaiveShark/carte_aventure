@@ -21,35 +21,9 @@
 {% if request.user.is_authenticated %}
 
 <h1>{{quest.name}} (difficulty {{quest.difficulty_coefficient}}) <a class="button" href="/view/quest/{{quest.id}}">Back to quest card</a></h1>
-<p>You are playing this quest.
+<p>You are playing this quest.</p>
 
-<table border=1>
-<thead>
-<tr>
-<th>questions_count</th>
-<th>answered_count</th>
-<th>answered_right_count</th>
-<th>answered_wrong_count</th>
-<th>final_score</th>
-<th>quest_began</th>
-<th>quest_end</th>
-
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>{{player_quest.questions_count}}</td>
-<td>{{player_quest.answered_count}}</td>
-<td>{{player_quest.answered_right_count}}</td>
-<td>{{player_quest.answered_wrong_count}}</td>
-<td>{{player_quest.final_score}}</td>
-<td>{{player_quest.quest_began.strftime('%Y-%m-%d %H:%M')}}</td>
-<td>{% if player_quest.quest_end %}{{player_quest.quest_end.strftime('%Y-%m-%d %H:%M')}}{% endif %}</td>
-</tr>
-</tbody>
-</table>
-
-</p>
+<progress class="wavy orange-text" value="{{player_quest.answered_count}}" max="{{player_quest.questions_count}}"></progress>
 
 <div class="padding">
   <h5 class="bold">Steps to follow:</h5>
@@ -280,4 +254,36 @@
 You should login to play.
 {% endif %}
 </p>
+{% endblock %}
+
+
+{% block body_padding %}
+
+<table>
+<thead>
+<tr>
+<th>questions count</th>
+<th>answered count</th>
+<th>answered right count</th>
+<th>answered wrong count</th>
+<th>final score</th>
+<th>quest began</th>
+<th>quest end</th>
+
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>{{player_quest.questions_count}}</td>
+<td>{{player_quest.answered_count}}</td>
+<td>{{player_quest.answered_right_count}}</td>
+<td>{{player_quest.answered_wrong_count}}</td>
+<td>{{player_quest.final_score}}</td>
+<td>{{player_quest.quest_began.strftime('%Y-%m-%d %H:%M')}}</td>
+<td>{% if player_quest.quest_end %}{{player_quest.quest_end.strftime('%Y-%m-%d %H:%M')}}{% endif %}</td>
+</tr>
+</tbody>
+</table>
+
+
 {% endblock %}
