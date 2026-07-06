@@ -24,9 +24,9 @@
 <tr>
 <td>
 {% if pq.quest_end %}
-<p><a href="/quest/in_play_it/{{pq.id}}">You are complete "{{pq.quest.name}}", you can view the log.</a>.</p>
+<p><a href="/quest/in_play_it/{{pq.id}}" class="link">You are complete "{{pq.quest.name}}", you can view the log.</a>.</p>
 {% else %}
-<p><a href="/quest/in_play_it/{{pq.id}}">You are in "{{pq.quest.name}}", proceed</a>.</p>
+<p><a href="/quest/in_play_it/{{pq.id}}" class="link">You are in "{{pq.quest.name}}", proceed</a>.</p>
 {% endif %}
 </td>
 
