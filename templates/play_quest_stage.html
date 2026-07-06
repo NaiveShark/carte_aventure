@@ -24,8 +24,14 @@
 
 <p>
 {% if player_quest.quest_end %}
-You are done this quest.
+You are done this quest with 
+<button class="chip">
+{{player_quest.final_score}}
+</button>
+score.
 <progress class="wavy light-green-text" value="{{player_quest.answered_count}}" max="{{player_quest.questions_count}}"></progress>
+
+
 {% else %}
 You are playing this quest ( {{player_quest.answered_count}} / {{player_quest.questions_count}} ).
 <progress class="wavy orange-text" value="{{player_quest.answered_count}}" max="{{player_quest.questions_count}}"></progress>
