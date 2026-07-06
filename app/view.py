@@ -84,7 +84,7 @@ async def reg_new_user(request: Request):
             if user:
                 error = "User name taken. Choose another name"
             else:
-                await User.create_user( db, username, password, is_admin=False )
+                await User.create_user( db, username, username, password, is_admin=False )
 
                 user = await User.get_user_by_username(db, username)
                 if user:
