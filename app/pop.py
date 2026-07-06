@@ -1317,7 +1317,7 @@ async def pop_data( DB : AsyncSession ):
         DB.add( quest )
         await DB.commit()
 
-        nf = News_Feed( published_dt = datetime.now(), title = 'New quiz!', description = 'Our mighty bot create the new quiz for you!', is_active = True, user_creator = bot_user, quest = quest )
+        nf = News_Feed( published_dt = datetime.now(), title = 'New quiz!', description = "Our mighty bot has made a new quiz for you! " + quest.name, is_active = True, user_creator = bot_user, quest = quest )
         DB.add( nf )
         await DB.commit()
 
@@ -1364,6 +1364,11 @@ async def pop_data( DB : AsyncSession ):
         quest = Quest( name = сq_d["name"], description = сq_d["description"], user_creator = bot_user, is_active = True  )
         DB.add( quest )
         await DB.commit()
+
+        nf = News_Feed( published_dt = datetime.now(), title = 'New quiz!', description = "Our mighty bot has made a new quiz for you! " + quest.name, is_active = True, user_creator = bot_user, quest = quest )
+        DB.add( nf )
+        await DB.commit()
+
         for qd in сq_d["questions"]:
             q = Question( question_title = qd["question_title"], quest_id = quest.id )
             DB.add( q )
