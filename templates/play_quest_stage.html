@@ -41,8 +41,8 @@ You are playing this quest.
 <table class="border">
   <thead>
     <tr>
-      <th>State</th>
       <th>Question</th>
+      <th>State</th>
     </tr>
   </thead>
   <tbody>
@@ -53,8 +53,19 @@ You are playing this quest.
 
     <tr>
       <td>
-	  
+<a href="?current_question_id={{q.Question.id}}"
 
+{% if q.Question.id == current_question_id|int %}
+class="bold"
+{% else %}
+class="link"
+{% endif %}
+
+>{{q.Question.question_title}}</a>
+
+	  </td>
+
+      <td>
 {% if q.max_sub_id %}
 
 {% if q.is_right_answer %}
@@ -70,18 +81,8 @@ You are playing this quest.
 {% endif %}
 
 {% endif %}
-
 	  </td>
-	  
-      <td>
-{% if q.Question.id == current_question_id|int %}
-<button class="chip">Selected</button>
-{% endif %}
-<a href="?current_question_id={{q.Question.id}}">{{q.Question.question_title}}</a>
 
-
-
-	  </td>
     </tr>
 
 {% endfor %}
@@ -126,12 +127,12 @@ You are playing this quest.
 	> <span>{{av.answer_title}}</span>
 
   </label>
- 
+
 
 {% endfor %}
 </div>
   <!-- Submit button to send the form data -->
-  
+
   <div class="field top-margin">
     <button type="submit" class="responsive">
       <i>check</i>
