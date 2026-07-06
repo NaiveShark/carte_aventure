@@ -20,7 +20,7 @@ from starlette_login.middleware import AuthenticationMiddleware
 
 from .admin_views import UserAdmin, QuestAdmin, QuestionAdmin, AnswerVarAdmin
 from .models import Base, User
-from .view import login_page, logout_page, reg_new_user, home_page, view_user_profile, view_quiz_top, quests_page, view_quest, play_quest, in_play_quest, handle_qqa, map_tools, in_play_it_next
+from .view import login_page, logout_page, reg_new_user, home_page, view_user_profile, view_quiz_top, quests_page, view_quest, play_quest, in_play_quest, handle_qqa, in_play_it_next
 from .pop import pop_data, BOT_USER_NAME, BOT_USER_TITLE
 
 import mimetypes
@@ -70,8 +70,6 @@ app = FastAPI(
         Route('/login', login_page, methods=['GET', 'POST'], name='login'),
         Route('/logout', logout_page, name='logout'),
 
-
-        Route('/map_tools', map_tools, name='map_tools'),
         Mount("/statics", StaticFiles(directory="statics"), name="statics"),
 
     ]
