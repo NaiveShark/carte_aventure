@@ -24,6 +24,7 @@ class User(Base, UserMixin):
     username = Column(String(150), unique=True)
     password = Column(String(128))
     title_name = Column(String(150))
+    is_bot = Column(Boolean, default=False)
     is_admin = Column(Boolean, default=False)
     is_editor = Column(Boolean, default=False)
 
@@ -58,16 +59,20 @@ class User(Base, UserMixin):
     @classmethod
     async def create_user(
         cls, db: AsyncSession,
-        username: str, password: str,
+        username: str, 
+        usertitle: str, 
+        password: str,
         is_admin: bool = False,
-        is_editor: bool = False
+        is_editor: bool = False,
+        is_bot: bool = False
     ):
         user = cls(
             username=username,
-            title_name = username,
+            title_name = usertitle,
             password=password,
             is_admin=is_admin,
-            is_editor=is_editor
+            is_editor=is_editor,
+            is_bot = is_bot,
         )
         user.set_password(password)
         db.add(user)
@@ -81,6 +86,9 @@ class Quest(Base):
     name = Column(String, index=True, nullable=False)
     description = Column(Text, nullable=True)
     is_active = Column(Boolean, default=True)
+    
+    user_creator_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False )
+    user_creator = relationship( "User" )
     # difficulty coefficient
     difficulty_coefficient = Column(Integer, nullable=False, default=1)
 

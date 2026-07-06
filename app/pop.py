@@ -1,7 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from .models import Quest, Question, AnswerVar, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER
+from .models import User, Quest, Question, AnswerVar, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER
+
+BOT_USER_NAME = 'Naive_shark_bot'
+BOT_USER_TITLE = 'Naive shark bot'
 
 # CONST map questions
 CONST_QUESTS_MAP = [
@@ -1298,11 +1301,17 @@ async def pop_data( DB : AsyncSession ):
 
     check_query = select(Quest)
     result = await DB.execute(check_query)
+    # check db is empty
     if result.scalars().first():
-        return 0
+        return None        
+    
+    # check we have the bot in user list
+    bot_user = await User.get_user_by_username(DB, BOT_USER_NAME )
+    if not bot_user:
+        return None
 
     for cqm in CONST_QUESTS_MAP:
-        quest = Quest( name = cqm["name"], description = cqm["description"], is_active = True, difficulty_coefficient = 3  )
+        quest = Quest( name = cqm["name"], description = cqm["description"], user_creator = bot_user, is_active = True, difficulty_coefficient = 3  )
         DB.add( quest )
         await DB.commit()
         for qd in cqm["questions"]:
@@ -1345,7 +1354,7 @@ async def pop_data( DB : AsyncSession ):
 
 
     for сq_d in CONST_QUESTS_TEXT:
-        quest = Quest( name = сq_d["name"], description = сq_d["description"], is_active = True  )
+        quest = Quest( name = сq_d["name"], description = сq_d["description"], user_creator = bot_user, is_active = True  )
         DB.add( quest )
         await DB.commit()
         for qd in сq_d["questions"]:

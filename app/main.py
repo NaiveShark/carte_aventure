@@ -21,7 +21,7 @@ from starlette_login.middleware import AuthenticationMiddleware
 from .admin_views import UserAdmin, QuestAdmin, QuestionAdmin, AnswerVarAdmin
 from .models import Base, User
 from .view import login_page, logout_page, reg_new_user, home_page, view_user_profile, view_quiz_top, quests_page, view_quest, play_quest, in_play_quest, handle_qqa, map_tools
-from .pop import pop_data
+from .pop import pop_data, BOT_USER_NAME, BOT_USER_TITLE
 
 import mimetypes
 mimetypes.add_type('text/javascript', '.js')
@@ -108,12 +108,15 @@ async def startup():
     db = LocalDBSession()
     if not await User.get_user_by_username(db, 'admin'):
         await User.create_user(
-            db, 'admin', 'password', is_admin=True
+            db, 'admin', 'Admin', 'password', is_admin=True
         )
-    #if not await User.get_user_by_username(db, 'user'):
-    #    await User.create_user(
-    #        db, 'user', 'password', is_admin=False
-    #    )
+    if not await User.get_user_by_username(db, BOT_USER_NAME ):
+        await User.create_user(
+            db, 
+            BOT_USER_NAME, BOT_USER_TITLE,
+            'password', 
+            is_bot=True
+        )
 
     await pop_data( db )
     await db_engine.dispose()
