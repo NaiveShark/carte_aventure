@@ -36,7 +36,14 @@ You are playing this quest.
 <div class="padding">
   <h5 class="bold">Steps to follow:</h5>
 
-
+{% if player_quest and not player_quest.quest_end %}
+<p>
+<a href="/quest/in_play_it_next/{{player_quest_id}}" class="button">
+  <i>chevron_right</i>
+  <span>Next unanswered</span>
+</a>
+</p>
+{% endif %}
 
 <table class="border">
   <thead>
@@ -46,7 +53,6 @@ You are playing this quest.
     </tr>
   </thead>
   <tbody>
-
 
 
   {% for q in questions %}
@@ -90,9 +96,6 @@ class="link"
 
   </tbody>
 </table>
-
-
-
 
 </div>
 

@@ -107,7 +107,7 @@ async def home_page(request: Request):
         news_q = select(News_Feed).where(News_Feed.is_active == True ).order_by(News_Feed.published_dt.desc())
         news_c = await db.execute(news_q)
         news = news_c.scalars().all()
-        
+
     return template.TemplateResponse(
     request,
         'home.html', context={ 'news' : news, }
@@ -243,16 +243,16 @@ async def in_play_quest(request: Request ):
         quest_id = player_quest.quest_id
         quest = await db.get(Quest, quest_id )
         current_question = None
-        
+
         subq = select(
             Player_Quest_Answers.question_id, Player_Quest_Answers.is_right_answer,
             func.max(Player_Quest_Answers.id).label('max_sub_id')
         ).where(Player_Quest_Answers.player_quest_id==player_quest_id).group_by(Player_Quest_Answers.question_id).subquery()
-        
+
         questions_q = select(Question, subq).outerjoin( subq, Question.id == subq.c.question_id).where( Question.quest_id == quest_id )
         questions = await db.execute( questions_q )
 
-        
+
         pqa = None
         # we need to show the map for question
         question_need_map = False
@@ -301,7 +301,7 @@ async def in_play_quest(request: Request ):
                     if pqa:
                         start_dot_X = pqa.answer_map_X
                         start_dot_Y = pqa.answer_map_Y
-                    
+
         return template.TemplateResponse(
                  request,
                 'play_quest_stage.html', context={
@@ -321,6 +321,34 @@ async def in_play_quest(request: Request ):
                     "pqa" : pqa,
                 }
             )
+
+# User in process of playing for this quest and want the next question
+@login_required
+async def in_play_it_next(request: Request ):
+    # main.LocalDBSession
+    db = request.state.db
+
+    user = request.user
+
+    player_quest_id = request.path_params['player_quest_id']
+    player_quest = await db.get(Player_Quest, player_quest_id )
+    next_question_id = None
+
+    if player_quest is None:
+        return None
+    else:
+        subq = select( Player_Quest_Answers.question_id ).where(Player_Quest_Answers.player_quest_id == player_quest_id )
+        next_question_q = select(Question).where( Question.quest_id == player_quest.quest_id ).where(Question.id.not_in(subq))
+        # get list of unanswered qeustions
+        next_question_e = await db.execute(next_question_q)
+        # get first
+        next_question = next_question_e.scalars().first()
+
+        if next_question:
+            next_question_id = next_question.id
+            return RedirectResponse(url='/quest/in_play_it/' + str( player_quest_id ) + '?current_question_id=' + str( next_question_id ) )
+        else:
+            return RedirectResponse(url='/quest/in_play_it/' + str( player_quest_id ) )
 
 # user answered the question
 @login_required
