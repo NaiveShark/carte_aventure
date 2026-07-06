@@ -250,7 +250,6 @@ async def in_play_quest(request: Request ):
         ).where(Player_Quest_Answers.player_quest_id==player_quest_id).group_by(Player_Quest_Answers.question_id).subquery()
         
         questions_q = select(Question, subq).outerjoin( subq, Question.id == subq.c.question_id).where( Question.quest_id == quest_id )
-        print( str( questions_q ) )
         questions = await db.execute( questions_q )
 
         
