@@ -3,6 +3,25 @@
 {% block body %}
 {% if request.user.is_authenticated %}
 <p>Go to <a href="/quests" class="link">Quests</a>.</p>
+
+<h1>Site news</h1>
+{% for n in news %}
+<article class="primary-container">
+  <h5>{{n.title}}</h5>
+  <p>{{n.description}}</p>
+  <p class="right-align">{{n.published_dt.strftime('%Y-%m-%d %H:%M')}}</p>
+
+  {% if n.quest_id %}
+  <nav>
+    
+	<a class="button" href="/view/quest/{{n.id}}">Go to Quiz!</a>
+  </nav>
+  {% endif %}
+</article>
+
+{% endfor %}
+
+
 {% else %}
 <p>You should login to play.</p>
 {% endif %}

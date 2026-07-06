@@ -8,7 +8,7 @@ from starlette_login.decorator import login_required
 from starlette_login.utils import login_user, logout_user
 from datetime import datetime
 
-from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_PERMISSIBLE_DISTANCE_DEVIATION
+from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_PERMISSIBLE_DISTANCE_DEVIATION, News_Feed
 from .gis import dist
 
 from starlette.templating import Jinja2Templates
@@ -100,9 +100,17 @@ async def reg_new_user(request: Request):
     )
 
 async def home_page(request: Request):
+    # main.LocalDBSession
+    db = request.state.db
+    user = request.user
+    if not ( user is None ):
+        news_q = select(News_Feed).where(News_Feed.is_active == True ).order_by(News_Feed.published_dt.desc())
+        news_c = await db.execute(news_q)
+        news = news_c.scalars().all()
+        
     return template.TemplateResponse(
     request,
-        'home.html', context={ }
+        'home.html', context={ 'news' : news, }
     )
 
 async def map_tools(request: Request):
@@ -164,7 +172,7 @@ async def view_quest(request: Request):
     user = request.user
 
     quest_id = request.path_params['quest_id']
-    quest = await db.get(Quest, quest_id )
+    quest = await db.get(Quest, quest_id, options= [ selectinload( Quest.user_creator ) ] )
 
     if quest is None:
         return None

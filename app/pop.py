@@ -1,7 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from .models import User, Quest, Question, AnswerVar, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER
+from .models import User, Quest, Question, AnswerVar, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, News_Feed
+
+from datetime import datetime
 
 BOT_USER_NAME = 'Naive_shark_bot'
 BOT_USER_TITLE = 'Naive shark bot'
@@ -87,12 +89,12 @@ CONST_QUESTS_MAP = [
           ] },
           ]
      }  ,
-     
+
 {
     "name": "Iceland History, Geography & Ancient Travels",
     "description": "Test your knowledge on the land of fire and ice, Viking settlements, and ancient North Atlantic voyages! ![Iceland](https://upload.wikimedia.org/wikipedia/commons/a/ab/Iceland_%286111906083%29.jpg)",
     "questions": [
-        { 
+        {
             "question_title": "Where did Iceland's historic Althing (parliament) meet from 930 AD until 1798?",
             "question_map_X": -21.12,
             "question_map_Y": 64.25,
@@ -103,10 +105,10 @@ CONST_QUESTS_MAP = [
                 [ "Akureyri", None, False, "No." ],
                 [ "Húsavík", None, False, "No." ],
                 [ "Skálholt", None, False, "No." ]
-            ] 
+            ]
         },
 
-        { 
+        {
             "question_title": "In 1783, a massive, catastrophic volcanic eruption began here, creating a global climate crisis. What was the name of the fissure system?",
             "question_map_X": -18.23,
             "question_map_Y": 64.06,
@@ -117,10 +119,10 @@ CONST_QUESTS_MAP = [
                 [ "Hekla", None, False, "No." ],
                 [ "Laki", "Yes.", True, None ],
                 [ "Askja", None, False, "No." ]
-            ] 
+            ]
         },
 
-        { 
+        {
             "question_title": "Leif Erikson sailed from Iceland and established a settlement in Vinland (North America) around 1000 AD. Where is this modern-day archaeological site located?",
             "question_map_X": -55.53,
             "question_map_Y": 51.59,
@@ -130,60 +132,60 @@ CONST_QUESTS_MAP = [
                 [ "Baffin Island", None, False, "No." ],
                 [ "L'Anse aux Meadows", "Yes.", True, None ],
                 [ "Cape Cod", None, False, "No." ]
-            ] 
+            ]
         },
 
-        { 
+        {
             "question_title": "The Sagas state that Ingólfur Arnarson became the first permanent Norse settler in Iceland around 874 AD. Place a dot on the map where he founded his settlement, which later became Iceland's capital.",
             "question_map_X": -22,
             "question_map_Y": 65,
             "question_map_ZOOM": 6,
             "dot_answer": [
-                { 
+                {
                     "dot_question": "Yes, you've placed the dot on the map very close to the target place.",
                     "true_answer_map_X": -21.9426,
                     "true_answer_map_Y": 64.1466,
                     "right_message": "Yes, this is Reykjavík.",
                     "wrong_message": "No"
                 }
-            ] 
+            ]
         },
 
-        { 
+        {
             "question_title": "Erik the Red fled Iceland after being outlawed for manslaughter and went on to establish the first Norse settlement in Greenland. Place a dot on the southwestern coast of Greenland where his estate, Brattahlíð, was founded.",
             "question_map_X": -45.0,
             "question_map_Y": 62.0,
             "question_map_ZOOM": 6,
             "dot_answer": [
-                { 
+                {
                     "dot_question": "Yes, you've placed the dot on the map very close to the target place.",
                     "true_answer_map_X": -45.5186,
                     "true_answer_map_Y": 61.1558,
                     "right_message": "Yes, this is the Eastern Settlement area (Tunulliarfik Fjord).",
                     "wrong_message": "No"
                 }
-            ] 
+            ]
         },
 
-        { 
+        {
             "question_title": "Where is the northernmost point of mainland Iceland, located just a few kilometers south of the Arctic Circle?",
             "question_map_X": -17,
             "question_map_Y": 66,
             "question_map_ZOOM": 8,
             "dot_answer": [
-                { 
+                {
                     "dot_question": "Yes, you've placed the dot on the map very close to the target place. It's Hraunhafnartangi, the northernmost point of the mainland.",
                     "true_answer_map_X": -16.5411,
                     "true_answer_map_Y": 66.5375,
                     "right_message": "Yes.",
                     "wrong_message": "No"
                 }
-            ] 
+            ]
         },
-        
 
 
-        { 
+
+        {
             "question_title": "According to the Landnámabók (Book of Settlements), this Irish-born Viking was the first to intentionally sail to Iceland and spend a winter there, naming it 'Garðarshólmur' after himself. Where did he land?",
             "question_map_X": -17.3,
             "question_map_Y": 66.0,
@@ -193,9 +195,9 @@ CONST_QUESTS_MAP = [
                 [ "Húsavík", "Yes.", True, None ],
                 [ "Seyðisfjörður", None, False, "No." ],
                 [ "Vestmannaeyjar", None, False, "No." ]
-            ] 
+            ]
         },
-        { 
+        {
             "question_title": "Iceland sits directly on top of the meeting point between two massive tectonic plates that are pulling apart. What are these two plates?",
             "question_map_X": -19.0,
             "question_map_Y": 65.0,
@@ -205,9 +207,9 @@ CONST_QUESTS_MAP = [
                 [ "Eurasian and African", None, False, "No." ],
                 [ "North American and Eurasian", "Yes.", True, None ],
                 [ "Nazca and South American", None, False, "No." ]
-            ] 
+            ]
         },
-        { 
+        {
             "question_title": "In 1963, a brand new island was born off the southern coast of Iceland due to a massive underwater volcanic eruption. What is the name of this UNESCO protected island?",
             "question_map_X": -20.6,
             "question_map_Y": 63.3,
@@ -217,9 +219,9 @@ CONST_QUESTS_MAP = [
                 [ "Surtsey", "Yes.", True, None ],
                 [ "Grimsey", None, False, "No." ],
                 [ "Flatey", None, False, "No." ]
-            ] 
+            ]
         },
-        { 
+        {
             "question_title": "Where is the legendary active volcano Hekla located, which was feared in medieval Europe and often called the 'Gateway to Hell'?",
             "question_map_X": -19.66,
             "question_map_Y": 63.99,
@@ -229,9 +231,9 @@ CONST_QUESTS_MAP = [
                 [ "Katla", None, False, "No." ],
                 [ "Katla", None, False, "No." ],
                 [ "Krafla", None, False, "No." ]
-            ] 
+            ]
         },
-        { 
+        {
             "question_title": "Before the Norse arrived, Iceland was briefly inhabited by Gaelic monks who sought absolute isolation for religious reflection. What were these early Christian hermits called?",
             "question_map_X": -14.5,
             "question_map_Y": 63.8,
@@ -241,88 +243,88 @@ CONST_QUESTS_MAP = [
                 [ "Papar", "Yes.", True, None ],
                 [ "Jarls", None, False, "No." ],
                 [ "Thralls", None, False, "No." ]
-            ] 
+            ]
         },
 
         # --- Dot Answers ---
-        { 
+        {
             "question_title": "Place the dot on Vatnajökull, the largest and most voluminous ice cap in Iceland (and one of the largest in Europe by area), which covers around 8% of the country.",
             "question_map_X": -16.8,
             "question_map_Y": 64.4,
             "question_map_ZOOM": 7,
             "dot_answer": [
-                { 
+                {
                     "dot_question": "Yes, you've placed the dot right on the massive Vatnajökull glacier.",
                     "true_answer_map_X": -16.81,
                     "true_answer_map_Y": 64.42,
                     "right_message": "Yes, this is Vatnajökull.",
                     "wrong_message": "No"
                 }
-            ] 
+            ]
         },
-        { 
+        {
             "question_title": "The Snaefellsjökull volcano is famous worldwide as the entry point to the center of the Earth in Jules Verne's sci-fi novel 'Journey to the Center of the Earth'. Place the dot on the western tip of this peninsula.",
             "question_map_X": -23.7,
             "question_map_Y": 64.8,
             "question_map_ZOOM": 9,
             "dot_answer": [
-                { 
+                {
                     "dot_question": "Excellent! You've located the Snæfellsjökull glacier-capped volcano at the edge of the peninsula.",
                     "true_answer_map_X": -23.7766,
                     "true_answer_map_Y": 64.8081,
                     "right_message": "Yes, that's Snæfellsjökull.",
                     "wrong_message": "No"
                 }
-            ] 
+            ]
         },
-        { 
+        {
             "question_title": "In the year 1000 AD, Iceland officially converted to Christianity at the Althing. To symbolize this, the Lawspeaker Thorgeir threw his pagan idols of the Norse gods into a spectacular waterfall. Place the dot on this 'Waterfall of the Gods' (Goðafoss) in northern Iceland.",
             "question_map_X": -17.5,
             "question_map_Y": 65.6,
             "question_map_ZOOM": 9,
             "dot_answer": [
-                { 
+                {
                     "dot_question": "Correct! You successfully located Goðafoss waterfall along the Skjálfandafljót river.",
                     "true_answer_map_X": -17.5502,
                     "true_answer_map_Y": 65.6828,
                     "right_message": "Yes, this is Goðafoss.",
                     "wrong_message": "No"
                 }
-            ] 
+            ]
         },
-        { 
+        {
             "question_title": "Before discovering Greenland, Viking explorers used the Faroe Islands as a crucial stepping stone between Norway and Iceland. Place a dot on this small island archipelago in the middle of the North Atlantic.",
             "question_map_X": -6.7,
             "question_map_Y": 62.0,
             "question_map_ZOOM": 6,
             "dot_answer": [
-                { 
+                {
                     "dot_question": "Perfect! You found the Faroe Islands, the vital mid-way hub for ancient Norse longships.",
                     "true_answer_map_X": -6.78,
                     "true_answer_map_Y": 62.01,
                     "right_message": "Yes, these are the Faroe Islands.",
                     "wrong_message": "No"
                 }
-            ] 
+            ]
         },
-        { 
+        {
             "question_title": "Where is the diamond-shaped black sand beach known as 'Diamond Beach' located, where glittering icebergs from the Jökulsárlón glacier lagoon wash ashore?",
             "question_map_X": -16.1,
             "question_map_Y": 64.0,
             "question_map_ZOOM": 11,
             "dot_answer": [
-                { 
+                {
                     "dot_question": "Great job! You pointed right to the outlet channel where the glacier lagoon meets the Atlantic ocean.",
                     "true_answer_map_X": -16.178,
                     "true_answer_map_Y": 64.043,
                     "right_message": "Yes, this is Diamond Beach.",
                     "wrong_message": "No"
                 }
-            ] 
+            ]
         },
-        
-        
-        { 
+
+
+        {
             "question_title": "Viking navigators used a mysterious crystal called a 'Sunstone' (silfrið berg) to find the sun's position even through thick fog or storm clouds. What local Icelandic mineral is this historically famous sunstone believed to be?",
             "question_map_X": -14.6,
             "question_map_Y": 65.0,
@@ -332,9 +334,9 @@ CONST_QUESTS_MAP = [
                 [ "Iceland Spar (Optical Calcite)", "Yes.", True, None ],
                 [ "Basalt", None, False, "No." ],
                 [ "Sulfur", None, False, "No." ]
-            ] 
+            ]
         },
-        { 
+        {
             "question_title": "In 1262, after decades of bloody internal civil war between powerful clans (the Age of the Sturlungs), Iceland lost its independence and signed an agreement submitting to the rule of which foreign king?",
             "question_map_X": 10.7,
             "question_map_Y": 59.9,
@@ -344,9 +346,9 @@ CONST_QUESTS_MAP = [
                 [ "King of England", None, False, "No." ],
                 [ "King of Norway", "Yes.", True, None ],
                 [ "King of Sweden", None, False, "No." ]
-            ] 
+            ]
         },
-        { 
+        {
             "question_title": "According to the Grœnlendinga saga, who was the very first Norse explorer to sight the coast of North America when his ship was blown off course in a storm, before Leif Erikson actually went there to build houses?",
             "question_map_X": -53.0,
             "question_map_Y": 47.0,
@@ -356,9 +358,9 @@ CONST_QUESTS_MAP = [
                 [ "Thorvald Erikson", None, False, "No." ],
                 [ "Thorfinn Karlsefni", None, False, "No." ],
                 [ "Freydís Eiríksdóttir", None, False, "No." ]
-            ] 
+            ]
         },
-        { 
+        {
             "question_title": "Which active stratovolcano located in southern Iceland is one of the island's most dangerous, famous for erupting underneath the Mýrdalsjökull ice cap and causing catastrophic glacial floods (jökulhlaups)?",
             "question_map_X": -19.0,
             "question_map_Y": 63.6,
@@ -368,89 +370,89 @@ CONST_QUESTS_MAP = [
                 [ "Katla", "Yes.", True, None ],
                 [ "Bárðarbunga", None, False, "No." ],
                 [ "Eyjafjallajökull", None, False, "No." ]
-            ] 
+            ]
         },
 
-        { 
+        {
             "question_title": "Viking explorers sailed even further west than Vinland. Archaeological evidence suggests they regularly visited this massive island (which they called Helluland, meaning 'Land of Flat Stones') to gather timber and trade with indigenous peoples. Place the dot on Baffin Island.",
             "question_map_X": -70.0,
             "question_map_Y": 69.0,
             "question_map_ZOOM": 3,
             "dot_answer": [
-                { 
+                {
                     "dot_question": "Perfect! You've located Baffin Island, known to the ancient Norse as Helluland.",
                     "true_answer_map_X": -68.84,
                     "true_answer_map_Y": 66.52,
                     "right_message": "Yes, this is Helluland (Baffin Island).",
                     "wrong_message": "No"
                 }
-            ] 
+            ]
         },
-        { 
+        {
             "question_title": "The Western Settlement was a group of farms established by Icelandic vikings in Greenland around 985 AD, but it mysteriously vanished entirely in the 14th century. Place a dot on the Nuuk fjord region where this remote outpost once stood.",
             "question_map_X": -51.0,
             "question_map_Y": 64.2,
             "question_map_ZOOM": 5,
             "dot_answer": [
-                { 
+                {
                     "dot_question": "Excellent! You found the area of the lost Western Settlement near modern-day Nuuk.",
                     "true_answer_map_X": -50.25,
                     "true_answer_map_Y": 64.50,
                     "right_message": "Yes, this is the Western Settlement area.",
                     "wrong_message": "No"
                 }
-            ] 
+            ]
         },
-        { 
+        {
             "question_title": "Where is the island of Grímsey located? It is the only part of Icelandic territory that is actually crossed by the official Arctic Circle line.",
             "question_map_X": -18.0,
             "question_map_Y": 66.5,
             "question_map_ZOOM": 9,
             "dot_answer": [
-                { 
+                {
                     "dot_question": "Great eye! You found Grímsey, sitting right on the edge of the Arctic Circle.",
                     "true_answer_map_X": -18.00,
                     "true_answer_map_Y": 66.55,
                     "right_message": "Yes, this is Grímsey island.",
                     "wrong_message": "No"
                 }
-            ] 
+            ]
         },
-        { 
+        {
             "question_title": "Reynisdrangar are famous, jagged basalt sea stacks poking out of the ocean. According to local folklore, they were formed when two trolls tried to drag a three-masted ship to shore but were turned to stone by the sunrise. Place a dot on this southern black sand beach near Vík í Mýrdal.",
             "question_map_X": -19.0,
             "question_map_Y": 63.4,
             "question_map_ZOOM": 11,
             "dot_answer": [
-                { 
+                {
                     "dot_question": "Spot on! You pointed right to the dramatic southern coast of Vík.",
                     "true_answer_map_X": -19.02,
                     "true_answer_map_Y": 63.40,
                     "right_message": "Yes, these are the Reynisdrangar sea stacks.",
                     "wrong_message": "No"
                 }
-            ] 
+            ]
         },
-        { 
+        {
             "question_title": "During the Little Ice Age, sea ice completely blocked Iceland's trade routes for months. Ships from the Hanseatic League and Britain had to brave terrifying winter storms to reach Iceland's main trading outpost in the Westfjords. Place a dot on the historic trading town of Ísafjörður.",
             "question_map_X": -23.1,
             "question_map_Y": 66.0,
             "question_map_ZOOM": 9,
             "dot_answer": [
-                { 
+                {
                     "dot_question": "Correct! You successfully carved your way into the deep fjords to locate Ísafjörður.",
                     "true_answer_map_X": -23.12,
                     "true_answer_map_Y": 66.07,
                     "right_message": "Yes, this is Ísafjörður in the Westfjords.",
                     "wrong_message": "No"
                 }
-            ] 
+            ]
         }
-        
+
     ]
 }     ,
-     
-     
+
+
 
     {
         "name": "Do you know Caribbean geography?",
@@ -665,8 +667,8 @@ CONST_QUESTS_MAP = [
 
 
 
-               
-            
+
+
         ]
     },
 
@@ -1303,8 +1305,8 @@ async def pop_data( DB : AsyncSession ):
     result = await DB.execute(check_query)
     # check db is empty
     if result.scalars().first():
-        return None        
-    
+        return None
+
     # check we have the bot in user list
     bot_user = await User.get_user_by_username(DB, BOT_USER_NAME )
     if not bot_user:
@@ -1314,6 +1316,11 @@ async def pop_data( DB : AsyncSession ):
         quest = Quest( name = cqm["name"], description = cqm["description"], user_creator = bot_user, is_active = True, difficulty_coefficient = 3  )
         DB.add( quest )
         await DB.commit()
+
+        nf = News_Feed( published_dt = datetime.now(), title = 'New quiz!', description = 'Our mighty bot create the new quiz for you!', is_active = True, user_creator = bot_user, quest = quest )
+        DB.add( nf )
+        await DB.commit()
+
         for qd in cqm["questions"]:
             if qd.get("dot_answer"):
                 q = Question( question_title = qd["question_title"],

@@ -174,4 +174,19 @@ class Player_Quest_Answers(Base):
     answer_distance = Column( Float )
 
 
+# News feed
+class News_Feed(Base):
+    id = Column(Integer, primary_key=True, index=True)
+    published_dt = Column( DateTime )
+    title = Column(String(250))
+    description = Column(Text, nullable=True)
+    is_active = Column(Boolean, default=True)
+    
+    user_creator_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False )
+    user_creator = relationship( "User" )
+    
+    # may be it's just a text announce, without links
+    quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=True )
+    quest = relationship( "Quest" )
+
 #
