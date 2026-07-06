@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 # Auth and user tables
@@ -137,6 +137,11 @@ class AnswerVar(Base):
 
 # quest played by player
 class Player_Quest(Base):
+    
+    # one quest per user constaint
+    __table_args__ = (
+        UniqueConstraint("quest_id", "user_id", name="uq_user_quest"), )
+    
     id = Column(Integer, primary_key=True, index=True)
 
     quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=False )
@@ -156,6 +161,11 @@ class Player_Quest(Base):
 
 # quest played by player
 class Player_Quest_Answers(Base):
+
+    # one quest per user constaint
+    __table_args__ = (
+        UniqueConstraint("player_quest_id", "question_id", "answervar_id", name="uq_user_quest_answer"), )
+
     id = Column(Integer, primary_key=True, index=True)
     player_quest_id: Mapped[int] = mapped_column(ForeignKey("player_quest.id"), nullable=False )
     player_quest = relationship( "Player_Quest" )
