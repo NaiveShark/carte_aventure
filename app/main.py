@@ -110,6 +110,12 @@ async def startup():
         await User.create_user(
             db, 'admin', 'Admin', 'password', is_admin=True
         )
+
+    if not await User.get_user_by_username(db, 'u'):
+        await User.create_user(
+            db, 'u', 'u user', 'u'
+        )
+
     if not await User.get_user_by_username(db, BOT_USER_NAME ):
         await User.create_user(
             db, 
