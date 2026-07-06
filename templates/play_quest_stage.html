@@ -27,14 +27,10 @@
 You are done this quest.
 <progress class="wavy light-green-text" value="{{player_quest.answered_count}}" max="{{player_quest.questions_count}}"></progress>
 {% else %}
-You are playing this quest.
+You are playing this quest ( {{player_quest.answered_count}} / {{player_quest.questions_count}} ).
 <progress class="wavy orange-text" value="{{player_quest.answered_count}}" max="{{player_quest.questions_count}}"></progress>
 {% endif %}
 </p>
-
-
-<div class="padding">
-  <h5 class="bold">Steps to follow:</h5>
 
 {% if player_quest and not player_quest.quest_end %}
 <p>
@@ -45,36 +41,14 @@ You are playing this quest.
 </p>
 {% endif %}
 
-<table class="border">
-  <thead>
-    <tr>
-      <th>Question</th>
-      <th>State</th>
-    </tr>
-  </thead>
-  <tbody>
+<h1>{{current_question.question_title}}</h1>
+
+{% if pqa %}
+
+<h3>
 
 
-  {% for q in questions %}
-
-    <tr>
-      <td>
-<a href="?current_question_id={{q.Question.id}}"
-
-{% if q.Question.id == current_question_id|int %}
-class="bold"
-{% else %}
-class="link"
-{% endif %}
-
->{{q.Question.question_title}}</a>
-
-	  </td>
-
-      <td>
-{% if q.max_sub_id %}
-
-{% if q.is_right_answer %}
+{% if pqa.is_right_answer %}
 <button class="chip large large-elevate vertical">
   <i class="green-text">done</i>
   <span>Right</span>
@@ -86,31 +60,14 @@ class="link"
 </button>
 {% endif %}
 
-{% endif %}
-	  </td>
-
-    </tr>
-
-{% endfor %}
-
-
-  </tbody>
-</table>
-
-</div>
-
-<h1>{{current_question.question_title}}</h1>
-
-{% if pqa %}
-
-<p>You answered at {{pqa.answered_dt.strftime('%Y-%m-%d %H:%M')}}. Your answer is <b>{{pqa.answervar.answer_title}}</b> and it's {{pqa.is_right_answer}}.
+You answered at {{pqa.answered_dt.strftime('%Y-%m-%d %H:%M')}}. Your answer is <b>{{pqa.answervar.answer_title}}</b> and it's {{pqa.is_right_answer}}.
 
 	{% if pqa.is_right_answer %}
 	{{pqa.answervar.right_message}}
 	{% else %}
     {{pqa.answervar.wrong_message}}
 	{% endif %}
-</p>
+</h3>
 
 {% else %}
 
@@ -304,6 +261,66 @@ class="link"
 
 
 {% block body_padding %}
+
+<div class="padding">
+  <h5 class="bold">Steps to follow:</h5>
+
+
+<table class="border">
+  <thead>
+    <tr>
+      <th>Question</th>
+      <th>State</th>
+    </tr>
+  </thead>
+  <tbody>
+
+
+  {% for q in questions %}
+
+    <tr>
+      <td>
+<a href="?current_question_id={{q.Question.id}}"
+
+{% if q.Question.id == current_question_id|int %}
+class="bold"
+{% else %}
+class="link"
+{% endif %}
+
+>{{q.Question.question_title}}</a>
+
+	  </td>
+
+      <td>
+{% if q.max_sub_id %}
+
+{% if q.is_right_answer %}
+<button class="chip large large-elevate vertical">
+  <i class="green-text">done</i>
+  <span>Right</span>
+</button>
+{% else %}
+<button class="chip large large-elevate vertical">
+  <i class="red-text">close</i>
+  <span>Fail</span>
+</button>
+{% endif %}
+
+{% endif %}
+	  </td>
+
+    </tr>
+
+{% endfor %}
+
+
+  </tbody>
+</table>
+
+</div>
+
+
 
 <table>
 <thead>
