@@ -81,16 +81,29 @@ class User(Base, UserMixin):
 
 # Data tables
 
+CONST_QUEST_QUIZ = 0
+CONST_QUEST_TREASURE_QUEST = 1
+
+# Quest and quiz
 class Quest(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True, nullable=False)
     description = Column(Text, nullable=True)
     is_active = Column(Boolean, default=True)
+
+    # quest_type
+    quest_type = Column(Integer, nullable=False, default = CONST_QUEST_QUIZ )
+
     
     user_creator_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False )
     user_creator = relationship( "User" )
     # difficulty coefficient
     difficulty_coefficient = Column(Integer, nullable=False, default=1)
+
+    @property
+    def is_treasure_quest(self) -> str:
+        return self.quest_type == CONST_QUEST_TREASURE_QUEST
+
 
 # question types const
 # 0 is for simple quiz with text variants

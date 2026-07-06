@@ -1,12 +1,20 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from .models import User, Quest, Question, AnswerVar, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, News_Feed
+from .models import User, Quest, Question, AnswerVar, CONST_QUEST_TREASURE_QUEST, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, News_Feed
 
 from datetime import datetime
 
 BOT_USER_NAME = 'Naive_shark_bot'
 BOT_USER_TITLE = 'Naive shark bot'
+
+# Treasure quest!
+CONST_TREASURE_QUEST = [
+
+   { "name" : "Are you ready for treasure quest?",
+      "description" : "Treasure!",
+     } ,
+]
 
 # CONST map questions
 CONST_QUESTS_MAP = [
@@ -1312,6 +1320,7 @@ async def pop_data( DB : AsyncSession ):
     if not bot_user:
         return None
 
+    # quiz
     for cqm in CONST_QUESTS_MAP:
         quest = Quest( name = cqm["name"], description = cqm["description"], user_creator = bot_user, is_active = True, difficulty_coefficient = 3  )
         DB.add( quest )
@@ -1378,6 +1387,17 @@ async def pop_data( DB : AsyncSession ):
                     a = AnswerVar( answer_title = answer[0], question_id = q.id, right_message = answer[1], is_true_answer = answer[2], wrong_message = answer[3] )
                     DB.add( a )
                     await DB.commit()
+
+
+    # Treasure quest
+    for ctq in CONST_TREASURE_QUEST:
+        quest = Quest( name = ctq["name"], description = ctq["description"], quest_type = CONST_QUEST_TREASURE_QUEST, user_creator = bot_user, is_active = True, difficulty_coefficient = 50  )
+        DB.add( quest )
+        await DB.commit()
+
+        nf = News_Feed( published_dt = datetime.now(), title = 'New treasure quest!', description = "Our mighty bot has made a new quest for you! " + quest.name, is_active = True, user_creator = bot_user, quest = quest )
+        DB.add( nf )
+        await DB.commit()
 
 
 #

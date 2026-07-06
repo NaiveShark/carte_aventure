@@ -104,7 +104,7 @@ async def home_page(request: Request):
     db = request.state.db
     user = request.user
     if not ( user is None ):
-        news_q = select(News_Feed).where(News_Feed.is_active == True ).order_by(News_Feed.published_dt.desc())
+        news_q = select(News_Feed).where(News_Feed.is_active == True ).order_by(News_Feed.published_dt.desc()).options(selectinload(News_Feed.quest))
         news_c = await db.execute(news_q)
         news = news_c.scalars().all()
 
@@ -171,16 +171,22 @@ async def view_quest(request: Request):
     if quest is None:
         return None
     else:
+        if quest.is_treasure_quest:
+            return template.TemplateResponse(
+                     request,
+                    'play_quest.html', context={ 'quest' : quest, }
+                )
+                
+        else:
+            # check - may be quest is already played by user
+            pq_query = select(Player_Quest).where(Player_Quest.quest_id == quest_id, Player_Quest.user_id == user.id )
+            pq_e = await db.execute(pq_query)
+            pq = pq_e.scalar_one_or_none()
 
-        # check - may be quest is already played by user
-        pq_query = select(Player_Quest).where(Player_Quest.quest_id == quest_id, Player_Quest.user_id == user.id )
-        pq_e = await db.execute(pq_query)
-        pq = pq_e.scalar_one_or_none()
-
-        return template.TemplateResponse(
-                 request,
-                'play_quest.html', context={ 'quest' : quest, "pq" : pq }
-            )
+            return template.TemplateResponse(
+                     request,
+                    'play_quiz.html', context={ 'quest' : quest, "pq" : pq }
+                )
 
 @login_required
 async def play_quest(request: Request):

@@ -13,8 +13,11 @@
 
   {% if n.quest_id %}
   <nav>
-    
+    {% if n.quest.is_treasure_quest %}
+	<a class="button" href="/view/quest/{{n.id}}">Go to treasure hunt!</a>
+	{% else %}
 	<a class="button" href="/view/quest/{{n.id}}">Go to Quiz!</a>
+	{% endif %}
   </nav>
   {% endif %}
 </article>
