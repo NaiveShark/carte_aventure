@@ -1,33 +1,32 @@
 {% extends 'base.html' %}
 {% block title %}Quest{% endblock %}
 {% block body %}
-<p>
 {% if request.user.is_authenticated %}
 
 <h1>{{quest.name}} (difficulty {{quest.difficulty_coefficient}})</h1>
-{% if quest.description %}
-<p>{{quest.description | markdown | safe }}</p>
 
-{% endif %}
 
+
+<p>
 {% if pq %}
-
 {% if pq.quest_end %}
 <p><a class="button" href="/quest/in_play_it/{{pq.id}}">You are complete this quest, you can view the log.</a>.</p>
 {% else %}
 <p><a class="button" href="/quest/in_play_it/{{pq.id}}">You are in quest, proceed</a>.</p>
 {% endif %}
-
-
 {% else %}
 <form action="/quest/play_it/{{quest.id}}/" method="get">
   <button type="submit">Play it!</button>
 </form>
-
 {% endif %}
 
 {% else %}
 You should login to play.
 {% endif %}
 </p>
+
+{% if quest.description %}
+<p>{{quest.description | markdown | safe }}</p>
+{% endif %}
+
 {% endblock %}
