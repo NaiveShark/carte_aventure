@@ -2,7 +2,7 @@ from urllib.parse import parse_qsl
 
 from starlette.requests import Request
 from starlette.responses import (
-    HTMLResponse, PlainTextResponse, RedirectResponse
+    HTMLResponse, PlainTextResponse, RedirectResponse, JSONResponse
 )
 from starlette_login.decorator import login_required
 from starlette_login.utils import login_user, logout_user
@@ -159,6 +159,54 @@ async def quests_page(request: Request):
                 'quests.html', context={ 'quests' : quests, }
             )
 
+
+async def get_treasure_quest_dots( request: Request ):
+    return JSONResponse(
+    
+    #{"status": "success", 'dots' :
+    
+    
+    [
+  {
+    "id": 1,
+    "name": "Point A",
+    "latitude": 1.0,
+    "longitude": 1.0
+  },
+  {
+    "id": 2,
+    "name": "Point B",
+    "latitude": 2.0,
+    "longitude": 1.0,
+  },
+  {
+    "id": 3,
+    "name": "Point C",
+    "latitude": 4.0,
+    "longitude": -1.0,
+  }
+
+]
+    
+    #}
+    )
+    
+async def play_treasure_quest( request: Request, db, user, quest ):
+    users_in_quest = { 1, 2  }
+    
+    start_dot_X = 0.0
+    start_dot_Y = 0.0
+    start_map_ZOOM = 4
+    
+    return template.TemplateResponse(
+             request,
+            'play_treasure_quest.html', context={ 'quest' : quest, 'users_in_quest' : users_in_quest,
+            'start_dot_X' : start_dot_X,
+            'start_dot_Y' : start_dot_Y,
+            'start_map_ZOOM' : start_map_ZOOM
+            }
+        )
+
 @login_required
 async def view_quest(request: Request):
     # main.LocalDBSession
@@ -172,11 +220,7 @@ async def view_quest(request: Request):
         return None
     else:
         if quest.is_treasure_quest:
-            return template.TemplateResponse(
-                     request,
-                    'play_quest.html', context={ 'quest' : quest, }
-                )
-                
+            return await play_treasure_quest( request, db, user, quest )               
         else:
             # check - may be quest is already played by user
             pq_query = select(Player_Quest).where(Player_Quest.quest_id == quest_id, Player_Quest.user_id == user.id )

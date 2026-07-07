@@ -20,7 +20,7 @@ from starlette_login.middleware import AuthenticationMiddleware
 
 from .admin_views import UserAdmin, QuestAdmin, QuestionAdmin, AnswerVarAdmin
 from .models import Base, User
-from .view import login_page, logout_page, reg_new_user, home_page, view_user_profile, view_quiz_top, quests_page, view_quest, play_quest, in_play_quest, handle_qqa, in_play_it_next
+from .view import login_page, logout_page, reg_new_user, home_page, view_user_profile, view_quiz_top, quests_page, view_quest, play_quest, in_play_quest, handle_qqa, in_play_it_next, get_treasure_quest_dots
 from .pop import pop_data, BOT_USER_NAME, BOT_USER_TITLE
 
 import mimetypes
@@ -64,6 +64,8 @@ app = FastAPI(
         Route("/quest/in_play_it/{player_quest_id}", in_play_quest, name='in_play_quest'),
         Route("/quest/in_play_it_next/{player_quest_id}", in_play_it_next, name='in_play_it_next'),
         Route("/quest/submit_form-qqa/{player_quest_id}/{current_question_id}", handle_qqa, methods=["POST"]),
+        Route("/quest/get_treasure_quest_dots", get_treasure_quest_dots ),
+
 
         Route('/profile', view_user_profile, name='view_user_profile'),
         Route('/reg_new_user', reg_new_user, methods=['GET', 'POST'], name='reg_new_user'),

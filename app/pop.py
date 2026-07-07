@@ -12,7 +12,7 @@ BOT_USER_TITLE = 'Naive shark bot'
 CONST_TREASURE_QUEST = [
 
    { "name" : "Are you ready for treasure quest?",
-      "description" : "Treasure!",
+      "description" : "Treasure hunt! An unknown wealthy individual has hidden a mysterious treasure somewhere on the globe. Pinpoint the location on the map where it’s hidden! Finding it on the first try is impossible, but keep an eye on the spots marked by other players—and remember, they can see yours, too. Decide for yourself: is this a race against the clock, or a collaborative effort?",
      } ,
 ]
 
