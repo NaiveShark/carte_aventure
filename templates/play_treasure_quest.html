@@ -62,27 +62,31 @@
 
 		map.addLayer(dotLayer);
 
-fetch('/quest/get_treasure_quest_dots')
-  .then(response => response.json()) // Read the response as JSON
-  .then(data => {
-     //console.log(data);
-	// 3. Loop through the array of dots
-    data.forEach(item => {
-      
-      // 4. Transform the coordinates from EPSG:4326 to EPSG:3857
-      const coords = ol.proj.fromLonLat([item.longitude, item.latitude]);
-      
-      // 5. Create a point feature
-      const feature = new ol.Feature({
-        geometry: new ol.geom.Point(coords)
-      });
-      
-      // 6. Add the feature to your source
-      dotSource.addFeature(feature);
-    });
-  })
-  .catch(error => console.error('Error fetching data:', error));
+// 2. Define the function to fetch and update dots
+function refreshDots() {
+  fetch('/quest/get_treasure_quest_dots')
+    .then(response => response.json())
+    .then(data => {
+      // Clear previous dots to prevent duplicates and memory leaks
+      dotSource.clear();
 
+      // OPTION B: If your data is an object containing an array (e.g., data.dots)
+      data.forEach(item => {
+        const coords = ol.proj.fromLonLat([item.longitude, item.latitude]);
+        const feature = new ol.Feature({
+          geometry: new ol.geom.Point(coords)
+        });
+        dotSource.addFeature(feature);
+      });
+    })
+    .catch(error => console.error('Error refreshing data:', error));
+}
+
+// 3. Run the function immediately when the page loads
+refreshDots();
+
+// 4. Repeat the function every 3000 milliseconds (3 seconds)
+setInterval(refreshDots, 3000);
 
     </script>
 
