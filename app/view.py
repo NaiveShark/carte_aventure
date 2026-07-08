@@ -185,12 +185,52 @@ async def get_treasure_quest_dots( request: Request ):
     "latitude": 4.0,
     "longitude": -1.0,
   }
+,
+  {
+    "id": 4,
+    "name": "Point D",
+    "latitude": -1.0,
+    "longitude": -2.0,
+  }
+
+,
+  {
+    "id": 5,
+    "name": "Point D1",
+    "latitude": -2.0,
+    "longitude": -5.0,
+  }
+
+
 
 ]
     
     #}
     )
     
+    
+async def post_treasure_quest_dot( request: Request ):
+    try:
+        # Extract the JSON payload from the request body
+        data = await request.json()
+        
+        # Extract coordinates
+        x = data.get("x")
+        y = data.get("y")
+        
+        # Simple validation check
+        if x is None or y is None:
+            return JSONResponse({"error": "Missing x or y coordinate"}, status_code=400)
+            
+        new_dot = {"x": float(x), "y": float(y)}
+        #db_dots.append(new_dot)
+        
+        print(f"Received new dot via Starlette at: X={x}, Y={y}")
+        return JSONResponse({"status": "success", "data": new_dot}, status_code=201)
+         
+    except Exception as e:
+        return JSONResponse({"error": "Invalid JSON format"}, status_code=400)
+        
 async def play_treasure_quest( request: Request, db, user, quest ):
     users_in_quest = { 1, 2  }
     
