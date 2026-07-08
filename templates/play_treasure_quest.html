@@ -31,19 +31,22 @@
         const vectorSource = new ol.source.Vector();
         const vectorLayer = new ol.layer.Vector({
             source: vectorSource,
-            style: new ol.style.Style({
-                fill: new ol.style.Fill({ color: 'rgba(255, 255, 255, 0.4)' }),
-                stroke: new ol.style.Stroke({ color: '#ffcc33', width: 3 }),
-                image: new ol.style.Circle({
-                    radius: 7,
-                    fill: new ol.style.Fill({ color: '#ffcc33' })
-                })
-            })
+            
         });
 		
 		const dotSource = new ol.source.Vector();
 		const dotLayer = new ol.layer.Vector({
-			source: dotSource
+			source: dotSource,
+			
+			style: new ol.style.Style({
+                fill: new ol.style.Fill({ color: 'rgba(255, 255, 255, 0.5)' }),
+                stroke: new ol.style.Stroke({ color: '#ffcc33', width: 3 }),
+                image: new ol.style.Circle({
+                    radius: 8,
+                    fill: new ol.style.Fill({ color: '#ffcc33' })
+                })
+            })			
+			
 			});
 
 
