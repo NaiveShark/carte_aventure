@@ -148,7 +148,7 @@ class AnswerVar(Base):
     true_answer_map_X = Column( Float )
     true_answer_map_Y = Column( Float )
 
-# quest played by player
+# quiz played by player
 class Player_Quest(Base):
     
     # one quest per user constaint
@@ -171,6 +171,29 @@ class Player_Quest(Base):
     answered_right_count = Column(Integer, nullable=False, default=0 )
     answered_wrong_count = Column(Integer, nullable=False, default=0 )
     final_score = Column(Integer, nullable=False, default=0 )
+
+# treasure quest played by player
+class Player_Trueasure_Quest(Base):
+    
+    # one quest per user constaint
+    #__table_args__ = (
+    #    UniqueConstraint("quest_id", "user_id", name="uq_user_quest"), )
+    
+    id = Column(Integer, primary_key=True, index=True)
+
+    #quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=False )
+    #quest = relationship( "Quest" )
+
+    #user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False )
+    #user = relationship( "User" )
+
+    #quest_began = Column( DateTime, nullable=False )
+    #quest_end = Column( DateTime(timezone=True) )
+
+    try_map_X = Column( Float, nullable=False )
+    try_map_Y = Column( Float, nullable=False )
+
+
 
 # quest played by player
 class Player_Quest_Answers(Base):

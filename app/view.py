@@ -8,7 +8,7 @@ from starlette_login.decorator import login_required
 from starlette_login.utils import login_user, logout_user
 from datetime import datetime
 
-from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_PERMISSIBLE_DISTANCE_DEVIATION, News_Feed
+from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_PERMISSIBLE_DISTANCE_DEVIATION, News_Feed, Player_Trueasure_Quest
 from .gis import dist
 
 from starlette.templating import Jinja2Templates
@@ -161,83 +161,68 @@ async def quests_page(request: Request):
 
 
 async def get_treasure_quest_dots( request: Request ):
-    return JSONResponse(
+    # main.LocalDBSession
+    db = request.state.db
     
-    #{"status": "success", 'dots' :
+    ptq_q = select( Player_Trueasure_Quest)
+    ptq_e = await db.execute( ptq_q )
+    ptq_list = ptq_e.scalars().all()
     
+    dots = []
+    i = 1
+    for ptq in ptq_list:
+        dots.append( 
+          {
+            "id": i,
+            "name": "Point" + str(i),
+            "longitude": ptq.try_map_X,
+            "latitude": ptq.try_map_Y,
+          }
+        )
+        i = i + 1
+    print( dots )
     
-    [
-  {
-    "id": 1,
-    "name": "Point A",
-    "latitude": 1.0,
-    "longitude": 1.0
-  },
-  {
-    "id": 2,
-    "name": "Point B",
-    "latitude": 2.0,
-    "longitude": 1.0,
-  },
-  {
-    "id": 3,
-    "name": "Point C",
-    "latitude": 4.0,
-    "longitude": -1.0,
-  }
-,
-  {
-    "id": 4,
-    "name": "Point D",
-    "latitude": -1.0,
-    "longitude": -2.0,
-  }
+    return JSONResponse( dots )
 
-,
-  {
-    "id": 5,
-    "name": "Point D1",
-    "latitude": -2.0,
-    "longitude": -5.0,
-  }
-
-
-
-]
-    
-    #}
-    )
-    
-    
 async def post_treasure_quest_dot( request: Request ):
     try:
+        # main.LocalDBSession
+        db = request.state.db
+
+
         # Extract the JSON payload from the request body
         data = await request.json()
-        
+
         # Extract coordinates
         x = data.get("x")
         y = data.get("y")
-        
+
         # Simple validation check
         if x is None or y is None:
             return JSONResponse({"error": "Missing x or y coordinate"}, status_code=400)
-            
+
         new_dot = {"x": float(x), "y": float(y)}
-        #db_dots.append(new_dot)
-        
+        ptq = Player_Trueasure_Quest( #quest_id = quest_id, user_id = user.id, quest_began = datetime.now()
+                try_map_X = x,
+                try_map_Y = y,
+        )
+
+        db.add( ptq )
+        await db.commit()
+
         print(f"Received new dot via Starlette at: X={x}, Y={y}")
         return JSONResponse({"status": "success", "data": new_dot}, status_code=201)
-         
+
     except Exception as e:
         return JSONResponse({"error": "Invalid JSON format"}, status_code=400)
-        
+
 async def play_treasure_quest( request: Request, db, user, quest ):
     users_in_quest = { 1, 2  }
-    
+
     start_dot_X = 0.0
     start_dot_Y = 0.0
     start_map_ZOOM = 4
-    
+
     return template.TemplateResponse(
              request,
             'play_treasure_quest.html', context={ 'quest' : quest, 'users_in_quest' : users_in_quest,
@@ -260,7 +245,7 @@ async def view_quest(request: Request):
         return None
     else:
         if quest.is_treasure_quest:
-            return await play_treasure_quest( request, db, user, quest )               
+            return await play_treasure_quest( request, db, user, quest )
         else:
             # check - may be quest is already played by user
             pq_query = select(Player_Quest).where(Player_Quest.quest_id == quest_id, Player_Quest.user_id == user.id )
