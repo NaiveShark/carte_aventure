@@ -168,11 +168,11 @@ async def start_public_treasure_quest( request: Request ):
 
     quest_id = request.path_params['quest_id']
     #quest = await db.get(Quest, quest_id )
-    
+
     ptq = Public_Treasure_Quest( quest_id = quest_id, quest_began = datetime.now(), started_user_id = user.id )
     db.add( ptq )
     await db.commit()
-    
+
     return RedirectResponse(url='/view/quest/' + str( quest_id ) )
 
 @login_required
@@ -180,19 +180,19 @@ async def get_treasure_quest_dots( request: Request ):
     # main.LocalDBSession
     db = request.state.db
 
-    ptq_q = select( Public_Treasure_Quest_User_Try )
-    ptq_e = await db.execute( ptq_q )
-    ptq_list = ptq_e.scalars().all()
+    ptqut_q = select( Public_Treasure_Quest_User_Try )
+    ptqut_e = await db.execute( ptqut_q )
+    ptqut_list = ptqut_e.scalars().all()
 
     dots = []
     i = 1
-    for ptq in ptq_list:
+    for ptqut in ptqut_list:
         dots.append(
           {
             "id": i,
-            "caption": "Point" + str(i),
-            "longitude": ptq.try_map_X,
-            "latitude": ptq.try_map_Y,
+            "caption": "Point   " + str(ptqut.distance_to_true),
+            "longitude": ptqut.try_map_X,
+            "latitude": ptqut.try_map_Y,
           }
         )
         i = i + 1
@@ -222,10 +222,18 @@ async def post_treasure_quest_dot( request: Request ):
         if x is None or y is None:
             return JSONResponse({"error": "Missing x or y coordinate"}, status_code=400)
 
+        # Triсk. We don't have the true dot before users start to search
+        if ( not ptq.true_map_X ) and ( not ptq.true_map_Y ):
+            ptq.true_map_X = -x
+            ptq.true_map_Y = -y
+            await db.commit()
+
         new_dot = {"x": float(x), "y": float(y)}
+        distance_to_true = dist( ptq.true_map_X, ptq.true_map_Y, x, y )
         ptq = Public_Treasure_Quest_User_Try( public_treasure_quest_id = ptq_id, user_id = user.id, saved_dt = datetime.now(),
                 try_map_X = x,
                 try_map_Y = y,
+                distance_to_true = distance_to_true 
         )
 
         db.add( ptq )
@@ -243,11 +251,14 @@ async def play_treasure_quest( request: Request, db, user, quest ):
 
     start_dot_X = 0.0
     start_dot_Y = 0.0
-    start_map_ZOOM = 4
+    start_map_ZOOM = 2
 
     ptq_query = select(Public_Treasure_Quest).where(Public_Treasure_Quest.quest_id == quest.id )
     ptq_e = await db.execute(ptq_query)
     ptq = ptq_e.scalar_one_or_none()
+
+    # hunt is proceed. make the tools available
+    ptq_in_play = ( ptq ) and ( ptq.quest_began) and ( not ptq.quest_end )
 
     return template.TemplateResponse(
              request,
@@ -255,6 +266,7 @@ async def play_treasure_quest( request: Request, db, user, quest ):
             context={
                 'quest' : quest,
                 'ptq' : ptq,
+                'ptq_in_play' : ptq_in_play,
                 'users_in_quest' : users_in_quest,
                 'start_dot_X' : start_dot_X,
                 'start_dot_Y' : start_dot_Y,

@@ -22,8 +22,10 @@
 <p>{{quest.description | markdown | safe }}</p>
 {% endif %}
 {{users_in_quest}}
+{{ptq_in_play}}
+{% if ptq_in_play %}
 <p>Click on map to post the dot. You see dots from all of gamers.</p>
-
+{% endif %}
 <p>
 {% if ptq %}
 The quest started at {{ptq.quest_began.strftime('%Y-%m-%d %H:%M')}}.
@@ -110,13 +112,18 @@ function refreshDots() {
     .catch(error => console.error('Error refreshing data:', error));
 }
 
+{% if ptq %}
 // 3. Run the function immediately when the page loads
 refreshDots();
+{% endif %}
 
+{% if ptq_in_play %}
 // 4. Repeat the function every 3000 milliseconds (3 seconds)
 setInterval(refreshDots, 3000);
+{% endif %}
 
 
+{% if ptq_in_play %}
 
 // Listen for click events on the map instance
 map.on('click', function (event) {
@@ -165,6 +172,7 @@ map.on('click', function (event) {
   });
 });
 
+{% endif %}
 
 
 
