@@ -24,6 +24,20 @@
 {{users_in_quest}}
 <p>Click on map to post the dot. You see dots from all of gamers.</p>
 
+<p>
+{% if ptq %}
+The quest started at {{ptq.quest_began.strftime('%Y-%m-%d %H:%M')}}.
+{% else %}
+<form action="/quest/start_public_treasure_quest/{{quest.id}}/" method="get">
+    <button type="submit">
+		<i>play_arrow</i>
+		<span>Start public quest</span>
+    </button>
+</form>
+{% endif %}
+</p>
+
+
 <div id="map"></div>
 
     <script>
@@ -35,19 +49,29 @@
         });
 		
 		const dotSource = new ol.source.Vector();
-		const dotLayer = new ol.layer.Vector({
-			source: dotSource,
-			
-			style: new ol.style.Style({
-                fill: new ol.style.Fill({ color: 'rgba(255, 255, 255, 0.5)' }),
-                stroke: new ol.style.Stroke({ color: '#ffcc33', width: 3 }),
-                image: new ol.style.Circle({
-                    radius: 8,
-                    fill: new ol.style.Fill({ color: '#ffcc33' })
-                })
-            })			
-			
-			});
+		
+const dotLayer = new ol.layer.Vector({
+    source: dotSource,
+    style: function(feature) {
+        return new ol.style.Style({
+            // base style for dot
+            fill: new ol.style.Fill({ color: 'rgba(255, 255, 255, 0.5)' }),
+            stroke: new ol.style.Stroke({ color: '#ffcc33', width: 3 }),
+            image: new ol.style.Circle({
+                radius: 8,
+                fill: new ol.style.Fill({ color: '#ffcc33' })
+            }),
+            // add caption
+            text: new ol.style.Text({
+                text: feature.get('caption'), // get caption
+                font: '12px sans-serif',
+                fill: new ol.style.Fill({ color: '#000000' }),
+                stroke: new ol.style.Stroke({ color: '#ffffff', width: 3 }),
+                offsetY: 18 // shift
+            })
+        });
+    }
+});		
 
 
         // 2. Initialize Map
@@ -67,7 +91,7 @@
 
 // 2. Define the function to fetch and update dots
 function refreshDots() {
-  fetch('/quest/get_treasure_quest_dots')
+  fetch('/quest/get_treasure_quest_dots/{{ptq.id}}')
     .then(response => response.json())
     .then(data => {
       // Clear previous dots to prevent duplicates and memory leaks
@@ -77,7 +101,8 @@ function refreshDots() {
       data.forEach(item => {
         const coords = ol.proj.fromLonLat([item.longitude, item.latitude]);
         const feature = new ol.Feature({
-          geometry: new ol.geom.Point(coords)
+          geometry: new ol.geom.Point(coords),
+		  caption : item.caption,
         });
         dotSource.addFeature(feature);
       });
@@ -116,7 +141,7 @@ map.on('click', function (event) {
   };
 
   // 5. Send the coordinates to your server using a POST request
-  fetch('/quest/post_treasure_quest_dot', {
+  fetch('/quest/post_treasure_quest_dot/{{ptq.id}}', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

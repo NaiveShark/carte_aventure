@@ -8,7 +8,7 @@ from starlette_login.decorator import login_required
 from starlette_login.utils import login_user, logout_user
 from datetime import datetime
 
-from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_PERMISSIBLE_DISTANCE_DEVIATION, News_Feed, Player_Trueasure_Quest
+from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_PERMISSIBLE_DISTANCE_DEVIATION, News_Feed, Public_Treasure_Quest, Public_Treasure_Quest_User_Try
 from .gis import dist
 
 from starlette.templating import Jinja2Templates
@@ -159,36 +159,57 @@ async def quests_page(request: Request):
                 'quests.html', context={ 'quests' : quests, }
             )
 
+@login_required
+async def start_public_treasure_quest( request: Request ):
+    # main.LocalDBSession
+    db = request.state.db
 
+    user = request.user
+
+    quest_id = request.path_params['quest_id']
+    #quest = await db.get(Quest, quest_id )
+    
+    ptq = Public_Treasure_Quest( quest_id = quest_id, quest_began = datetime.now(), started_user_id = user.id )
+    db.add( ptq )
+    await db.commit()
+    
+    return RedirectResponse(url='/view/quest/' + str( quest_id ) )
+
+@login_required
 async def get_treasure_quest_dots( request: Request ):
     # main.LocalDBSession
     db = request.state.db
-    
-    ptq_q = select( Player_Trueasure_Quest)
+
+    ptq_q = select( Public_Treasure_Quest_User_Try )
     ptq_e = await db.execute( ptq_q )
     ptq_list = ptq_e.scalars().all()
-    
+
     dots = []
     i = 1
     for ptq in ptq_list:
-        dots.append( 
+        dots.append(
           {
             "id": i,
-            "name": "Point" + str(i),
+            "caption": "Point" + str(i),
             "longitude": ptq.try_map_X,
             "latitude": ptq.try_map_Y,
           }
         )
         i = i + 1
-    print( dots )
-    
+    # print( dots )
+
     return JSONResponse( dots )
 
+@login_required
 async def post_treasure_quest_dot( request: Request ):
     try:
         # main.LocalDBSession
         db = request.state.db
 
+        user = request.user
+
+        ptq_id = request.path_params['ptq_id']
+        ptq = await db.get(Public_Treasure_Quest, ptq_id )
 
         # Extract the JSON payload from the request body
         data = await request.json()
@@ -202,7 +223,7 @@ async def post_treasure_quest_dot( request: Request ):
             return JSONResponse({"error": "Missing x or y coordinate"}, status_code=400)
 
         new_dot = {"x": float(x), "y": float(y)}
-        ptq = Player_Trueasure_Quest( #quest_id = quest_id, user_id = user.id, quest_began = datetime.now()
+        ptq = Public_Treasure_Quest_User_Try( public_treasure_quest_id = ptq_id, user_id = user.id, saved_dt = datetime.now(),
                 try_map_X = x,
                 try_map_Y = y,
         )
@@ -216,6 +237,7 @@ async def post_treasure_quest_dot( request: Request ):
     except Exception as e:
         return JSONResponse({"error": "Invalid JSON format"}, status_code=400)
 
+@login_required
 async def play_treasure_quest( request: Request, db, user, quest ):
     users_in_quest = { 1, 2  }
 
@@ -223,12 +245,20 @@ async def play_treasure_quest( request: Request, db, user, quest ):
     start_dot_Y = 0.0
     start_map_ZOOM = 4
 
+    ptq_query = select(Public_Treasure_Quest).where(Public_Treasure_Quest.quest_id == quest.id )
+    ptq_e = await db.execute(ptq_query)
+    ptq = ptq_e.scalar_one_or_none()
+
     return template.TemplateResponse(
              request,
-            'play_treasure_quest.html', context={ 'quest' : quest, 'users_in_quest' : users_in_quest,
-            'start_dot_X' : start_dot_X,
-            'start_dot_Y' : start_dot_Y,
-            'start_map_ZOOM' : start_map_ZOOM
+            'play_treasure_quest.html',
+            context={
+                'quest' : quest,
+                'ptq' : ptq,
+                'users_in_quest' : users_in_quest,
+                'start_dot_X' : start_dot_X,
+                'start_dot_Y' : start_dot_Y,
+                'start_map_ZOOM' : start_map_ZOOM
             }
         )
 
@@ -288,7 +318,6 @@ async def play_quest(request: Request):
 
             db.add( pq )
             await db.commit()
-            print( 'new' )
 
         return RedirectResponse(url='/quest/in_play_it/' + str( pq.id ) )
 

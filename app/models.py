@@ -59,8 +59,8 @@ class User(Base, UserMixin):
     @classmethod
     async def create_user(
         cls, db: AsyncSession,
-        username: str, 
-        usertitle: str, 
+        username: str,
+        usertitle: str,
         password: str,
         is_admin: bool = False,
         is_editor: bool = False,
@@ -80,8 +80,9 @@ class User(Base, UserMixin):
         return user
 
 # Data tables
-
+# individual quiz
 CONST_QUEST_QUIZ = 0
+# common (public) treasure quest
 CONST_QUEST_TREASURE_QUEST = 1
 
 # Quest and quiz
@@ -92,9 +93,10 @@ class Quest(Base):
     is_active = Column(Boolean, default=True)
 
     # quest_type
+    # CONST_QUEST_QUIZ for quiz with CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER
+    # CONST_QUEST_TREASURE_QUEST for treasure quest over map
     quest_type = Column(Integer, nullable=False, default = CONST_QUEST_QUIZ )
 
-    
     user_creator_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False )
     user_creator = relationship( "User" )
     # difficulty coefficient
@@ -150,11 +152,11 @@ class AnswerVar(Base):
 
 # quiz played by player
 class Player_Quest(Base):
-    
+
     # one quest per user constaint
     __table_args__ = (
         UniqueConstraint("quest_id", "user_id", name="uq_user_quest"), )
-    
+
     id = Column(Integer, primary_key=True, index=True)
 
     quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=False )
@@ -163,7 +165,7 @@ class Player_Quest(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False )
     user = relationship( "User" )
 
-    quest_began = Column( DateTime, nullable=False )
+    quest_began = Column( DateTime(timezone=True), nullable=False )
     quest_end = Column( DateTime(timezone=True) )
 
     questions_count = Column(Integer, nullable=False, default=0 )
@@ -172,27 +174,36 @@ class Player_Quest(Base):
     answered_wrong_count = Column(Integer, nullable=False, default=0 )
     final_score = Column(Integer, nullable=False, default=0 )
 
-# treasure quest played by player
-class Player_Trueasure_Quest(Base):
-    
-    # one quest per user constaint
-    #__table_args__ = (
-    #    UniqueConstraint("quest_id", "user_id", name="uq_user_quest"), )
-    
+# treasure quest played public play, for CONST_QUEST_TREASURE_QUEST
+class Public_Treasure_Quest(Base):
     id = Column(Integer, primary_key=True, index=True)
 
-    #quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=False )
-    #quest = relationship( "Quest" )
+    quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=False )
+    quest = relationship( "Quest" )
 
-    #user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False )
-    #user = relationship( "User" )
+    quest_began = Column( DateTime(timezone=True), nullable=False )
+    quest_end = Column( DateTime(timezone=True) )
 
-    #quest_began = Column( DateTime, nullable=False )
-    #quest_end = Column( DateTime(timezone=True) )
+    started_user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False )
+    started_user = relationship( "User", foreign_keys=[started_user_id] )
 
+    ended_user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=True )
+    ended_user = relationship( "User", foreign_keys=[ended_user_id] )
+
+# treasure quest played by player
+class Public_Treasure_Quest_User_Try(Base):
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    public_treasure_quest_id: Mapped[int] = mapped_column(ForeignKey("public_treasure_quest.id"), nullable=False )
+    public_treasurequest = relationship( "Public_Treasure_Quest" )
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False )
+    user = relationship( "User" )
+
+    saved_dt = Column( DateTime(timezone=True), nullable=False )
     try_map_X = Column( Float, nullable=False )
     try_map_Y = Column( Float, nullable=False )
-
 
 
 # quest played by player
@@ -205,7 +216,7 @@ class Player_Quest_Answers(Base):
     id = Column(Integer, primary_key=True, index=True)
     player_quest_id: Mapped[int] = mapped_column(ForeignKey("player_quest.id"), nullable=False )
     player_quest = relationship( "Player_Quest" )
-    answered_dt = Column( DateTime )
+    answered_dt = Column( DateTime(timezone=True) )
 
     question_id: Mapped[int] = mapped_column(ForeignKey("question.id"), nullable=False )
     question = relationship( "Question" )
@@ -223,14 +234,14 @@ class Player_Quest_Answers(Base):
 # News feed
 class News_Feed(Base):
     id = Column(Integer, primary_key=True, index=True)
-    published_dt = Column( DateTime )
+    published_dt = Column( DateTime(timezone=True) )
     title = Column(String(250))
     description = Column(Text, nullable=True)
     is_active = Column(Boolean, default=True)
-    
+
     user_creator_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False )
     user_creator = relationship( "User" )
-    
+
     # may be it's just a text announce, without links
     quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=True )
     quest = relationship( "Quest" )
