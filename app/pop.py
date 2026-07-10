@@ -14,6 +14,32 @@ CONST_TREASURE_QUEST = [
    { "name" : "Are you ready for treasure quest?",
       "description" : "Treasure hunt! An unknown wealthy individual has hidden a mysterious treasure somewhere on the globe. Pinpoint the location on the map where it’s hidden! Finding it on the first try is impossible, but keep an eye on the spots marked by other players—and remember, they can see yours, too. Decide for yourself: is this a race against the clock, or a collaborative effort?",
      } ,
+
+   { "name" : "Are you ready for UFO quest?",
+      "description" : "Alien hunt! An unknown space traveler has parked a glowing craft somewhere on Earth. Pinpoint its beam on your radar map. Getting it right on your first try is very rare. Watch the glowing lights dropped by other alien seekers—and remember, they can see yours too. You must decide: is this a frantic race, or a shared mission?",
+     } ,
+
+   { "name" : "Spy Thriller Spin",
+      "description" : "Top secret! A rogue spy has stashed a glowing microchip somewhere on the globe. Pinpoint the city on the intelligence map! Finding it on the first try is impossible, but keep a close eye on the safehouses marked by other agents—and remember, they can see yours, too. Decide for yourself: is this a race against the clock, or a collaborative effort?",
+     } ,
+     
+   { "name" : "Secret Agency Recruitment Spin",
+      "description" : "Agent selection! An unidentified subject has hidden a classified archive somewhere on the globe. Pinpoint the coordinates on the operational map. Locating it on your first attempt is impossible. Track the visual markers dropped by rival candidates—and remember, they can monitor your progress too. Decide your strategy: is this a high-speed elimination race, or a joint special operation?",
+     } ,
+     
+   { "name" : "The Bigfoot Tracker",
+      "description" : "Monster hunt! An elusive, undiscovered beast has vanished into the wilderness somewhere on the globe. Pinpoint its nesting ground on your field map! Catching a glimpse on your first try is impossible. Track the footprints left by rival cryptid hunters—and remember, they are tracking yours, too. Decide your strategy: is this a solo race for the ultimate discovery, or a shared expedition?",
+     } ,
+     
+   { "name" : "The Paranormal Investigator",
+      "description" : "Anomaly detected! A legendary cryptid has crossed over into our world somewhere on the planet. Pinpoint the anomaly's origin on your radar! Locking onto its signal on your first attempt is impossible. Monitor the heat signatures marked by other paranormal investigators—and remember, they can see your grid, too. Decide for yourself: is this a frantic race against the clock, or a collaborative investigation?",
+     } ,
+     
+   { "name" : "The Mythic Cartographer ",
+      "description" : "Mythical expedition! A creature thought to be extinct is nesting somewhere on the globe. Pinpoint the habitat on your research map! Finding the correct coordinates on your first try is impossible. Keep a close eye on the coordinates logged by other cryptozoologists—and remember, they can see your data, too. Is this a competitive race for scientific glory, or a joint global research effort?",
+     } ,
+          
+     
 ]
 
 # CONST map questions
