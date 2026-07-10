@@ -20,7 +20,7 @@ from starlette_login.middleware import AuthenticationMiddleware
 
 from .admin_views import UserAdmin, QuestAdmin, QuestionAdmin, AnswerVarAdmin
 from .models import Base, User
-from .view import login_page, logout_page, reg_new_user, home_page, view_user_profile, view_quiz_top, quests_page, view_quest, play_quest, in_play_quest, handle_qqa, in_play_it_next, get_treasure_quest_dots, post_treasure_quest_dot, start_public_treasure_quest
+from .view import login_page, logout_page, reg_new_user, home_page, view_user_profile, view_quiz_top, quizzes_page, quests_page, view_quest, play_quest, in_play_quest, handle_qqa, in_play_it_next, get_treasure_quest_dots, post_treasure_quest_dot, start_public_treasure_quest
 from .pop import pop_data, BOT_USER_NAME, BOT_USER_TITLE
 
 import mimetypes
@@ -56,6 +56,7 @@ app = FastAPI(
     middleware=middleware,
     routes=[
         Route('/', home_page, name='home'),
+        Route('/quizzes', quizzes_page, name='quizzes_page'),
         Route('/quests', quests_page, name='quests_page'),
         Route('/view_quiz_top', view_quiz_top, name='view_quiz_top'),
 

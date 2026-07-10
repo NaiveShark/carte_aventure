@@ -8,7 +8,7 @@ from starlette_login.decorator import login_required
 from starlette_login.utils import login_user, logout_user
 from datetime import datetime
 
-from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_QUEST_TREASURE_QUEST, CONST_PERMISSIBLE_DISTANCE_DEVIATION_QUIZ, CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE, News_Feed, Public_Treasure_Quest, Public_Treasure_Quest_User_Try
+from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_QUEST_QUIZ, CONST_QUEST_TREASURE_QUEST, CONST_PERMISSIBLE_DISTANCE_DEVIATION_QUIZ, CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE, News_Feed, Public_Treasure_Quest, Public_Treasure_Quest_User_Try
 from .gis import dist, random_x, random_y
 
 from starlette.templating import Jinja2Templates
@@ -154,11 +154,27 @@ async def view_quiz_top(request: Request):
             )
 
 @login_required
+async def quizzes_page(request: Request):
+    # main.LocalDBSession
+    db = request.state.db
+
+    query = select(Quest).where(Quest.is_active == True, Quest.quest_type == CONST_QUEST_QUIZ )
+    result = await db.execute(query)
+    if result is None:
+        return None
+    else:
+        quests = result.scalars().all()
+        return template.TemplateResponse(
+                 request,
+                'quizzes.html', context={ 'quests' : quests, }
+            )
+
+@login_required
 async def quests_page(request: Request):
     # main.LocalDBSession
     db = request.state.db
 
-    query = select(Quest).where(Quest.is_active == True )
+    query = select(Quest).where(Quest.is_active == True, Quest.quest_type == CONST_QUEST_TREASURE_QUEST )
     result = await db.execute(query)
     if result is None:
         return None
