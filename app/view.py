@@ -124,17 +124,17 @@ async def view_user_profile(request: Request):
         quizzes_q = select(Player_Quest).where(Player_Quest.user_id == user.id ).options(selectinload(Player_Quest.quest))
         quizzes_c = await db.execute(quizzes_q)
         quizzes = quizzes_c.scalars().all()
-        
+
         #sub_treasure_quests_q = select(Public_Treasure_Quest_User_Try).where(Public_Treasure_Quest_User_Try.user_id == user.id)
-        sub_treasure_quests_q = select(Public_Treasure_Quest).where(Public_Treasure_Quest.quest_id == Quest.id).exists()
+        sub_treasure_quests_q = select(Public_Treasure_Quest).where(Public_Treasure_Quest.quest_id == Quest.id, Public_Treasure_Quest.started_user_id == user.id ).exists()
         treasure_quests_q = select(Quest).where( sub_treasure_quests_q )
-        
+
         # where( Quest.quest_type == CONST_QUEST_TREASURE_QUEST ).
         #Public_Treasure_Quest_User_Try.user_id == user.id)
         #print( str(treasure_quests_q) )
         treasure_quests_c = await db.execute(treasure_quests_q)
         treasure_quests = treasure_quests_c.scalars().all()
-        
+
         return template.TemplateResponse(
                  request,
                 'user_profile.html', context={ "quizzes" : quizzes, 'treasure_quests' : treasure_quests,  }
@@ -206,7 +206,10 @@ async def get_treasure_quest_dots( request: Request ):
     # main.LocalDBSession
     db = request.state.db
 
-    ptqut_q = select( Public_Treasure_Quest_User_Try )
+    ptq_id = request.path_params['ptq_id']
+    ptq = await db.get(Public_Treasure_Quest, ptq_id )
+
+    ptqut_q = select( Public_Treasure_Quest_User_Try ).where( Public_Treasure_Quest_User_Try.public_treasure_quest_id == ptq_id )
     ptqut_e = await db.execute( ptqut_q )
     ptqut_list = ptqut_e.scalars().all()
 
@@ -277,7 +280,7 @@ async def post_treasure_quest_dot( request: Request ):
             ptq.quest_end = datetime.now()
             ptq.ended_user_id = user.id
             await db.commit()
-            
+
             ptqut.final_try = True
             await db.commit()
         else:
@@ -291,10 +294,10 @@ async def post_treasure_quest_dot( request: Request ):
 
 @login_required
 async def play_treasure_quest( request: Request, db, user, quest ):
-    users_in_quest = { 1, 2  }
+    users_in_quest = None
     steps_overall = 0
     ptq_in_play = False
-    
+
     ptq_query = select(Public_Treasure_Quest).where(Public_Treasure_Quest.quest_id == quest.id )
     ptq_e = await db.execute(ptq_query)
     ptq = ptq_e.scalar_one_or_none()
@@ -304,7 +307,7 @@ async def play_treasure_quest( request: Request, db, user, quest ):
         win_ptqut_q = select( Public_Treasure_Quest_User_Try ).where( Public_Treasure_Quest_User_Try.public_treasure_quest_id == ptq.id, Public_Treasure_Quest_User_Try.final_try == True )
         win_ptqut_e = await db.execute( win_ptqut_q )
         win_ptqut = win_ptqut_e.scalar_one_or_none()
-        
+
         start_dot_X = win_ptqut.try_map_X
         start_dot_Y = win_ptqut.try_map_Y
 
@@ -319,6 +322,12 @@ async def play_treasure_quest( request: Request, db, user, quest ):
 
     # hunt is proceed. make the tools available
     if ptq:
+        # select users in game
+        sub_users_in_quest_q = select( Public_Treasure_Quest_User_Try ).where( Public_Treasure_Quest_User_Try.user_id == User.id, Public_Treasure_Quest_User_Try.public_treasure_quest_id == ptq.id ).exists()
+        users_in_quest_q = select(User).where( sub_users_in_quest_q )
+        print( str( users_in_quest_q ) )
+        users_in_quest = await db.scalars( users_in_quest_q )
+        
         ptq_in_play = ( ptq.quest_began) and ( not ptq.quest_end )
         if ptq.quest_end:
             query = (
