@@ -2,8 +2,6 @@
 {% block title %}User profile{% endblock %}
 {% block body %}
 
-
-
 {% if request.user.is_authenticated %}
 <h1>Profile of {{ request.user.username }}</h1>
 
@@ -20,7 +18,7 @@
 </tr>
 </thead>
 <tbody>
-{% for pq in quests %}
+{% for pq in quizzes %}
 <tr>
 <td>
 {% if pq.quest_end %}

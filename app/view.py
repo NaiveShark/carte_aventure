@@ -121,9 +121,9 @@ async def view_user_profile(request: Request):
     if user is None:
         return None
     else:
-        query_q = select(Player_Quest).where(Player_Quest.user_id == user.id ).options(selectinload(Player_Quest.quest))
-        query_c = await db.execute(query_q)
-        quests = query_c.scalars().all()
+        quizzes_q = select(Player_Quest).where(Player_Quest.user_id == user.id ).options(selectinload(Player_Quest.quest))
+        quizzes_c = await db.execute(quizzes_q)
+        quizzes = quizzes_c.scalars().all()
         
         #sub_treasure_quests_q = select(Public_Treasure_Quest_User_Try).where(Public_Treasure_Quest_User_Try.user_id == user.id)
         sub_treasure_quests_q = select(Public_Treasure_Quest).where(Public_Treasure_Quest.quest_id == Quest.id).exists()
@@ -137,7 +137,7 @@ async def view_user_profile(request: Request):
         
         return template.TemplateResponse(
                  request,
-                'user_profile.html', context={ "quests" : quests, 'treasure_quests' : treasure_quests,  }
+                'user_profile.html', context={ "quizzes" : quizzes, 'treasure_quests' : treasure_quests,  }
             )
 
 @login_required
