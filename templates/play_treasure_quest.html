@@ -53,11 +53,11 @@
         const vectorSource = new ol.source.Vector();
         const vectorLayer = new ol.layer.Vector({
             source: vectorSource,
-            
+
         });
-		
+
 		const dotSource = new ol.source.Vector();
-		
+
 const dotLayer = new ol.layer.Vector({
     source: dotSource,
     style: function(feature) {
@@ -79,7 +79,7 @@ const dotLayer = new ol.layer.Vector({
             })
         });
     }
-});		
+});
 
 
         // 2. Initialize Map
@@ -170,9 +170,10 @@ map.on('click', function (event) {
   .then(data => {
     console.log('Successfully saved to server:', data);
 	// if dot post result is GAME OVER, then reload page
-	if (data.status == 'game_over' ) { 
-	window.location.reload(true);
+	if (data.status == 'game_over' ) {
+	ui("#end_game_dialog");
 	
+
 	};
   })
   .catch(error => {
@@ -193,7 +194,13 @@ map.on('click', function (event) {
 <p class="right-align">Published by {{quest.user_creator.display_name}}.</p>
 
 
-
+<dialog id="end_game_dialog" class="modal">
+  <h5>You find the treasure!</h5>
+  <p class="bold green-text">You find the hidden treasure! You are winner!</p>
+  <nav class="right-align">
+    <button class="border" onclick="window.location.reload()">View score</button>
+  </nav>
+</dialog>
 
 {% else %}
 <p>You should login to play.</p>
