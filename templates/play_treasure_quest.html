@@ -22,23 +22,28 @@
 <p>{{quest.description | markdown | safe }}</p>
 {% endif %}
 {% if ptq_in_play %}
-<p>In game! Click on map to post the dot. You see dots from all of gamers.</p>
+<p class="bold red-text">In game! Click on map to post the dot. You see dots from all of gamers.</p>
 {{users_in_quest}}
 
 {% endif %}
-<p>
 {% if ptq %}
+<p class="bold green-text">
 The quest started at {{ptq.quest_began.strftime('%Y-%m-%d %H:%M')}}.
-{% if ptq.quest_end %}The quest ended at {{ptq.quest_end.strftime('%Y-%m-%d %H:%M')}}{% endif %}.
+{% if ptq.quest_end %}
+The quest ended at {{ptq.quest_end.strftime('%Y-%m-%d %H:%M')}}
+</p>
+{%else%}
+{% endif %}.
 {% else %}
+<p>
 <form action="/quest/start_public_treasure_quest/{{quest.id}}/" method="get">
     <button type="submit">
 		<i>play_arrow</i>
 		<span>Start public quest</span>
     </button>
 </form>
-{% endif %}
 </p>
+{% endif %}
 
 
 <div id="map"></div>
