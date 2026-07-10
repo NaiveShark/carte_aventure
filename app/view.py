@@ -9,7 +9,7 @@ from starlette_login.utils import login_user, logout_user
 from datetime import datetime
 
 from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_PERMISSIBLE_DISTANCE_DEVIATION, News_Feed, Public_Treasure_Quest, Public_Treasure_Quest_User_Try
-from .gis import dist
+from .gis import dist, random_x, random_y
 
 from starlette.templating import Jinja2Templates
 from starlette_login.login_manager import LoginManager
@@ -229,8 +229,8 @@ async def post_treasure_quest_dot( request: Request ):
 
         # Triсk. We don't have the true dot before users start to search
         if ( not ptq.target_map_X ) and ( not ptq.target_map_Y ):
-            ptq.target_map_X = -x
-            ptq.target_map_Y = -y
+            ptq.target_map_X = random_x( x )
+            ptq.target_map_Y = random_y( y )
             await db.commit()
 
         new_dot = {"x": float(x), "y": float(y)}
