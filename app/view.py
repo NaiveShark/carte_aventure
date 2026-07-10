@@ -187,16 +187,21 @@ async def get_treasure_quest_dots( request: Request ):
     dots = []
     i = 1
     for ptqut in ptqut_list:
+        dist = ptqut.distance_to_target
+        if dist < CONST_PERMISSIBLE_DISTANCE_DEVIATION:
+            caption = 'FIND IT!'
+        else:
+            caption = "Miss " + str(dist)
+            
         dots.append(
           {
             "id": i,
-            "caption": "Point   " + str(ptqut.distance_to_true),
+            "caption": caption,
             "longitude": ptqut.try_map_X,
             "latitude": ptqut.try_map_Y,
           }
         )
         i = i + 1
-    # print( dots )
 
     return JSONResponse( dots )
 
@@ -223,24 +228,34 @@ async def post_treasure_quest_dot( request: Request ):
             return JSONResponse({"error": "Missing x or y coordinate"}, status_code=400)
 
         # Triсk. We don't have the true dot before users start to search
-        if ( not ptq.true_map_X ) and ( not ptq.true_map_Y ):
-            ptq.true_map_X = -x
-            ptq.true_map_Y = -y
+        if ( not ptq.target_map_X ) and ( not ptq.target_map_Y ):
+            ptq.target_map_X = -x
+            ptq.target_map_Y = -y
             await db.commit()
 
         new_dot = {"x": float(x), "y": float(y)}
-        distance_to_true = dist( ptq.true_map_X, ptq.true_map_Y, x, y )
-        ptq = Public_Treasure_Quest_User_Try( public_treasure_quest_id = ptq_id, user_id = user.id, saved_dt = datetime.now(),
+        calc_distance_to_target = dist( ptq.target_map_X, ptq.target_map_Y, x, y )
+        ptqut = Public_Treasure_Quest_User_Try( public_treasure_quest_id = ptq_id, user_id = user.id, saved_dt = datetime.now(),
                 try_map_X = x,
                 try_map_Y = y,
-                distance_to_true = distance_to_true 
+                distance_to_target = calc_distance_to_target
         )
 
-        db.add( ptq )
+        db.add( ptqut )
         await db.commit()
-
-        print(f"Received new dot via Starlette at: X={x}, Y={y}")
-        return JSONResponse({"status": "success", "data": new_dot}, status_code=201)
+        
+        # check try is close enought
+        if calc_distance_to_target < CONST_PERMISSIBLE_DISTANCE_DEVIATION:            
+            # game over!
+            set_json_status = 'game_over'
+            ptq.quest_end = datetime.now()
+            ptq.ended_user_id = user.id
+            await db.commit()
+        else:
+            set_json_status = 'success'
+            
+        #print(f"Received new dot via Starlette at: X={x}, Y={y}")
+        return JSONResponse({"status": set_json_status, "data": new_dot}, status_code=201)
 
     except Exception as e:
         return JSONResponse({"error": "Invalid JSON format"}, status_code=400)
@@ -249,13 +264,19 @@ async def post_treasure_quest_dot( request: Request ):
 async def play_treasure_quest( request: Request, db, user, quest ):
     users_in_quest = { 1, 2  }
 
-    start_dot_X = 0.0
-    start_dot_Y = 0.0
-    start_map_ZOOM = 2
 
     ptq_query = select(Public_Treasure_Quest).where(Public_Treasure_Quest.quest_id == quest.id )
     ptq_e = await db.execute(ptq_query)
     ptq = ptq_e.scalar_one_or_none()
+    
+    if ptq and ptq.quest_end:
+        start_dot_X = ptq.target_map_X
+        start_dot_Y = ptq.target_map_Y
+        start_map_ZOOM = 8
+    else:
+        start_dot_X = 0.0
+        start_dot_Y = 0.0
+        start_map_ZOOM = 2
 
     # hunt is proceed. make the tools available
     ptq_in_play = ( ptq ) and ( ptq.quest_began) and ( not ptq.quest_end )

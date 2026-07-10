@@ -189,9 +189,10 @@ class Public_Treasure_Quest(Base):
 
     ended_user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=True )
     ended_user = relationship( "User", foreign_keys=[ended_user_id] )
-
-    true_map_X = Column(Float )
-    true_map_Y = Column(Float )
+    
+    # target dot
+    target_map_X = Column(Float )
+    target_map_Y = Column(Float )
 
 # treasure quest played by player
 class Public_Treasure_Quest_User_Try(Base):
@@ -207,7 +208,7 @@ class Public_Treasure_Quest_User_Try(Base):
     saved_dt = Column( DateTime(timezone=True), nullable=False )
     try_map_X = Column( Float, nullable=False )
     try_map_Y = Column( Float, nullable=False )
-    distance_to_true = Column( Float, nullable=False )
+    distance_to_target = Column( Float, nullable=False )
 
 # quest played by player
 class Player_Quest_Answers(Base):

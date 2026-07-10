@@ -21,14 +21,15 @@
 {% if quest.description %}
 <p>{{quest.description | markdown | safe }}</p>
 {% endif %}
-{{users_in_quest}}
-{{ptq_in_play}}
 {% if ptq_in_play %}
-<p>Click on map to post the dot. You see dots from all of gamers.</p>
+<p>In game! Click on map to post the dot. You see dots from all of gamers.</p>
+{{users_in_quest}}
+
 {% endif %}
 <p>
 {% if ptq %}
 The quest started at {{ptq.quest_began.strftime('%Y-%m-%d %H:%M')}}.
+{% if ptq.quest_end %}The quest ended at {{ptq.quest_end.strftime('%Y-%m-%d %H:%M')}}{% endif %}.
 {% else %}
 <form action="/quest/start_public_treasure_quest/{{quest.id}}/" method="get">
     <button type="submit">
@@ -163,6 +164,11 @@ map.on('click', function (event) {
   })
   .then(data => {
     console.log('Successfully saved to server:', data);
+	// if dot post result is GAME OVER, then reload page
+	if (data.status == 'game_over' ) { 
+	window.location.reload(true);
+	
+	};
   })
   .catch(error => {
     console.error('Error sending dot to server:', error);
