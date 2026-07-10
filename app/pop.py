@@ -774,21 +774,104 @@ CONST_QUESTS_TEXT = [
      },
 
 
- {
-    "name": "Do you know Roman Architecture?",
-    "description": "Test your knowledge on the greatest engineering feats of Ancient Rome.",
-    "questions": [
-        {
-            "question_title": "Which iconic Roman amphitheater was commissioned around 70-72 AD by Emperor Vespasian?",
-            "answers": [
-                ["The Pantheon", "None", False, "No."],
-                ["The Colosseum", "Correct! The Colosseum is the largest ancient amphitheater ever built.", True, "None"],
-                ["Circus Maximus", "None", False, "No."],
-                ["The Roman Forum", "None", False, "No."]
-            ]
-        }
-    ]
-},
+{
+  "name": "Do you know Roman Architecture?",
+  "description": "Test your knowledge on the greatest engineering feats of Ancient Rome.",
+  "questions": [
+    {
+      "question_title": "Which iconic Roman amphitheater was commissioned around 70-72 AD by Emperor Vespasian?",
+      "answers": [
+        [ "The Pantheon", "None", False, "No." ],
+        [ "The Colosseum", "Correct! The Colosseum is the largest ancient amphitheater ever built.", True, "None" ],
+        [ "Circus Maximus", "None", False, "No." ],
+        [ "The Roman Forum", "None", False, "No." ]
+      ]
+    },
+    {
+      "question_title": "Which temple features a massive concrete dome with a central opening (oculus) at its top?",
+      "answers": [
+        [ "The Pantheon", "Correct! The Pantheon dome remains the world's largest unreinforced concrete dome.", True, "None" ],
+        [ "Temple of Venus and Roma", "None", False, "No." ],
+        [ "Temple of Saturn", "None", False, "No." ],
+        [ "Maison Carrée", "None", False, "No." ]
+      ]
+    },
+    {
+      "question_title": "What volcanic ash material did Romans mix with lime to create their incredibly durable concrete?",
+      "answers": [
+        [ "Marble dust", "None", False, "No." ],
+        [ "Granite aggregate", "None", False, "No." ],
+        [ "Pozzolana", "Correct! Pozzolana allowed Roman concrete to set even underwater.", True, "None" ],
+        [ "Pumice stone", "None", False, "No." ]
+      ]
+    },
+    {
+      "question_title": "Which major structure was built to transport fresh water over long distances into Roman cities?",
+      "answers": [
+        [ "The Appian Way", "None", False, "No." ],
+        [ "The Cloaca Maxima", "None", False, "No." ],
+        [ "Aqueduct of Segovia", "Correct! Aqueducts used a precise gravity gradient to move water.", True, "None" ],
+        [ "Baths of Caracalla", "None", False, "No." ]
+      ]
+    },
+    {
+      "question_title": "Which architectural order did the Romans adapt from the Greeks, adding a base and removing column fluting?",
+      "answers": [
+        [ "Doric Order", "None", False, "No." ],
+        [ "Tuscan Order", "Correct! The Tuscan order is a simplified, sturdier version of the Greek Doric order.", True, "None" ],
+        [ "Ionic Order", "None", False, "No." ],
+        [ "Corinthian Order", "None", False, "No." ]
+      ]
+    },
+    {
+      "question_title": "What is the name of the oldest and most famous strategic military highway built by the Romans in 312 BC?",
+      "answers": [
+        [ "Via Appia", "Correct! The Appian Way connected Rome to Brindisi and was called the queen of long-distance roads.", True, "None" ],
+        [ "Via Flaminia", "None", False, "No." ],
+        [ "Via Aurelia", "None", False, "No." ],
+        [ "Via Sacra", "None", False, "No." ]
+      ]
+    },
+    {
+      "question_title": "Which structural element, consisting of an arch extended along a continuous path, did the Romans use to create long corridors and tunnels?",
+      "answers": [
+        [ "Groin vault", "None", False, "No." ],
+        [ "Barrel vault", "Correct! A barrel vault is a simple, semi-cylindrical arch structure used for ceilings.", True, "None" ],
+        [ "Rib vault", "None", False, "No." ],
+        [ "Dome", "None", False, "No." ]
+      ]
+    },
+    {
+      "question_title": "Which massive Roman bath complex could accommodate up to 1,600 bathers and featured a complex underfloor heating system (hypocaust)?",
+      "answers": [
+        [ "Baths of Caracalla", "Correct! The Baths of Caracalla were a massive public leisure complex.", True, "None" ],
+        [ "Baths of Diocletian", "None", False, "No." ],
+        [ "Baths of Trajan", "None", False, "No." ],
+        [ "Baths of Nero", "None", False, "No." ]
+      ]
+    },
+    {
+      "question_title": "What architectural masterpiece in southern France is a triple-tiered bridge that served as both an aqueduct and a road?",
+      "answers": [
+        [ "Pont du Gard", "Correct! The Pont du Gard is a brilliant example of Roman precision hydraulic engineering.", True, "None" ],
+        [ "Bridge of Alcántara", "None", False, "No." ],
+        [ "Pont d'Avignon", "None", False, "No." ],
+        [ "Milvian Bridge", "None", False, "No." ]
+      ]
+    },
+    {
+      "question_title": "What unique architectural form is created by the perpendicular intersection of two barrel vaults?",
+      "answers": [
+        [ "An oculus", "None", False, "No." ],
+        [ "A groin vault", "Correct! Groin vaults allowed Romans to concentrate weight on specific corner pillars rather than solid walls.", True, "None" ],
+        [ "A flying buttress", "None", False, "No." ],
+        [ "A corbel arch", "None", False, "No." ]
+      ]
+    }
+  ]
+}
+
+,
 {
     "name": "The Fall of the Republic",
     "description": "Explore the dramatic transition from the Roman Republic to the Empire.",
