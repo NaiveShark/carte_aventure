@@ -8,7 +8,7 @@ from starlette_login.decorator import login_required
 from starlette_login.utils import login_user, logout_user
 from datetime import datetime
 
-from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_PERMISSIBLE_DISTANCE_DEVIATION, News_Feed, Public_Treasure_Quest, Public_Treasure_Quest_User_Try
+from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_PERMISSIBLE_DISTANCE_DEVIATION_QUIZ, CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE, News_Feed, Public_Treasure_Quest, Public_Treasure_Quest_User_Try
 from .gis import dist, random_x, random_y
 
 from starlette.templating import Jinja2Templates
@@ -188,7 +188,7 @@ async def get_treasure_quest_dots( request: Request ):
     i = 1
     for ptqut in ptqut_list:
         dist = ptqut.distance_to_target
-        if dist < CONST_PERMISSIBLE_DISTANCE_DEVIATION:
+        if dist < CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE:
             caption = 'FIND IT!'
         else:
             caption = "Miss " + str(dist)
@@ -245,7 +245,7 @@ async def post_treasure_quest_dot( request: Request ):
         await db.commit()
         
         # check try is close enought
-        if calc_distance_to_target < CONST_PERMISSIBLE_DISTANCE_DEVIATION:            
+        if calc_distance_to_target < CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE:            
             # game over!
             set_json_status = 'game_over'
             ptq.quest_end = datetime.now()
@@ -521,7 +521,7 @@ async def handle_qqa(request: Request ):
                latitude  = float( form.get("latitude") )
                distance = dist( answer_var.true_answer_map_X, answer_var.true_answer_map_Y, longitude, latitude)
 
-               check_answer = ( distance < CONST_PERMISSIBLE_DISTANCE_DEVIATION )
+               check_answer = ( distance < CONST_PERMISSIBLE_DISTANCE_DEVIATION_QUIZ )
 
 
             pqa = Player_Quest_Answers(
