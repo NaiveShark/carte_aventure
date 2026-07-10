@@ -24,10 +24,13 @@
 
 {% if ptq_in_play %}
 <p class="bold red-text">In game! Click on map to post the dot. You see dots from all of gamers.</p>
-{{users_in_quest}}
 {% endif %}
 
 {% if ptq %}
+Users in game:
+{% for uq in users_in_quest %}
+{{uq.display_name}}
+{% endfor %}
 
 {% if ptq.quest_end %}
 <p class="bold green-text">The quest started at {{ptq.quest_began.strftime('%Y-%m-%d %H:%M')}}, and ended at {{ptq.quest_end.strftime('%Y-%m-%d %H:%M')}}. Treasure found after <button class="chip">{{steps_overall}}</button> steps.</p>
