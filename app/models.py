@@ -210,6 +210,7 @@ class Public_Treasure_Quest_User_Try(Base):
     try_map_X = Column( Float, nullable=False )
     try_map_Y = Column( Float, nullable=False )
     distance_to_target = Column( Float, nullable=False )
+    final_try = Column(Boolean, default=False)
 
 # quest played by player
 class Player_Quest_Answers(Base):

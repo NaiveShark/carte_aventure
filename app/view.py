@@ -261,6 +261,9 @@ async def post_treasure_quest_dot( request: Request ):
             ptq.quest_end = datetime.now()
             ptq.ended_user_id = user.id
             await db.commit()
+            
+            ptqut.final_try = True
+            await db.commit()
         else:
             set_json_status = 'success'
 
@@ -281,9 +284,18 @@ async def play_treasure_quest( request: Request, db, user, quest ):
     ptq = ptq_e.scalar_one_or_none()
 
     if ptq and ptq.quest_end:
-        start_dot_X = ptq.target_map_X
-        start_dot_Y = ptq.target_map_Y
-        start_map_ZOOM = 8
+        # Target may diff from win dot. Get last win try
+        win_ptqut_q = select( Public_Treasure_Quest_User_Try ).where( Public_Treasure_Quest_User_Try.public_treasure_quest_id == ptq.id, Public_Treasure_Quest_User_Try.final_try == True )
+        win_ptqut_e = await db.execute( win_ptqut_q )
+        win_ptqut = win_ptqut_e.scalar_one_or_none()
+        
+        start_dot_X = win_ptqut.try_map_X
+        start_dot_Y = win_ptqut.try_map_Y
+
+        #start_dot_X = ptq.target_map_X
+        #start_dot_Y = ptq.target_map_Y
+
+        start_map_ZOOM = 12
     else:
         start_dot_X = 0.0
         start_dot_Y = 0.0
