@@ -8,7 +8,7 @@ from starlette_login.decorator import login_required
 from starlette_login.utils import login_user, logout_user
 from datetime import datetime
 
-from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_PERMISSIBLE_DISTANCE_DEVIATION_QUIZ, CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE, News_Feed, Public_Treasure_Quest, Public_Treasure_Quest_User_Try
+from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_QUEST_TREASURE_QUEST, CONST_PERMISSIBLE_DISTANCE_DEVIATION_QUIZ, CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE, News_Feed, Public_Treasure_Quest, Public_Treasure_Quest_User_Try
 from .gis import dist, random_x, random_y
 
 from starlette.templating import Jinja2Templates
@@ -124,10 +124,20 @@ async def view_user_profile(request: Request):
         query_q = select(Player_Quest).where(Player_Quest.user_id == user.id ).options(selectinload(Player_Quest.quest))
         query_c = await db.execute(query_q)
         quests = query_c.scalars().all()
-
+        
+        #sub_treasure_quests_q = select(Public_Treasure_Quest_User_Try).where(Public_Treasure_Quest_User_Try.user_id == user.id)
+        sub_treasure_quests_q = select(Public_Treasure_Quest).where(Public_Treasure_Quest.quest_id == Quest.id).exists()
+        treasure_quests_q = select(Quest).where( sub_treasure_quests_q )
+        
+        # where( Quest.quest_type == CONST_QUEST_TREASURE_QUEST ).
+        #Public_Treasure_Quest_User_Try.user_id == user.id)
+        #print( str(treasure_quests_q) )
+        treasure_quests_c = await db.execute(treasure_quests_q)
+        treasure_quests = treasure_quests_c.scalars().all()
+        
         return template.TemplateResponse(
                  request,
-                'user_profile.html', context={ "quests" : quests, }
+                'user_profile.html', context={ "quests" : quests, 'treasure_quests' : treasure_quests,  }
             )
 
 @login_required

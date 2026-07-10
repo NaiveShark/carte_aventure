@@ -13,7 +13,7 @@
 <table class="stripes">
 <thead>
 <tr>
-<th>Quest</th>
+<th>Quiz</th>
 <th>Began</th>
 <th>End</th>
 <th>Score</th>
@@ -42,7 +42,38 @@
 </tbody>
 
 </table>
-	
+
+
+<table class="stripes">
+<thead>
+<tr>
+<th>Treasure quests</th>
+<th>Began</th>
+<th>End</th>
+<th>Score</th>
+</tr>
+</thead>
+<tbody>
+{% for tq in treasure_quests %}
+<tr>
+<td>
+<p><a href="/view/quest/{{tq.id}}" class="link">{{tq.name}}</a></p>
+</td>
+
+<td></td>
+<td></td>
+<td></td>
+
+
+</tr>
+
+
+{% endfor %}
+</tbody>
+
+</table>
+
+
 {% else %}
 You should login.
 {% endif %}

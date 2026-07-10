@@ -30,7 +30,7 @@
 {% if ptq %}
 
 {% if ptq.quest_end %}
-<p class="bold green-text">The quest started at {{ptq.quest_began.strftime('%Y-%m-%d %H:%M')}}, and ended at {{ptq.quest_end.strftime('%Y-%m-%d %H:%M')}}. Treasure found after {{steps_overall}} steps.</p>
+<p class="bold green-text">The quest started at {{ptq.quest_began.strftime('%Y-%m-%d %H:%M')}}, and ended at {{ptq.quest_end.strftime('%Y-%m-%d %H:%M')}}. Treasure found after <button class="chip">{{steps_overall}}</button> steps.</p>
 {%else%}
 <p class="bold red-text">The quest started at {{ptq.quest_began.strftime('%Y-%m-%d %H:%M')}}.</p>
 {% endif %}
