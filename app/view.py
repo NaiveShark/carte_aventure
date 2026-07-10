@@ -192,7 +192,7 @@ async def get_treasure_quest_dots( request: Request ):
             caption = 'FIND IT!'
         else:
             caption = "Miss " + str(dist)
-            
+
         dots.append(
           {
             "id": i,
@@ -243,9 +243,9 @@ async def post_treasure_quest_dot( request: Request ):
 
         db.add( ptqut )
         await db.commit()
-        
+
         # check try is close enought
-        if calc_distance_to_target < CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE:            
+        if calc_distance_to_target < CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE:
             # game over!
             set_json_status = 'game_over'
             ptq.quest_end = datetime.now()
@@ -253,7 +253,7 @@ async def post_treasure_quest_dot( request: Request ):
             await db.commit()
         else:
             set_json_status = 'success'
-            
+
         #print(f"Received new dot via Starlette at: X={x}, Y={y}")
         return JSONResponse({"status": set_json_status, "data": new_dot}, status_code=201)
 
@@ -263,12 +263,13 @@ async def post_treasure_quest_dot( request: Request ):
 @login_required
 async def play_treasure_quest( request: Request, db, user, quest ):
     users_in_quest = { 1, 2  }
-
-
+    steps_overall = 0
+    ptq_in_play = False
+    
     ptq_query = select(Public_Treasure_Quest).where(Public_Treasure_Quest.quest_id == quest.id )
     ptq_e = await db.execute(ptq_query)
     ptq = ptq_e.scalar_one_or_none()
-    
+
     if ptq and ptq.quest_end:
         start_dot_X = ptq.target_map_X
         start_dot_Y = ptq.target_map_Y
@@ -279,7 +280,14 @@ async def play_treasure_quest( request: Request, db, user, quest ):
         start_map_ZOOM = 2
 
     # hunt is proceed. make the tools available
-    ptq_in_play = ( ptq ) and ( ptq.quest_began) and ( not ptq.quest_end )
+    if ptq:
+        ptq_in_play = ( ptq.quest_began) and ( not ptq.quest_end )
+        if ptq.quest_end:
+            query = (
+                select(func.count(Public_Treasure_Quest_User_Try.id))
+                .where(Public_Treasure_Quest_User_Try.public_treasure_quest_id == ptq.id )
+                )
+            steps_overall = await db.scalar(query) or 0
 
     return template.TemplateResponse(
              request,
@@ -291,7 +299,8 @@ async def play_treasure_quest( request: Request, db, user, quest ):
                 'users_in_quest' : users_in_quest,
                 'start_dot_X' : start_dot_X,
                 'start_dot_Y' : start_dot_Y,
-                'start_map_ZOOM' : start_map_ZOOM
+                'start_map_ZOOM' : start_map_ZOOM,
+                'steps_overall' : steps_overall,
             }
         )
 
