@@ -1,22 +1,25 @@
 import logging
 
-from fastapi import FastAPI
 from starlette.requests import Request
 from starlette.responses import PlainTextResponse
 from starlette.routing import Route, Mount
 from starlette.middleware import Middleware
+from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.staticfiles import StaticFiles
+from starlette.applications import Starlette
 
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import NullPool
+from sqlalchemy import text
 
 from sqladmin import Admin
 
 from starlette_login.backends import SessionAuthBackend
 from starlette_login.login_manager import LoginManager
 from starlette_login.middleware import AuthenticationMiddleware
+
+from contextlib import asynccontextmanager
 
 from .admin_views import UserAdmin, QuestAdmin, QuestionAdmin, AnswerVarAdmin
 from .models import Base, User
@@ -31,10 +34,70 @@ SECRET_KEY = 'our_webapp_secret_key'
 DB_URL = 'sqlite+aiosqlite:///./mq.db'
 
 logger = logging.getLogger('uvicorn.error')
-db_engine = create_async_engine(DB_URL, poolclass=NullPool)
-LocalDBSession = sessionmaker(
-    db_engine, class_=AsyncSession, expire_on_commit=False
+db_engine = create_async_engine(DB_URL, connect_args={"check_same_thread": False}, ) # Required for SQLite in multi-threaded environments
+
+# Create a session factory for generating database sessions
+AsyncSessionLocal = async_sessionmaker(
+    bind=db_engine,
+    class_=AsyncSession,
+    expire_on_commit=False
 )
+
+# Helper function to enable Write-Ahead Logging (WAL) for better concurrency
+async def init_db():
+    async with db_engine.begin() as conn:
+        # Enable WAL mode
+        await conn.execute(text("PRAGMA journal_mode=WAL;"))
+        # Create tables if they do not exist
+        await conn.run_sync(Base.metadata.create_all)
+
+    # create start users and populate data
+    async with get_db() as db:
+        if not await User.get_user_by_username(db, 'admin'):
+            await User.create_user(
+            db, 'admin', 'Admin', 'password', is_admin=True
+        )
+
+        if not await User.get_user_by_username(db, 'u'):
+            await User.create_user(
+                db, 'u', 'u user', 'u'
+            )
+
+        if not await User.get_user_by_username(db, BOT_USER_NAME ):
+            await User.create_user(
+                db,
+                BOT_USER_NAME, BOT_USER_TITLE,
+                'password',
+                is_bot=True
+            )
+
+        await pop_data( db )
+
+
+# 1. Lifespan handler manages startup and shutdown events
+@asynccontextmanager
+async def lifespan(app: Starlette):
+    # Setup: Initialize database and tables
+    await init_db()
+    yield
+    # Shutdown: Clean up resources if necessary
+
+# 2. Context manager to ensure database sessions close cleanly
+@asynccontextmanager
+async def get_db():
+    session = AsyncSessionLocal()
+    try:
+        yield session
+    finally:
+        await session.close()
+
+class DatabaseMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        # Открываем сессию для каждого запроса
+        async with get_db() as db:
+            request.state.db = db
+            response = await call_next(request)
+            return response
 
 login_manager = LoginManager(
     redirect_to='/login', secret_key=SECRET_KEY
@@ -43,6 +106,7 @@ login_manager.set_user_loader(User.get_user_by_id)
 
 middleware = [
     Middleware(SessionMiddleware, secret_key=SECRET_KEY),
+    Middleware(DatabaseMiddleware),
     Middleware(
         AuthenticationMiddleware,
         backend=SessionAuthBackend(login_manager),
@@ -52,8 +116,9 @@ middleware = [
 ]
 
 
-app = FastAPI(
+app = Starlette(
     middleware=middleware,
+    lifespan=lifespan,
     routes=[
         Route('/', home_page, name='home'),
         Route('/quizzes', quizzes_page, name='quizzes_page'),
@@ -88,42 +153,4 @@ admin.add_view(QuestAdmin )
 admin.add_view(QuestionAdmin )
 admin.add_view(AnswerVarAdmin )
 
-@app.middleware('http')
-async def extensions(request: Request, call_next):
-    try:
-        request.state.db = LocalDBSession()
-        response = await call_next(request)
-    except Exception as exc:
-        logger.exception(exc)
-        response = PlainTextResponse(f'error: {exc}')
-    finally:
-        return response
-
-
-@app.on_event('startup')
-async def startup():
-    async with db_engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-
-    # create admin user
-    db = LocalDBSession()
-    if not await User.get_user_by_username(db, 'admin'):
-        await User.create_user(
-            db, 'admin', 'Admin', 'password', is_admin=True
-        )
-
-    if not await User.get_user_by_username(db, 'u'):
-        await User.create_user(
-            db, 'u', 'u user', 'u'
-        )
-
-    if not await User.get_user_by_username(db, BOT_USER_NAME ):
-        await User.create_user(
-            db,
-            BOT_USER_NAME, BOT_USER_TITLE,
-            'password',
-            is_bot=True
-        )
-
-    await pop_data( db )
-    await db_engine.dispose()
+#
