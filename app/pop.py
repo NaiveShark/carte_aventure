@@ -852,8 +852,8 @@ CONST_QUESTS_TEXT = [
     {
       "question_title": "What is the name of the oldest and most famous strategic military highway built by the Romans in 312 BC?",
       "answers": [
-        [ "Via Appia", "Correct! The Appian Way connected Rome to Brindisi and was called the queen of long-distance roads.", True, "None" ],
         [ "Via Flaminia", "None", False, "No." ],
+        [ "Via Appia", "Correct! The Appian Way connected Rome to Brindisi and was called the queen of long-distance roads.", True, "None" ],
         [ "Via Aurelia", "None", False, "No." ],
         [ "Via Sacra", "None", False, "No." ]
       ]
@@ -905,8 +905,8 @@ CONST_QUESTS_TEXT = [
         {
             "question_title": "On which famous date was Julius Caesar assassinated in the Roman Senate?",
             "answers": [
-                ["March 15, 44 BC", "Correct! This date is famously known as the Ides of March.", True, "None"],
                 ["January 1, 45 BC", "None", False, "No."],
+                ["March 15, 44 BC", "Correct! This date is famously known as the Ides of March.", True, "None"],
                 ["August 19, 14 AD", "None", False, "No."],
                 ["November 23, 50 BC", "None", False, "No."]
             ]
