@@ -9,7 +9,7 @@ from starlette_login.utils import login_user, logout_user
 from datetime import datetime
 
 from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_QUEST_QUIZ, CONST_QUEST_TREASURE_QUEST, CONST_PERMISSIBLE_DISTANCE_DEVIATION_QUIZ, CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE, News_Feed, Public_Treasure_Quest, Public_Treasure_Quest_User_Try
-from .gis import dist, random_x, random_y
+from .gis import get_distance_m, random_x, random_y
 
 from starlette.templating import Jinja2Templates
 from starlette_login.login_manager import LoginManager
@@ -220,8 +220,7 @@ async def get_treasure_quest_dots( request: Request ):
         if dist < CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE:
             caption = 'FIND IT!'
         else:
-            caption = "Miss " + str(dist)
-
+            caption = f"Miss {dist:,.2f} away".replace(",", " ")
         dots.append(
           {
             "id": i,
@@ -263,7 +262,7 @@ async def post_treasure_quest_dot( request: Request ):
             await db.commit()
 
         new_dot = {"x": float(x), "y": float(y)}
-        calc_distance_to_target = dist( ptq.target_map_X, ptq.target_map_Y, x, y )
+        calc_distance_to_target = get_distance_m( ptq.target_map_X, ptq.target_map_Y, x, y )
         ptqut = Public_Treasure_Quest_User_Try( public_treasure_quest_id = ptq_id, user_id = user.id, saved_dt = datetime.now(),
                 try_map_X = x,
                 try_map_Y = y,
@@ -325,7 +324,7 @@ async def play_treasure_quest( request: Request, db, user, quest ):
         # select users in game
         sub_users_in_quest_q = select( Public_Treasure_Quest_User_Try ).where( Public_Treasure_Quest_User_Try.user_id == User.id, Public_Treasure_Quest_User_Try.public_treasure_quest_id == ptq.id ).exists()
         users_in_quest_q = select(User).where( sub_users_in_quest_q )
-        print( str( users_in_quest_q ) )
+        #print( str( users_in_quest_q ) )
         users_in_quest = await db.scalars( users_in_quest_q )
         
         ptq_in_play = ( ptq.quest_began) and ( not ptq.quest_end )
@@ -575,7 +574,7 @@ async def handle_qqa(request: Request ):
                # check for coordinates distant
                longitude = float( form.get("longitude") )
                latitude  = float( form.get("latitude") )
-               distance = dist( answer_var.true_answer_map_X, answer_var.true_answer_map_Y, longitude, latitude)
+               distance = get_distance_m( answer_var.true_answer_map_X, answer_var.true_answer_map_Y, longitude, latitude)
 
                check_answer = ( distance < CONST_PERMISSIBLE_DISTANCE_DEVIATION_QUIZ )
 

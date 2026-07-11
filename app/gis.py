@@ -1,19 +1,23 @@
-import math
+from math import radians, cos, sin, asin, sqrt
 import random
 
 # float -> float
-def dist( x1, y1, x2, y2 ):
-    if x1 < 0:
-        x1 = x1 + 360
-    if x2 < 0:
-        x2 = x2 + 360
+def get_distance_m(lat1, lon1, lat2, lon2):
+    # Radius of Earth in meters
+    R = 6371000 
     
-    if y1 < 0:
-        y1 = y1 + 180
-    if y2 < 0:
-        y2 = y2 + 180
-        
-    return math.sqrt( abs(x2-x1)**2 + abs( y2-y1 )**2 )
+    # Convert degrees to radians
+    phi1 = radians(lat1)
+    phi2 = radians(lat2)
+    delta_phi = radians(lat2 - lat1)
+    delta_lambda = radians(lon2 - lon1)
+    
+    # Haversine formula
+    a = sin(delta_phi / 2)**2 + cos(phi1) * cos(phi2) * sin(delta_lambda / 2)**2
+    c = 2 * asin(sqrt(a))
+    
+    # Distance in meters
+    return R * c
 
 def random_x( x : float ):
     rx = -x + ( 150 * random.random() )

@@ -115,9 +115,9 @@ CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS = 1
 # 2 is for map description for questions, center on X,Y,ZOOM, answers is user placed dot
 CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER = 2
 
-# permissible distance deviation for answer X,Y from true X,Y
-CONST_PERMISSIBLE_DISTANCE_DEVIATION_QUIZ = 0.5
-CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE = 0.1
+# permissible distance deviation for answer X,Y from true X,Y in meters
+CONST_PERMISSIBLE_DISTANCE_DEVIATION_QUIZ = 15000
+CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE = 10000
 
 class Question(Base):
     id = Column(Integer, primary_key=True, index=True)
@@ -194,6 +194,9 @@ class Public_Treasure_Quest(Base):
     # target dot
     target_map_X = Column(Float )
     target_map_Y = Column(Float )
+
+# 
+# Public_Treasure_Quest_User_Share
 
 # treasure quest played by player
 class Public_Treasure_Quest_User_Try(Base):

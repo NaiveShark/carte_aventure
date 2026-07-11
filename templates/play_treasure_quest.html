@@ -29,7 +29,7 @@
 {% if ptq %}
 Users in game:
 {% for uq in users_in_quest %}
-{{uq.display_name}}
+<button class="chip">{{uq.display_name}}</button>
 {% endfor %}
 
 {% if ptq.quest_end %}
