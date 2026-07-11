@@ -638,8 +638,8 @@ CONST_QUESTS_MAP = [
             },
             {
                 "question_title": "The famous naval Battle of the Saintes took place in 1782 between British and French fleets.",
-                "question_map_X": -61.6,
-                "question_map_Y": 15.8,
+                "question_map_X": -60,
+                "question_map_Y": 16,
                 "question_map_ZOOM": 8,
 
                 "dot_answer" : [
@@ -976,9 +976,9 @@ CONST_QUESTS_TEXT = [
     {
       "question_title": "Which massive Roman bath complex could accommodate up to 1,600 bathers and featured a complex underfloor heating system (hypocaust)?",
       "answers": [
-        [ "Baths of Caracalla", "Correct! The Baths of Caracalla were a massive public leisure complex.", True, "None" ],
         [ "Baths of Diocletian", "None", False, "No." ],
         [ "Baths of Trajan", "None", False, "No." ],
+        [ "Baths of Caracalla", "Correct! The Baths of Caracalla were a massive public leisure complex.", True, "None" ],
         [ "Baths of Nero", "None", False, "No." ]
       ]
     },
