@@ -22,28 +22,134 @@ CONST_TREASURE_QUEST = [
    { "name" : "Spy Thriller Spin",
       "description" : "Top secret! A rogue spy has stashed a glowing microchip somewhere on the globe. Pinpoint the city on the intelligence map! Finding it on the first try is impossible, but keep a close eye on the safehouses marked by other agents—and remember, they can see yours, too. Decide for yourself: is this a race against the clock, or a collaborative effort?",
      } ,
-     
+
    { "name" : "Secret Agency Recruitment Spin",
       "description" : "Agent selection! An unidentified subject has hidden a classified archive somewhere on the globe. Pinpoint the coordinates on the operational map. Locating it on your first attempt is impossible. Track the visual markers dropped by rival candidates—and remember, they can monitor your progress too. Decide your strategy: is this a high-speed elimination race, or a joint special operation?",
      } ,
-     
+
    { "name" : "The Bigfoot Tracker",
       "description" : "Monster hunt! An elusive, undiscovered beast has vanished into the wilderness somewhere on the globe. Pinpoint its nesting ground on your field map! Catching a glimpse on your first try is impossible. Track the footprints left by rival cryptid hunters—and remember, they are tracking yours, too. Decide your strategy: is this a solo race for the ultimate discovery, or a shared expedition?",
      } ,
-     
+
    { "name" : "The Paranormal Investigator",
       "description" : "Anomaly detected! A legendary cryptid has crossed over into our world somewhere on the planet. Pinpoint the anomaly's origin on your radar! Locking onto its signal on your first attempt is impossible. Monitor the heat signatures marked by other paranormal investigators—and remember, they can see your grid, too. Decide for yourself: is this a frantic race against the clock, or a collaborative investigation?",
      } ,
-     
+
    { "name" : "The Mythic Cartographer ",
       "description" : "Mythical expedition! A creature thought to be extinct is nesting somewhere on the globe. Pinpoint the habitat on your research map! Finding the correct coordinates on your first try is impossible. Keep a close eye on the coordinates logged by other cryptozoologists—and remember, they can see your data, too. Is this a competitive race for scientific glory, or a joint global research effort?",
      } ,
-          
-     
+
+
 ]
 
 # CONST map questions
 CONST_QUESTS_MAP = [
+
+ {
+    "name": "Stonehenge and Ancient Sights of Britain & Ireland",
+    "description": "Test your knowledge on the mysterious stone circles, tombs, and ancient monuments of the British Isles! Discover structures older than the Egyptian pyramids, built by prehistoric societies using massive megaliths aligned with solar and lunar cycles. ![Stonehenge](https://upload.wikimedia.org/wikipedia/commons/5/57/Menir%2C_Stonehenge%2C_Inglaterra_.jpg)",
+    "questions": [
+        {
+            "question_title": "Which Famous Neolithic stone circle is located here in Wiltshire, England? Constructed over several phases starting around 3000 BC, its massive sarsen stones and smaller bluestones were transported from miles away, serving as a complex burial ground and an astronomical observatory.",
+            "question_map_X": -1.8262,
+            "question_map_Y": 51.1789,
+            "question_map_ZOOM": 14,
+            "answers": [
+                [ "Avebury", None, False, "No, Avebury is larger but located further north." ],
+                [ "Stonehenge", "Yes! This iconic monument remains a masterpiece of engineering.", True, None ],
+                [ "Newgrange", None, False, "No, Newgrange is a passage tomb located in Ireland." ],
+                [ "Callanish", None, False, "No, the Callanish Stones are situated in Scotland." ],
+                [ "Bryn Celli Ddu", None, False, "No, this is a famous passage tomb found in Wales." ],
+            ]
+        },
+        {
+            "question_title": "What is the name of this massive prehistoric tomb in County Meath, Ireland? Built around 3200 BC during the Neolithic period, this grand passage tomb features a unique roof box designed to illuminate the inner chamber with sunrise light during the winter solstice.",
+            "question_map_X": -6.4444,
+            "question_map_Y": 53.6947,
+            "question_map_ZOOM": 13,
+            "answers": [
+                [ "Knowth", None, False, "No, Knowth is nearby but features different art and structures." ],
+                [ "Dowth", None, False, "No, Dowth is part of the same complex but remains unexcavated." ],
+                [ "Tara", None, False, "No, the Hill of Tara was the ancient seat of the High Kings." ],
+                [ "Newgrange", "Yes! It is one of the most famous megalithic structures globally.", True, None ],
+                [ "Poulnabrone", None, False, "No, Poulnabrone is a portal dolmen located in County Clare." ],
+            ]
+        },
+        {
+            "question_title": "Place the dot on the map where you think Avebury is located—the largest megalithic stone circle in the world. Dating from roughly 2850 BC to 2200 BC, this massive henge encloses a village, multiple stone avenues, and was used for ritual ceremonies.",
+            "question_map_X": -2,
+            "question_map_Y": 52,
+            "question_map_ZOOM": 6,
+            "dot_answer": [
+                {
+                    "dot_question": "Yes, you've placed the dot on the map very close to Avebury, which sits just north of Stonehenge in Wiltshire.",
+                    "true_answer_map_X": -1.8592,
+                    "true_answer_map_Y": 51.4286,
+                    "right_message": "Yes, perfect accuracy!",
+                    "wrong_message": "No, Avebury is located in Wiltshire, southern England."
+                },
+            ]
+        },
+        {
+            "question_title": "This remote island chain holds the Callanish Stones, a cross-shaped setting of megaliths erected 5,000 years ago. Serving as a crucial ritual center for generations, place the dot on this historic Scottish site on the Isle of Lewis.",
+            "question_map_X": -4,
+            "question_map_Y": 56,
+            "question_map_ZOOM": 5,
+            "dot_answer": [
+                {
+                    "dot_question": "Yes, you've placed the dot right on the Outer Hebrides where the magnificent Callanish Stones stand.",
+                    "true_answer_map_X": -6.7454,
+                    "true_answer_map_Y": 58.1978,
+                    "right_message": "Yes, excellent geographical knowledge!",
+                    "wrong_message": "No, look further northwest toward the outer Scottish islands."
+                },
+            ]
+        },
+
+        {
+            "question_title": "What is the name of this remarkably preserved Neolithic village in the Orkney Islands, Scotland? Occupied between 3180 BC and 2500 BC, it features stone-built houses with integrated beds, hearths, and cupboards, earning it the title of 'British Pompeii'.",
+            "question_map_X": -3.3421,
+            "question_map_Y": 59.0486,
+            "question_map_ZOOM": 14,
+            "answers": [
+                [ "Jarlshof", None, False, "No, Jarlshof is a complex archaeological site in Shetland." ],
+                [ "Maeshowe", None, False, "No, Maeshowe is a chambered cairn located nearby." ],
+                [ "Skara Brae", "Yes! It offers an unparalleled glimpse into European Stone Age domestic life.", True, None ],
+                [ "Knap of Howar", None, False, "No, though it is another ancient farmstead in Orkney." ],
+                [ "Grime's Graves", None, False, "No, Grime's Graves is an ancient flint mining site in England." ],
+            ]
+        },
+        {
+            "question_title": "Place the dot on the map where you think Maiden Castle is located. This massive site is one of the largest and most complex Iron Age hillforts in Europe, featuring immense, labyrinthine earthen ramparts constructed around the 1st century BC to protect its thriving tribal community.",
+            "question_map_X": -3,
+            "question_map_Y": 50,
+            "question_map_ZOOM": 7,
+            "dot_answer": [
+                {
+                    "dot_question": "Yes, you've placed the dot right near Dorchester in Dorset, England, where this colossal hillfort stands.",
+                    "true_answer_map_X": -2.4682,
+                    "true_answer_map_Y": 50.6953,
+                    "right_message": "Yes, superb spotting!",
+                    "wrong_message": "No, Maiden Castle is located in Dorset, in the southwestern part of England."
+                },
+            ]
+        },
+        {
+            "question_title": "What is the name of this famous prehistoric monument on the island of Anglesey, Wales? Meaning 'The Mound in the Dark Grove', it began as a henge monument around 3000 BC before being transformed into a passage tomb accurately aligned with the summer solstice sunrise.",
+            "question_map_X": -4.2800,
+            "question_map_Y": 53.2000,
+            "question_map_ZOOM": 12,
+            "answers": [
+                [ "Pentre Ifan", None, False, "No, Pentre Ifan is a famous dolmen located in Pembrokeshire, South Wales." ],
+                [ "Barclodiad y Gawres", None, False, "No, that is a different cruciform passage grave nearby on Anglesey." ],
+                [ "Bryn Celli Ddu", "Yes! It is one of Wales' most iconic and archaeologically significant prehistoric sites.", True, None ],
+                [ "Tinkinswood", None, False, "No, Tinkinswood is a megalithic burial chamber situated in South Wales." ],
+                [ "Gop Cairn", None, False, "No, Gop Cairn is a massive enigmatic mound located in Flintshire." ],
+            ],
+        },
+]
+    },
+
 
    { "name" : "Do you know the Roman Empire's age geography?",
       "description" : "Do you know the geography  of ancient Roman Empire? ![SQPQR](https://upload.wikimedia.org/wikipedia/commons/d/d5/SPQR_skjaldamerki_R%C3%B3maveldis.png)",
