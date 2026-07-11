@@ -20,7 +20,7 @@ CONST_TREASURE_QUEST = [
      } ,
 
    { "name" : "Spy Thriller Spin",
-      "description" : "Top secret! A rogue spy has stashed a glowing microchip somewhere on the globe. Pinpoint the city on the intelligence map! Finding it on the first try is impossible, but keep a close eye on the safehouses marked by other agents—and remember, they can see yours, too. Decide for yourself: is this a race against the clock, or a collaborative effort?",
+      "description" : "Top secret! A rogue spy has stashed a glowing microchip somewhere on the globe. Pinpoint the site on the intelligence map! Finding it on the first try is impossible, but keep a close eye on the safehouses marked by other agents—and remember, they can see yours, too. Decide for yourself: is this a race against the clock, or a collaborative effort?",
      } ,
 
    { "name" : "Secret Agency Recruitment Spin",
