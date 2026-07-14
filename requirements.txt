@@ -1,7 +1,6 @@
 aiosqlite
 jinja2
 python-multipart
-fastapi
 passlib
 starlette
 uvicorn
