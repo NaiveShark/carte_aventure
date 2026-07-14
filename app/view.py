@@ -238,8 +238,7 @@ async def get_treasure_quest_dots( request: Request ):
 @login_required
 async def post_treasure_quest_dot( request: Request ):
     game_over = False
-    #try:
-    if True:
+    try:
         # main.LocalDBSession
         db = request.state.db
 
@@ -317,8 +316,8 @@ async def post_treasure_quest_dot( request: Request ):
         #print(f"Received new dot via Starlette at: X={x}, Y={y}")
         return JSONResponse({"status": set_json_status, "data": new_dot}, status_code=201)
 
-    #except Exception as e:
-    #    return JSONResponse({"error": "Invalid JSON format"}, status_code=400)
+    except Exception as e:
+        return JSONResponse({"error": "Invalid JSON format"}, status_code=400)
 
 @login_required
 async def play_treasure_quest( request: Request, db, user, quest ):
