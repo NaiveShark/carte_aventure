@@ -195,8 +195,20 @@ class Public_Treasure_Quest(Base):
     target_map_X = Column(Float )
     target_map_Y = Column(Float )
 
-# 
-# Public_Treasure_Quest_User_Share
+# list of treasure quest players, for individual score
+class Public_Treasure_Quest_User_Share(Base):
+    # one score record per user constaint
+    __table_args__ = (
+        UniqueConstraint("public_treasure_quest_id", "user_id", name="uq_user_treasure_score"), )
+
+    id = Column(Integer, primary_key=True, index=True)
+    public_treasure_quest_id: Mapped[int] = mapped_column(ForeignKey("public_treasure_quest.id"), nullable=False )
+    public_treasurequest = relationship( "Public_Treasure_Quest" )
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False )
+    user = relationship( "User" )
+    
+    user_score = Column( Integer, nullable=False, default = 0 )
 
 # treasure quest played by player
 class Public_Treasure_Quest_User_Try(Base):

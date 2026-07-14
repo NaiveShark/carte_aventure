@@ -8,7 +8,7 @@ from starlette_login.decorator import login_required
 from starlette_login.utils import login_user, logout_user
 from datetime import datetime
 
-from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_QUEST_QUIZ, CONST_QUEST_TREASURE_QUEST, CONST_PERMISSIBLE_DISTANCE_DEVIATION_QUIZ, CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE, News_Feed, Public_Treasure_Quest, Public_Treasure_Quest_User_Try
+from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest_Answers, CONST_QUESTION_TYPE_TEXT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, CONST_QUEST_QUIZ, CONST_QUEST_TREASURE_QUEST, CONST_PERMISSIBLE_DISTANCE_DEVIATION_QUIZ, CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE, News_Feed, Public_Treasure_Quest, Public_Treasure_Quest_User_Share, Public_Treasure_Quest_User_Try
 from .gis import get_distance_m, random_x, random_y
 
 from starlette.templating import Jinja2Templates
@@ -193,10 +193,12 @@ async def start_public_treasure_quest( request: Request ):
     user = request.user
 
     quest_id = request.path_params['quest_id']
-    #quest = await db.get(Quest, quest_id )
 
     ptq = Public_Treasure_Quest( quest_id = quest_id, quest_began = datetime.now(), started_user_id = user.id )
     db.add( ptq )
+    await db.commit()
+    ptqus = Public_Treasure_Quest_User_Share( public_treasure_quest_id = ptq.id, user_id = user.id, user_score = 1 )
+    db.add( ptqus )
     await db.commit()
 
     return RedirectResponse(url='/view/quest/' + str( quest_id ) )
@@ -235,7 +237,9 @@ async def get_treasure_quest_dots( request: Request ):
 
 @login_required
 async def post_treasure_quest_dot( request: Request ):
-    try:
+    game_over = False
+    #try:
+    if True:
         # main.LocalDBSession
         db = request.state.db
 
@@ -275,6 +279,7 @@ async def post_treasure_quest_dot( request: Request ):
         # check try is close enought
         if calc_distance_to_target < CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE:
             # game over!
+            game_over = True
             set_json_status = 'game_over'
             ptq.quest_end = datetime.now()
             ptq.ended_user_id = user.id
@@ -285,11 +290,35 @@ async def post_treasure_quest_dot( request: Request ):
         else:
             set_json_status = 'success'
 
+        # user score
+        # new shooter in quest +1 score
+        # final shooter +"difficulty_coefficient" score
+        # for end of game at first shoot 1+"difficulty_coefficient"
+        score_delta = 0
+        if game_over:
+            quest = await db.get( Quest, ptq.quest_id )
+            score_delta = score_delta + quest.difficulty_coefficient
+
+        ptqus_q = select( Public_Treasure_Quest_User_Share ).where( Public_Treasure_Quest_User_Share.public_treasure_quest_id == ptq.id, Public_Treasure_Quest_User_Share.user_id == user.id )
+        ptqus_e = await db.execute(ptqus_q)
+        ptqus = ptqus_e.scalars( ).first()
+        if not ptqus:
+            score_delta = score_delta + 1
+            ptqus = Public_Treasure_Quest_User_Share( public_treasure_quest_id = ptq.id, user_id = user.id, user_score = score_delta )
+            db.add( ptqus )
+            await db.commit()
+        else:
+            if game_over:
+                ptqus.user_score = ptqus.user_score + score_delta
+                db.add( ptqus )
+                await db.commit()
+
+
         #print(f"Received new dot via Starlette at: X={x}, Y={y}")
         return JSONResponse({"status": set_json_status, "data": new_dot}, status_code=201)
 
-    except Exception as e:
-        return JSONResponse({"error": "Invalid JSON format"}, status_code=400)
+    #except Exception as e:
+    #    return JSONResponse({"error": "Invalid JSON format"}, status_code=400)
 
 @login_required
 async def play_treasure_quest( request: Request, db, user, quest ):
@@ -326,7 +355,7 @@ async def play_treasure_quest( request: Request, db, user, quest ):
         users_in_quest_q = select(User).where( sub_users_in_quest_q )
         #print( str( users_in_quest_q ) )
         users_in_quest = await db.scalars( users_in_quest_q )
-        
+
         ptq_in_play = ( ptq.quest_began) and ( not ptq.quest_end )
         if ptq.quest_end:
             query = (
