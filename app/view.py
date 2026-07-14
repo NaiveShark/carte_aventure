@@ -125,12 +125,11 @@ async def view_user_profile(request: Request):
         quizzes_c = await db.execute(quizzes_q)
         quizzes = quizzes_c.scalars().all()
 
-        #sub_treasure_quests_q = select(Public_Treasure_Quest_User_Try).where(Public_Treasure_Quest_User_Try.user_id == user.id)
-        sub_treasure_quests_q = select(Public_Treasure_Quest).where(Public_Treasure_Quest.quest_id == Quest.id, Public_Treasure_Quest.started_user_id == user.id ).exists()
+        sub_treasure_quests_user_q = select(Public_Treasure_Quest_User_Share).where(Public_Treasure_Quest_User_Share.user_id == user.id, Public_Treasure_Quest_User_Share.public_treasure_quest_id == Public_Treasure_Quest.id ).exists()
+        sub_treasure_quests_q = select(Public_Treasure_Quest).where(Public_Treasure_Quest.quest_id == Quest.id ).where( sub_treasure_quests_user_q ).exists()
         treasure_quests_q = select(Quest).where( sub_treasure_quests_q )
 
         # where( Quest.quest_type == CONST_QUEST_TREASURE_QUEST ).
-        #Public_Treasure_Quest_User_Try.user_id == user.id)
         #print( str(treasure_quests_q) )
         treasure_quests_c = await db.execute(treasure_quests_q)
         treasure_quests = treasure_quests_c.scalars().all()
