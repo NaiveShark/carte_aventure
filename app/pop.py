@@ -1276,6 +1276,33 @@ CONST_QUESTS_TEXT = [
                 ["Mulsum", "None", False, "No."],
                 ["Defrutum", "None", False, "No."]
             ]
+        },
+        {
+            "question_title": "What was 'posca', a popular drink among Roman soldiers and the lower classes?",
+            "answers": [
+                ["A blend of expensive vintage wines", "None", False, "No."],
+                ["A mix of sour wine or vinegar with water and sometimes herbs", "Yes. Posca was refreshing, safe to drink, and standard issue for the Roman military.", True, "None"],
+                ["Pure honey water fermented like mead", "None", False, "No."],
+                ["Goat's milk mixed with barley", "None", False, "No."]
+            ]
+        },
+        {
+            "question_title": "Since cane sugar was unknown to them, what was the primary sweetener used by ancient Romans?",
+            "answers": [
+                ["Maple syrup", "None", False, "No."],
+                ["Beet root extract", "None", False, "No."],
+                ["Honey", "Yes. Honey (mel) was the chief sweetener, though they also used reduced grape juices like defrutum.", True, "None"],
+                ["Agave nectar", "None", False, "No."]
+            ]
+        },
+        {
+            "question_title": "In a formal Roman dining room (triclinium), how did upper-class guests traditionally consume their dinner?",
+            "answers": [
+                ["Sitting cross-legged on the floor", "None", False, "No."],
+                ["Reclining on cushioned couches arranged in a U-shape", "Yes. Romans reclined on their left sides on three couches around a central table.", True, "None"],
+                ["Standing up around high bar tables", "None", False, "No."],
+                ["Sitting on high-backed wooden chairs", "None", False, "No."]
+            ]
         }
     ]
 },
