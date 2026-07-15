@@ -17,7 +17,7 @@
 {% for pq in player_quizzes %}
 <tr>
 <td>{{pq.final_score}}</td>
-<td>{{pq.quest.name}}</td>
+<td><a href="/view/quest/{{pq.quest.id}}" class="link">{{pq.quest.name}}</a></td>
 <td>{{pq.quest_end.strftime('%Y-%m-%d %H:%M')}}</td>
 <td>{{pq.user.display_name}}</td>
 </tr>
