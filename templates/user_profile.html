@@ -5,7 +5,13 @@
 {% if request.user.is_authenticated %}
 <h1>Profile of {{ request.user.username }}</h1>
 
-{{ request.user.display_name }}
+<p>{{ request.user.display_name }}</p>
+
+<p>You quizzes and quests score: <a>
+  <i>social_leaderboard</i>
+  <span class="badge primary">{{request.user.user_total_score}}</span>
+</a>
+</p>
 
 <h2>Quizzes</h2>
 

@@ -198,6 +198,9 @@ async def start_public_treasure_quest( request: Request ):
     db.add( ptq )
     await db.commit()
     ptqus = Public_Treasure_Quest_User_Share( public_treasure_quest_id = ptq.id, user_id = user.id, user_score = 1 )
+    # add to user score
+    user.increment_score( 1 )
+
     db.add( ptqus )
     await db.commit()
 
@@ -305,11 +308,15 @@ async def post_treasure_quest_dot( request: Request ):
             score_delta = score_delta + 1
             ptqus = Public_Treasure_Quest_User_Share( public_treasure_quest_id = ptq.id, user_id = user.id, user_score = score_delta )
             db.add( ptqus )
+
             await db.commit()
         else:
             if game_over:
                 ptqus.user_score = ptqus.user_score + score_delta
                 db.add( ptqus )
+                
+                # add to user score
+                user.increment_score( ptqus.user_score )
                 await db.commit()
 
 
@@ -629,7 +636,10 @@ async def handle_qqa(request: Request ):
                 player_quest.answered_wrong_count = player_quest.answered_wrong_count + 1
 
             if player_quest.questions_count == player_quest.answered_count:
+                # fix the quest end
                 player_quest.quest_end = datetime.now()
+                # fix the user score
+                user.increment_score( player_quest.final_score )
 
             await db.commit()
 

@@ -28,6 +28,8 @@ class User(Base, UserMixin):
     is_admin = Column(Boolean, default=False)
     is_editor = Column(Boolean, default=False)
 
+    user_total_score = Column( Integer, nullable=False, default = 0 )
+
     @property
     def identity(self):
         return self.id
@@ -41,6 +43,9 @@ class User(Base, UserMixin):
 
     def check_password(self, password: str):
         return pbkdf2_sha256.verify(password, self.password)
+
+    def increment_score(self, delta_score: int ):
+        self.user_total_score = self.user_total_score + delta_score
 
     @classmethod
     async def get_user_by_id(cls, request: Request, user_id: int):
@@ -190,7 +195,7 @@ class Public_Treasure_Quest(Base):
 
     ended_user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=True )
     ended_user = relationship( "User", foreign_keys=[ended_user_id] )
-    
+
     # target dot
     target_map_X = Column(Float )
     target_map_Y = Column(Float )
@@ -207,7 +212,7 @@ class Public_Treasure_Quest_User_Share(Base):
 
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False )
     user = relationship( "User" )
-    
+
     user_score = Column( Integer, nullable=False, default = 0 )
 
 # treasure quest played by player
@@ -250,7 +255,6 @@ class Player_Quest_Answers(Base):
     answer_map_X = Column( Float )
     answer_map_Y = Column( Float )
     answer_distance = Column( Float )
-
 
 # News feed
 class News_Feed(Base):
