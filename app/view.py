@@ -140,13 +140,13 @@ async def view_user_profile(request: Request):
 async def view_quiz_top(request: Request):
     # main.LocalDBSession
     db = request.state.db
-    player_quests_q = select(Player_Quest).where(Player_Quest.quest_end != None).options( selectinload( Player_Quest.quest ), selectinload( Player_Quest.user ) ).order_by(Player_Quest.final_score.desc())
-    player_quests_d = await db.execute(player_quests_q)
-    player_quests = player_quests_d.scalars().all()
+    player_quizzes_q = select(Player_Quest).where(Player_Quest.quest_end != None).options( selectinload( Player_Quest.quest ), selectinload( Player_Quest.user ) ).order_by(Player_Quest.final_score.desc())
+    player_quizzes_d = await db.execute(player_quizzes_q)
+    player_quizzes = player_quizzes_d.scalars().all()
 
     return template.TemplateResponse(
                 request,
-                'view_quiz_top.html', context={ "player_quests" : player_quests, }
+                'view_quiz_top.html', context={ "player_quizzes" : player_quizzes, }
             )
 
 @login_required
