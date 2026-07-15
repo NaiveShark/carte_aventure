@@ -1186,21 +1186,7 @@ CONST_QUESTS_TEXT = [
         }
     ]
 },
-{
-    "name": "Roman Food and Drink",
-    "description": "Discover the unique culinary tastes of ancient Rome.",
-    "questions": [
-        {
-            "question_title": "What highly popular fermented fish sauce was used as a universal condiment in Roman cuisine?",
-            "answers": [
-                ["Garum", "Yes. Garum was made by fermenting fish intestines in brine and was added to both sweet and savory dishes.", True, "None"],
-                ["Posca", "None", False, "No."],
-                ["Mulsum", "None", False, "No."],
-                ["Defrutum", "None", False, "No."]
-            ]
-        }
-    ]
-},
+
 {
     "name": "Gladiatorial Culture",
     "description": "Test your knowledge on the fighters of the arena.",
@@ -1279,66 +1265,6 @@ CONST_QUESTS_TEXT = [
 },
 
 {
-    "name": "Roman Literature",
-    "description": "Quiz yourself on the epic writers of the Golden Age of Roman literature.",
-    "questions": [
-        {
-            "question_title": "Who wrote the national epic poem 'The Aeneid', detailing the journey of a Trojan hero to Italy?",
-            "answers": [
-                ["Ovid", "None", False, "No."],
-                ["Horace", "None", False, "No."],
-                ["Virgil", "Yes. Virgil wrote the Aeneid during the reign of Augustus to glorify Rome's divine origins.", True, "None"],
-                ["Cicero", "None", False, "No."]
-            ]
-        }
-    ]
-},
-{
-    "name": "Roman Housing",
-    "description": "Explore the contrasting living conditions between rich and poor Romans.",
-    "questions": [
-        {
-            "question_title": "What was the name of the multi-story, crowded apartment buildings where lower-class Romans lived?",
-            "answers": [
-                ["Domus", "None", False, "No."],
-                ["Insulae", "Yes. Insulae were apartment blocks that housed the majority of Rome's urban population, often prone to fires.", True, "None"],
-                ["Villa", "None", False, "No."],
-                ["Atrium", "None", False, "No."]
-            ]
-        }
-    ]
-},
-{
-    "name": "Roman Mythology",
-    "description": "Delve into the gods protecting the Roman household.",
-    "questions": [
-        {
-            "question_title": "What were the Lares and Penates in ancient Roman cultural beliefs?",
-            "answers": [
-                ["Military ranks", "None", False, "No."],
-                ["Household gods", "Yes. The Lares and Penates were domestic guardian spirits worshipped daily at family shrines called lararia.", True, "None"],
-                ["Gladiator types", "None", False, "No."],
-                ["Types of wine", "None", False, "No."]
-            ]
-        }
-    ]
-},
-{
-    "name": "Roman Festivals",
-    "description": "Uncover the wild celebrations of the Roman calendar.",
-    "questions": [
-        {
-            "question_title": "Which December winter festival involved role reversals, where masters served meals to their slaves?",
-            "answers": [
-                ["Lupercalia", "None", False, "No."],
-                ["Saturnalia", "Yes. Saturnalia was a joyful festival honoring Saturn, marked by feasting, gift-giving, and temporary social equality.", True, "None"],
-                ["Liberalia", "None", False, "No."],
-                ["Lemuria", "None", False, "No."]
-            ]
-        }
-    ]
-},
-{
     "name": "Roman Food and Drink",
     "description": "Discover the unique culinary tastes of ancient Rome.",
     "questions": [
@@ -1353,66 +1279,7 @@ CONST_QUESTS_TEXT = [
         }
     ]
 },
-{
-    "name": "Gladiatorial Culture",
-    "description": "Test your knowledge on the fighters of the arena.",
-    "questions": [
-        {
-            "question_title": "Which specific type of gladiator fought using a fishing net and a three-pronged trident?",
-            "answers": [
-                ["Murmillo", "None", False, "No."],
-                ["Secutor", "None", False, "No."],
-                ["Retiarius", "Yes. The Retiarius was lightly armored and relied on speed to ensnare heavily armed opponents like the Secutor.", True, "None"],
-                ["Thraex", "None", False, "No."]
-            ]
-        }
-    ]
-},
-{
-    "name": "Roman Philosophy",
-    "description": "Examine the moral frameworks that guided Roman politicians and emperors.",
-    "questions": [
-        {
-            "question_title": "Which Hellenistic philosophy, emphasizing duty, self-control, and reason, became dominant among elite Romans?",
-            "answers": [
-                ["Epicureanism", "None", False, "No."],
-                ["Stoicism", "Yes. Stoicism heavily influenced Roman culture, appealing to their traditional values of gravity and discipline.", True, "None"],
-                ["Cynicism", "None", False, "No."],
-                ["Skepticism", "None", False, "No."]
-            ]
-        }
-    ]
-},
-{
-    "name": "Roman Education",
-    "description": "Learn how young Romans were prepared for public life.",
-    "questions": [
-        {
-            "question_title": "What subject was considered the pinnacle of higher education for a young Roman nobleman planning a political career?",
-            "answers": [
-                ["Rhetoric", "Yes. Rhetoric, the art of public speaking and persuasion, was vital for winning court cases and political debates.", True, "None"],
-                ["Geometry", "None", False, "No."],
-                ["Astronomy", "None", False, "No."],
-                ["Medicine", "None", False, "No."]
-            ]
-        }
-    ]
-},
-{
-    "name": "Roman Marriage",
-    "description": "Explore the social contracts and ceremonies of Roman unions.",
-    "questions": [
-        {
-            "question_title": "What was the traditional white bridal dress worn by Roman women on their wedding day?",
-            "answers": [
-                ["Tunica Recta", "Yes. The tunica recta was woven traditionally on an upright loom and tied with a special knot of Hercules.", True, "None"],
-                ["Toga Pulla", "None", False, "No."],
-                ["Paludamentum", "None", False, "No."],
-                ["Subligaculum", "None", False, "No."]
-            ]
-        }
-    ]
-},
+
 
 {
     "name": "Roman Roads and Commute",
@@ -1437,11 +1304,10 @@ async def check_duplicate( DB : AsyncSession, q_name : str ):
     check_dup_q = select(exists().where(Quest.name == q_name ))
     # 2. Execute using scalar to get a true/false boolean directly
     check_dup = await DB.scalar(check_dup_q)
-    if bool( check_dup ):
+    check_dup = bool( check_dup )
+    if check_dup:
         print( 'dup ' + q_name )
-        return True
-    else:
-        return False
+    return check_dup
 
 async def pop_data( DB : AsyncSession ):
 
