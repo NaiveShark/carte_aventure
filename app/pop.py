@@ -1280,7 +1280,6 @@ CONST_QUESTS_TEXT = [
     ]
 },
 
-
 {
     "name": "Roman Roads and Commute",
     "description": "Understand how information and military power moved through the empire.",
@@ -1292,6 +1291,33 @@ CONST_QUESTS_TEXT = [
                 ["Cursus Publicus", "Yes. Established by Augustus, the Cursus Publicus used a network of relay stations for fast imperial communication.", True, "None"],
                 ["Vigiles", "None", False, "No."],
                 ["Praetorian Guard", "None", False, "No."]
+            ]
+        },
+        {
+            "question_title": "What was the name of the gold-covered milestone erected by Emperor Augustus in the Roman Forum, from which all roads were measured?",
+            "answers": [
+                ["Umbilicus Urbis", "None", False, "No. That marked the symbolic center of the city, not the road system."],
+                ["Milliarium Aureum", "Yes. The Golden Milestone was the symbolic starting point for the entire Roman road system.", True, "None"],
+                ["Colossus of Nero", "None", False, "No."],
+                ["Rostra", "None", False, "No."]
+            ]
+        },
+        {
+            "question_title": "What were 'mansiones' in the context of the Roman road network?",
+            "answers": [
+                ["Private villas of the emperors", "None", False, "No."],
+                ["Official stopping places and inns equipped with lodging and stables", "Yes. Mansiones were located along major roads for officials using the Cursus Publicus.", True, "None"],
+                ["Military watchtowers along the borders", "None", False, "No."],
+                ["Toll booths for merchant tax collection", "None", False, "No."]
+            ]
+        },
+        {
+            "question_title": "Which layer of a standard Roman road consisted of flat, large stone blocks fitted tightly together to form the durable surface?",
+            "answers": [
+                ["Statumen", "None", False, "No. That was the deep foundation layer of large stones."],
+                ["Rudus", "None", False, "No. That was the layer of broken stones and lime."],
+                ["Nucleus", "None", False, "No. That was the cement and gravel layer just below the top."],
+                ["Pavimentum", "Yes. Also called the 'summa crusta', this was the top layer of fitted polygonal paving stones.", True, "None"]
             ]
         }
     ]
