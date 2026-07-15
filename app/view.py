@@ -144,9 +144,13 @@ async def view_quiz_top(request: Request):
     player_quizzes_d = await db.execute(player_quizzes_q)
     player_quizzes = player_quizzes_d.scalars().all()
 
+    treasure_quests_q = select( Public_Treasure_Quest_User_Share ).options( selectinload( Public_Treasure_Quest_User_Share.public_treasurequest ).selectinload( Public_Treasure_Quest.quest ) ).order_by(Public_Treasure_Quest_User_Share.user_score.desc())
+    treasure_quests_c = await db.execute(treasure_quests_q)
+    treasure_quests = treasure_quests_c.scalars().all()
+
     return template.TemplateResponse(
                 request,
-                'view_quiz_top.html', context={ "player_quizzes" : player_quizzes, }
+                'view_quiz_top.html', context={ "player_quizzes" : player_quizzes, 'treasure_quests' : treasure_quests, }
             )
 
 @login_required

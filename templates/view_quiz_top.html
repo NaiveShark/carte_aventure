@@ -27,6 +27,25 @@
 	
 <h1>Quests top scoring</h1>
 
+<table class="stripes">
+<thead>
+<th>Score</th>
+<th>Treasure quest name</th>
+<th>Date</th>
+<th>Player</th>
+</thead>
+<tbody>
+{% for tq in treasure_quests %}
+	<tr>
+		<td>{{tq.user_score}}</td>
+		<td><a href="/view/quest/{{tq.public_treasurequest.quest.id}}" class="link">{{tq.public_treasurequest.quest.name}}</a></td>
+		<td>{% if tq.public_treasurequest.quest_end %} {{tq.public_treasurequest.quest_end.strftime('%Y-%m-%d %H:%M') }} {% endif %}</td>
+		<td>{{tq.user.display_name}}</td>
+	</tr>
+{% endfor %}
+</tbody>
+</table>
+
 {% else %}
 You should login.
 {% endif %}
