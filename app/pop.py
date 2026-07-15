@@ -1284,9 +1284,9 @@ CONST_QUESTS_TEXT = [
         {
             "question_title": "What was the name of the ancient state-run courier and postal service of the Roman Empire?",
             "answers": [
-                ["Cursus Publicus", "Yes. Established by Augustus, the Cursus Publicus used a network of relay stations for fast imperial communication.", True, "None"],
                 ["Via Appia", "None", False, "No."],
                 ["Vigiles", "None", False, "No."],
+                ["Cursus Publicus", "Yes. Established by Augustus, the Cursus Publicus used a network of relay stations for fast imperial communication.", True, "None"],
                 ["Praetorian Guard", "None", False, "No."]
             ]
         }
