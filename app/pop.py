@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, exists
 
 from .models import User, Quest, Question, AnswerVar, CONST_QUEST_TREASURE_QUEST, CONST_QUESTION_TYPE_MAP_POINT_AND_TEXT_VARS, CONST_QUESTION_TYPE_MAP_POINT_AND_DOT_ANSWER, News_Feed
 
@@ -1066,22 +1066,6 @@ CONST_QUESTS_TEXT = [
     ]
 },
 
-
-{
-    "name": "Roman Baths and Leisure",
-    "description": "Explore the daily relaxation habits and social hubs of Roman citizens.",
-    "questions": [
-        {
-            "question_title": "What was the name of the hot room in a traditional Roman bathhouse complex?",
-            "answers": [
-                ["Frigidarium", "None", False, "No."],
-                ["Tepidarium", "None", False, "No."],
-                ["Caldarium", "Yes. The caldarium was the hot, steamy room heated by an underground hypocaust system.", True, "None"],
-                ["Apodyterium", "None", False, "No."]
-            ]
-        }
-    ]
-},
 {
     "name": "Roman Entertainment",
     "description": "Test your knowledge on chariot racing and stadium spectacles.",
@@ -1293,66 +1277,7 @@ CONST_QUESTS_TEXT = [
         }
     ]
 },
-{
-    "name": "Roman Entertainment",
-    "description": "Test your knowledge on chariot racing and stadium spectacles.",
-    "questions": [
-        {
-            "question_title": "Where did chariot races primarily take place in the city of Ancient Rome?",
-            "answers": [
-                ["Circus Maximus", "Yes. The Circus Maximus could hold over 150,000 spectators for thrilling chariot races.", True, "None"],
-                ["The Colosseum", "None", False, "No."],
-                ["The Theatre of Marcellus", "None", False, "No."],
-                ["The Curia", "None", False, "No."]
-            ]
-        }
-    ]
-},
-{
-    "name": "Roman Engineering",
-    "description": "Questions about the physical infrastructure that supported Roman life.",
-    "questions": [
-        {
-            "question_title": "What volcanic ash-based material allowed Romans to build massive concrete structures underwater?",
-            "answers": [
-                ["Marble", "None", False, "No."],
-                ["Pozzolana", "Yes. Pozzolana ash reacted chemically with lime to create incredibly durable, water-resistant concrete.", True, "None"],
-                ["Granite", "None", False, "No."],
-                ["Limestone", "None", False, "No."]
-            ]
-        }
-    ]
-},
-{
-    "name": "Roman Clothing",
-    "description": "Learn about the social status garments worn by Roman citizens.",
-    "questions": [
-        {
-            "question_title": "Which garment was a symbol of Roman citizenship and forbidden to be worn by foreigners or slaves?",
-            "answers": [
-                ["Tunic", "None", False, "No."],
-                ["Chiton", "None", False, "No."],
-                ["Toga", "Yes. The toga was the formal woolen garment reserved exclusively for free male Roman citizens.", True, "None"],
-                ["Stola", "None", False, "No."]
-            ]
-        }
-    ]
-},
-{
-    "name": "Roman Domestic Life",
-    "description": "Discover the structure of ancient Roman households and families.",
-    "questions": [
-        {
-            "question_title": "What term refers to the absolute legal authority held by the male head of a Roman family?",
-            "answers": [
-                ["Patria Potestas", "Yes. Patria Potestas gave the male head of household complete legal power over his children and descendants.", True, "None"],
-                ["Cursus Honorum", "None", False, "No."],
-                ["Mos Maiorum", "None", False, "No."],
-                ["Clientela", "None", False, "No."]
-            ]
-        }
-    ]
-},
+
 {
     "name": "Roman Literature",
     "description": "Quiz yourself on the epic writers of the Golden Age of Roman literature.",
@@ -1507,6 +1432,17 @@ CONST_QUESTS_TEXT = [
 
  ]
 
+# result bool
+async def check_duplicate( DB : AsyncSession, q_name : str ):
+    check_dup_q = select(exists().where(Quest.name == q_name ))
+    # 2. Execute using scalar to get a true/false boolean directly
+    check_dup = await DB.scalar(check_dup_q)
+    if bool( check_dup ):
+        print( 'dup ' + q_name )
+        return True
+    else:
+        return False
+
 async def pop_data( DB : AsyncSession ):
 
     check_query = select(Quest)
@@ -1522,6 +1458,9 @@ async def pop_data( DB : AsyncSession ):
 
     # quiz
     for cqm in CONST_QUESTS_MAP:
+        # check for duplicates
+        await check_duplicate( DB, cqm["name"] )
+
         quest = Quest( name = cqm["name"], description = cqm["description"], user_creator = bot_user, is_active = True, difficulty_coefficient = 3  )
         DB.add( quest )
         await DB.commit()
@@ -1570,6 +1509,9 @@ async def pop_data( DB : AsyncSession ):
 
 
     for сq_d in CONST_QUESTS_TEXT:
+        # check for duplicates
+        await check_duplicate( DB, сq_d["name"] )
+
         quest = Quest( name = сq_d["name"], description = сq_d["description"], user_creator = bot_user, is_active = True  )
         DB.add( quest )
         await DB.commit()
