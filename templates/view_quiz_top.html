@@ -46,6 +46,24 @@
 </tbody>
 </table>
 
+<h1>Top players</h1>
+<table class="stripes">
+<thead>
+<th>Score</th>
+<th>Player</th>
+</thead>
+<tbody>
+{% for p in top_players %}
+	<tr>
+		<td>{{p.user_total_score}}</td>
+		<td>{{p.display_name}}</td>
+	</tr>
+{% endfor %}
+</tbody>
+</table>
+
+
+
 {% else %}
 You should login.
 {% endif %}

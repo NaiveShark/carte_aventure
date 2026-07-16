@@ -148,9 +148,13 @@ async def view_quiz_top(request: Request):
     treasure_quests_c = await db.execute(treasure_quests_q)
     treasure_quests = treasure_quests_c.scalars().all()
 
+    top_players_q = select(User).where( User.is_bot == False, User.is_admin == False ).order_by(User.user_total_score.desc())
+    top_players_c = await db.execute( top_players_q )
+    top_players = top_players_c.scalars().all()
+    
     return template.TemplateResponse(
                 request,
-                'view_quiz_top.html', context={ "player_quizzes" : player_quizzes, 'treasure_quests' : treasure_quests, }
+                'view_quiz_top.html', context={ "player_quizzes" : player_quizzes, 'treasure_quests' : treasure_quests, 'top_players' : top_players, }
             )
 
 @login_required
