@@ -106,7 +106,7 @@ function refreshDots() {
 	  // Clear previous dots to prevent duplicates and memory leaks
       dotSource.clear();
 
-  	  const { dots, users } = data;
+  	  const { dots, users, game_over } = data;
       // OPTION B: If your data is an object containing an array (e.g., data.dots)
       dots.forEach(item => {
         const coords = ol.proj.fromLonLat([item.longitude, item.latitude]);
@@ -116,17 +116,24 @@ function refreshDots() {
         });
         dotSource.addFeature(feature);
       });
-      
+		
+	  {% if ptq_in_play %}
+	  if (game_over) { 
+		const dialog = document.getElementById("end_game_dialog");
+		const isShowing = dialog.classList.contains("active");
+		if (!isShowing) {
+		window.location.reload(); }
+	  
+	  };
+	  {% endif %}
 	  // refresh users list
 	  const User_ListElement = document.getElementById('div_users_in_quest');
 	  const User_htmlElements = users.map(obj => {
+		return `<button class="chip">${obj.user_name}</button>`;
 
-      return `<button class="chip">${obj.user_name}</button>`;
-	  
-	  
     });
 	  User_ListElement.innerHTML = User_htmlElements.join('');
-	
+
 	})
     .catch(error => console.error('Error refreshing data:', error));
 }
@@ -184,9 +191,8 @@ map.on('click', function (event) {
     console.log('Successfully saved to server:', data);
 	// if dot post result is GAME OVER, then reload page
 	if (data.status == 'game_over' ) {
-	ui("#end_game_dialog");
-
-
+		clearInterval(refreshDots);
+		ui("#end_game_dialog");
 	};
   })
   .catch(error => {

@@ -215,8 +215,11 @@ async def get_treasure_quest_dots( request: Request ):
     # main.LocalDBSession
     db = request.state.db
 
+    game_over = False
     ptq_id = request.path_params['ptq_id']
     ptq = await db.get(Public_Treasure_Quest, ptq_id )
+    if ptq.quest_end:
+        game_over = True
 
     ptqut_q = select( Public_Treasure_Quest_User_Try ).where( Public_Treasure_Quest_User_Try.public_treasure_quest_id == ptq_id )
     ptqut_e = await db.execute( ptqut_q )
@@ -249,7 +252,7 @@ async def get_treasure_quest_dots( request: Request ):
     for ul in users_list:
         users.append( { "user_name" : ul.user.display_name } )
         
-    return JSONResponse( { "dots" : dots, "users" : users } )
+    return JSONResponse( { "game_over" : game_over, "dots" : dots, "users" : users } )
 
 @login_required
 async def post_treasure_quest_dot( request: Request ):
