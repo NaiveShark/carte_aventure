@@ -151,7 +151,7 @@ async def view_quiz_top(request: Request):
     top_players_q = select(User).where( User.is_bot == False, User.is_admin == False ).order_by(User.user_total_score.desc())
     top_players_c = await db.execute( top_players_q )
     top_players = top_players_c.scalars().all()
-    
+
     return template.TemplateResponse(
                 request,
                 'view_quiz_top.html', context={ "player_quizzes" : player_quizzes, 'treasure_quests' : treasure_quests, 'top_players' : top_players, }
@@ -198,9 +198,16 @@ async def start_public_treasure_quest( request: Request ):
 
     quest_id = request.path_params['quest_id']
 
-    ptq = Public_Treasure_Quest( quest_id = quest_id, quest_began = datetime.now(), started_user_id = user.id )
-    db.add( ptq )
-    await db.commit()
+    # we must check - may be another user start the game already?
+    ptq_q = select( Public_Treasure_Quest ).where( Public_Treasure_Quest.quest_id == quest_id )
+    ptq_e = await db.execute( ptq_q )
+    ptq = ptq_e.scalars( ).first()
+    
+    if not ptq:
+        ptq = Public_Treasure_Quest( quest_id = quest_id, quest_began = datetime.now(), started_user_id = user.id )
+        db.add( ptq )
+        await db.commit()
+
     ptqus = Public_Treasure_Quest_User_Share( public_treasure_quest_id = ptq.id, user_id = user.id, user_score = 1 )
     # add to user score
     user.increment_score( 1 )
@@ -247,11 +254,11 @@ async def get_treasure_quest_dots( request: Request ):
     users_in_quest_q = select( Public_Treasure_Quest_User_Share ).where( Public_Treasure_Quest_User_Share.public_treasure_quest_id == ptq.id ).options(selectinload(Public_Treasure_Quest_User_Share.user))
     users_in_quest_e = await db.execute( users_in_quest_q )
     users_list = users_in_quest_e.scalars().all()
-    
+
     users = []
     for ul in users_list:
         users.append( { "user_name" : ul.user.display_name } )
-        
+
     return JSONResponse( { "game_over" : game_over, "dots" : dots, "users" : users } )
 
 @login_required
@@ -330,7 +337,7 @@ async def post_treasure_quest_dot( request: Request ):
             if game_over:
                 ptqus.user_score = ptqus.user_score + score_delta
                 db.add( ptqus )
-                
+
                 # add to user score
                 user.increment_score( ptqus.user_score )
                 await db.commit()

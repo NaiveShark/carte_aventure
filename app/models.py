@@ -182,6 +182,11 @@ class Player_Quest(Base):
 
 # treasure quest played public play, for CONST_QUEST_TREASURE_QUEST
 class Public_Treasure_Quest(Base):
+    # one quest per user constaint
+    # it's a relation 1 to 1
+    __table_args__ = (
+        UniqueConstraint("quest_id", name="uq_quest"), )  
+
     id = Column(Integer, primary_key=True, index=True)
 
     quest_id: Mapped[int] = mapped_column(ForeignKey("quest.id"), nullable=False )
