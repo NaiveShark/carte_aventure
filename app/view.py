@@ -240,7 +240,16 @@ async def get_treasure_quest_dots( request: Request ):
         )
         i = i + 1
 
-    return JSONResponse( dots )
+    # select users in game
+    users_in_quest_q = select( Public_Treasure_Quest_User_Share ).where( Public_Treasure_Quest_User_Share.public_treasure_quest_id == ptq.id ).options(selectinload(Public_Treasure_Quest_User_Share.user))
+    users_in_quest_e = await db.execute( users_in_quest_q )
+    users_list = users_in_quest_e.scalars().all()
+    
+    users = []
+    for ul in users_list:
+        users.append( { "user_name" : ul.user.display_name } )
+        
+    return JSONResponse( { "dots" : dots, "users" : users } )
 
 @login_required
 async def post_treasure_quest_dot( request: Request ):
@@ -332,7 +341,6 @@ async def post_treasure_quest_dot( request: Request ):
 
 @login_required
 async def play_treasure_quest( request: Request, db, user, quest ):
-    users_in_quest = None
     steps_overall = 0
     ptq_in_play = False
 
@@ -349,9 +357,6 @@ async def play_treasure_quest( request: Request, db, user, quest ):
         start_dot_X = win_ptqut.try_map_X
         start_dot_Y = win_ptqut.try_map_Y
 
-        #start_dot_X = ptq.target_map_X
-        #start_dot_Y = ptq.target_map_Y
-
         start_map_ZOOM = 12
     else:
         start_dot_X = 0.0
@@ -360,12 +365,6 @@ async def play_treasure_quest( request: Request, db, user, quest ):
 
     # hunt is proceed. make the tools available
     if ptq:
-        # select users in game
-        sub_users_in_quest_q = select( Public_Treasure_Quest_User_Try ).where( Public_Treasure_Quest_User_Try.user_id == User.id, Public_Treasure_Quest_User_Try.public_treasure_quest_id == ptq.id ).exists()
-        users_in_quest_q = select(User).where( sub_users_in_quest_q )
-        #print( str( users_in_quest_q ) )
-        users_in_quest = await db.scalars( users_in_quest_q )
-
         ptq_in_play = ( ptq.quest_began) and ( not ptq.quest_end )
         if ptq.quest_end:
             query = (
@@ -381,7 +380,6 @@ async def play_treasure_quest( request: Request, db, user, quest ):
                 'quest' : quest,
                 'ptq' : ptq,
                 'ptq_in_play' : ptq_in_play,
-                'users_in_quest' : users_in_quest,
                 'start_dot_X' : start_dot_X,
                 'start_dot_Y' : start_dot_Y,
                 'start_map_ZOOM' : start_map_ZOOM,

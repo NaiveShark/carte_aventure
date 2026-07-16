@@ -28,9 +28,7 @@
 
 {% if ptq %}
 Users in game:
-{% for uq in users_in_quest %}
-<button class="chip">{{uq.display_name}}</button>
-{% endfor %}
+<div id="div_users_in_quest"></div>
 
 {% if ptq.quest_end %}
 <p class="bold green-text">The quest started at {{ptq.quest_began.strftime('%Y-%m-%d %H:%M')}}, and ended at {{ptq.quest_end.strftime('%Y-%m-%d %H:%M')}}. Treasure found after <button class="chip">{{steps_overall}}</button> steps.</p>
@@ -105,11 +103,12 @@ function refreshDots() {
   fetch('/quest/get_treasure_quest_dots/{{ptq.id}}')
     .then(response => response.json())
     .then(data => {
-      // Clear previous dots to prevent duplicates and memory leaks
+	  // Clear previous dots to prevent duplicates and memory leaks
       dotSource.clear();
 
+  	  const { dots, users } = data;
       // OPTION B: If your data is an object containing an array (e.g., data.dots)
-      data.forEach(item => {
+      dots.forEach(item => {
         const coords = ol.proj.fromLonLat([item.longitude, item.latitude]);
         const feature = new ol.Feature({
           geometry: new ol.geom.Point(coords),
@@ -117,7 +116,18 @@ function refreshDots() {
         });
         dotSource.addFeature(feature);
       });
-    })
+      
+	  // refresh users list
+	  const User_ListElement = document.getElementById('div_users_in_quest');
+	  const User_htmlElements = users.map(obj => {
+
+      return `<button class="chip">${obj.user_name}</button>`;
+	  
+	  
+    });
+	  User_ListElement.innerHTML = User_htmlElements.join('');
+	
+	})
     .catch(error => console.error('Error refreshing data:', error));
 }
 
@@ -175,7 +185,7 @@ map.on('click', function (event) {
 	// if dot post result is GAME OVER, then reload page
 	if (data.status == 'game_over' ) {
 	ui("#end_game_dialog");
-	
+
 
 	};
   })
