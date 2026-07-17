@@ -44,7 +44,200 @@ CONST_TREASURE_QUEST = [
 
 # CONST map questions
 CONST_QUESTS_MAP = [
+ {
 
+    "name": "Volcano Quest: Extreme Peaks & Crater Lakes",
+    "description": "Can you pinpoint the world's most powerful, dangerous, and extreme volcanoes on a map? From the ice-capped summits that paralyzed global aviation to the ancient calderas capable of altering the Earth's climate, volcanoes are our planet's ultimate architects of destruction. In this interactive map challenge, your task is simple: read the clue, locate the target, and place your dot as close to the true coordinates as possible. Test your geographical precision and see if you can conquer the world's most extreme volcanic wonders![Volcano Kizimen](https://upload.wikimedia.org/wikipedia/commons/2/2b/Kizimen-Volcano-DSC_7342-cropped-thumbnail.jpg)",
+    "questions": [
+
+    {
+        "question_title": "Where is Mount Fuji, the sacred stratovolcano and the highest peak in Japan?",
+        "question_map_X": 138.0,
+        "question_map_Y": 35.6,
+        "question_map_ZOOM": 7,
+        "dot_answer": [
+            {
+                "dot_question": "Mount Fuji is located on Honshu Island, standing as an iconic cultural and natural symbol of Japan.",
+                "true_answer_map_X": 138.7275,
+                "true_answer_map_Y": 35.3606,
+                "right_message": "Correct! You successfully located Mount Fuji.",
+                "wrong_message": "Not quite. Look on Honshu Island, slightly southwest of Tokyo."
+            }
+        ]
+    },
+    {
+        "question_title": "Where is the Yellowstone Caldera, the massive supervolcano in North America?",
+        "question_map_X": -110.5,
+        "question_map_Y": 44.5,
+        "question_map_ZOOM": 5,
+        "dot_answer": [
+            {
+                "dot_question": "The Yellowstone supervolcano is located in the western United States, primarily within Wyoming.",
+                "true_answer_map_X": -110.6744,
+                "true_answer_map_Y": 44.4300,
+                "right_message": "Spot on! That is one of the world's largest volcanic systems.",
+                "wrong_message": "Incorrect. Look in the western United States, within the Rocky Mountains region."
+            }
+        ]
+    },
+    {
+        "question_title": "Where is Mount Etna, Europe's most active stratovolcano?",
+        "question_map_X": 15.0,
+        "question_map_Y": 37.0,
+        "question_map_ZOOM": 8,
+        "dot_answer": [
+            {
+                "dot_question": "Mount Etna is located on the east coast of Sicily, Italy, and is in an almost constant state of activity.",
+                "true_answer_map_X": 14.9964,
+                "true_answer_map_Y": 37.7510,
+                "right_message": "Excellent! You found Mount Etna.",
+                "wrong_message": "No, Mount Etna is on the Italian island of Sicily, right above Catania."
+            }
+        ]
+    },
+    {
+        "question_title": "Where is Krakatoa, the infamous island volcano known for its catastrophic 1883 eruption?",
+        "question_map_X": 105.0,
+        "question_map_Y": -6.0,
+        "question_map_ZOOM": 8,
+        "dot_answer": [
+            {
+                "dot_question": "Krakatoa (Krakatau) is located in the Sunda Strait between the Indonesian islands of Java and Sumatra.",
+                "true_answer_map_X": 105.4233,
+                "true_answer_map_Y": -6.1022,
+                "right_message": "Perfect! You accurately marked Krakatoa in the Sunda Strait.",
+                "wrong_message": "Try again. It is located right between Sumatra and Java in Indonesia."
+            }
+        ]
+    },
+    {
+        "question_title": "Where is Mount Kilimanjaro, the dormant giant and the tallest freestanding mountain in the world?",
+        "question_map_X": 37.0,
+        "question_map_Y": -3.0,
+        "question_map_ZOOM": 6,
+        "dot_answer": [
+            {
+                "dot_question": "Mount Kilimanjaro is a massive stratovolcano located in northeastern Tanzania.",
+                "true_answer_map_X": 37.3556,
+                "true_answer_map_Y": -3.0656,
+                "right_message": "Great job! You found the roof of Africa.",
+                "wrong_message": "Incorrect. Kilimanjaro is in East Africa, right on the northern border of Tanzania."
+            }
+        ]
+    },
+    {
+        "question_title": "Where is Mount St. Helens, famous for its major lateral blast eruption in 1980?",
+        "question_map_X": -122.0,
+        "question_map_Y": 46.0,
+        "question_map_ZOOM": 8,
+        "dot_answer": [
+            {
+                "dot_question": "Mount St. Helens is an active stratovolcano located in the Cascade Volcanic Arc of the Pacific Northwest.",
+                "true_answer_map_X": -122.1944,
+                "true_answer_map_Y": 46.1914,
+                "right_message": "Correct! You successfully located Mount St. Helens.",
+                "wrong_message": "Missed it. Look in Washington State, USA, between Seattle and Portland."
+            }
+        ]
+    },
+
+    {
+        "question_title": "Where is Eyjafjallajökull, the ice-capped volcano that grounded global flights in 2010?",
+        "question_map_X": -19.0,
+        "question_map_Y": 64,
+        "question_map_ZOOM": 7,
+        "dot_answer": [
+            {
+                "dot_question": "Eyjafjallajökull is located in southern Iceland, completely covered by an ice cap.",
+                "true_answer_map_X": -19.6200,
+                "true_answer_map_Y": 63.6300,
+                "right_message": "Splendid! You successfully located the infamous Icelandic volcano.",
+                "wrong_message": "Not quite. Look along the southern coast of Iceland, east of Reykjavik."
+            }
+        ]
+    },
+    {
+        "question_title": "Where is Mauna Loa, the world's largest active subaerial volcano by mass and volume?",
+        "question_map_X": -155.1,
+        "question_map_Y": 19.4,
+        "question_map_ZOOM": 7,
+        "dot_answer": [
+            {
+                "dot_question": "Mauna Loa is a massive shield volcano making up over half of the Big Island of Hawaii.",
+                "true_answer_map_X": -155.6061,
+                "true_answer_map_Y": 19.4756,
+                "right_message": "Spot on! You found the giant shield volcano of Hawaii.",
+                "wrong_message": "Incorrect. Look in the central part of the Big Island of Hawaii in the Pacific Ocean."
+            }
+        ]
+    },
+    {
+        "question_title": "Where is Nevado del Ruiz, the extreme volcano famous for the devastating Armero lahar mudflow in 1985?",
+        "question_map_X": -75.0,
+        "question_map_Y": 5,
+        "question_map_ZOOM": 8,
+        "dot_answer": [
+            {
+                "dot_question": "Nevado del Ruiz is a glaciated stratovolcano located in the Andes mountain range of Colombia.",
+                "true_answer_map_X": -75.3214,
+                "true_answer_map_Y": 4.8953,
+                "right_message": "Correct! You successfully pinpointed this dangerous Colombian volcano.",
+                "wrong_message": "Missed it. Look in South America, specifically in the western mountains of Colombia."
+            }
+        ]
+    },
+    {
+        "question_title": "Where is Ojos del Salado, the highest active volcano on Earth?",
+        "question_map_X": -68.0,
+        "question_map_Y": -27.0,
+        "question_map_ZOOM": 7,
+        "dot_answer": [
+            {
+                "dot_question": "Ojos del Salado stands at 6,893 meters (22,615 ft) on the international border between Chile and Argentina.",
+                "true_answer_map_X": -68.5411,
+                "true_answer_map_Y": -27.1092,
+                "right_message": "Excellent! You found the highest volcanic peak in the world.",
+                "wrong_message": "No, it is located in South America, deep in the Andes right on the Chile-Argentina border."
+            }
+        ]
+    },
+    {
+        "question_title": "Where is Lake Nyos, the exploding crater lake that caused a tragic limnic eruption in 1986?",
+        "question_map_X": 10.0,
+        "question_map_Y": 6.0,
+        "question_map_ZOOM": 7,
+        "dot_answer": [
+            {
+                "dot_question": "Lake Nyos is a deep crater lake located inside an inactive volcano in northwestern Cameroon.",
+                "true_answer_map_X": 10.2989,
+                "true_answer_map_Y": 6.4386,
+                "right_message": "Amazing! You found the deadly volcanic lake of Cameroon.",
+                "wrong_message": "Incorrect. Look in Central/West Africa, in the highlands of northwestern Cameroon."
+            }
+        ]
+    },
+    {
+        "question_title": "Where is Mount Tambora, responsible for the 1815 eruption that caused the 'Year Without a Summer'?",
+        "question_map_X": 117.0,
+        "question_map_Y": -8.0,
+        "question_map_ZOOM": 7,
+        "dot_answer": [
+            {
+                "dot_question": "Mount Tambora is located on Sumbawa Island, Indonesia, and had the most powerful eruption in recorded history.",
+                "true_answer_map_X": 117.9958,
+                "true_answer_map_Y": -8.2472,
+                "right_message": "Perfect! You accurately marked the colossal Tambora caldera.",
+                "wrong_message": "Try again. It is located on the Lesser Sunda Islands chain in Indonesia, east of Bali."
+            }
+        ]
+    }
+
+    
+    ]
+
+
+ },
+ 
  {
     "name": "Stonehenge and Ancient Sights of Britain & Ireland",
     "description": "Test your knowledge on the mysterious stone circles, tombs, and ancient monuments of the British Isles! Discover structures older than the Egyptian pyramids, built by prehistoric societies using massive megaliths aligned with solar and lunar cycles. ![Stonehenge](https://upload.wikimedia.org/wikipedia/commons/5/57/Menir%2C_Stonehenge%2C_Inglaterra_.jpg)",
