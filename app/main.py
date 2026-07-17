@@ -32,6 +32,7 @@ mimetypes.add_type('text/css', '.css')
 
 SECRET_KEY = 'our_webapp_secret_key'
 
+import os
 # Check if running on Vercel, otherwise use local path
 if os.environ.get("VERCEL"):
     DB_URL = "sqlite+aiosqlite:////tmp/mq.db"  # Note the 4 slashes for absolute path
