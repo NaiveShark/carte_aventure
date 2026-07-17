@@ -31,7 +31,12 @@ mimetypes.add_type('text/javascript', '.js')
 mimetypes.add_type('text/css', '.css')
 
 SECRET_KEY = 'our_webapp_secret_key'
-DB_URL = 'sqlite+aiosqlite:///./mq.db'
+
+# Check if running on Vercel, otherwise use local path
+if os.environ.get("VERCEL"):
+    DB_URL = "sqlite+aiosqlite:////tmp/mq.db"  # Note the 4 slashes for absolute path
+else:
+    DB_URL = 'sqlite+aiosqlite:///./mq.db'
 
 logger = logging.getLogger('uvicorn.error')
 db_engine = create_async_engine(DB_URL, connect_args={"check_same_thread": False}, ) # Required for SQLite in multi-threaded environments
