@@ -1,11 +1,11 @@
 from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, UniqueConstraint
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship, as_declarative
 
 # Auth and user tables
 from passlib.hash import pbkdf2_sha256
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, Text, Float, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.ext.declarative import as_declarative, declared_attr
+from sqlalchemy.ext.declarative import declared_attr
 from starlette.requests import Request
 from starlette_login.mixins import UserMixin
 
