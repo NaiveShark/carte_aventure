@@ -823,6 +823,7 @@ CONST_QUESTS_TEXT = [
       "questions" : [
           { "question_title" : "Which planet from the Sun is Earth?",
             "answers" : [
+              [ "(1) First", None, False, "No, first planet is a Mercury." ],
               [ "(2) Second", None, False, "No, second planet is a Venus." ],
               [ "(3) Third", "Yes", True, None ],
               [ "(4) Fourth", None, False, "No, fourth planet is a Mars." ],
