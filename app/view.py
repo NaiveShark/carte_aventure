@@ -553,6 +553,7 @@ async def in_play_quest(request: Request ):
                     "start_dot_Y" : start_dot_Y,
                     "answer_variants" : answer_variants,
                     "pqa" : pqa,
+                    "map_deviation" : CONST_PERMISSIBLE_DISTANCE_DEVIATION_QUIZ,
                 }
             )
 

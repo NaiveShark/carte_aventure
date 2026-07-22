@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock %}
+{% block title %}Play quiz{% endblock %}
 
 {% if question_need_map %}
 {% block addition_style %}
@@ -123,7 +123,7 @@ You answered at {{pqa.answered_dt.strftime('%Y-%m-%d %H:%M')}}. Your answer is <
 {% if question_need_map %}
 
 {% if question_need_map_dot_mover %}
-	<p>Move the yellow dot on map there it was occure.</p>
+	<p>Move the yellow dot on map there it was occure (closer than {{map_deviation}} meters).</p>
 
 	<button id="toggle-edit-btn" style="margin-bottom: 10px; padding: 8px 16px; cursor: pointer;">
 		Move the map dot
