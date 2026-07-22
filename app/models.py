@@ -180,7 +180,7 @@ class Player_Quest(Base):
     answered_wrong_count = Column(Integer, nullable=False, default=0 )
     final_score = Column(Integer, nullable=False, default=0 )
 
-# treasure quest played public play, for CONST_QUEST_TREASURE_QUEST
+# treasure quest multiplayer public play, for CONST_QUEST_TREASURE_QUEST
 class Public_Treasure_Quest(Base):
     # one quest per user constaint
     # it's a relation 1 to 1

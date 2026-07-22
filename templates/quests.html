@@ -2,19 +2,39 @@
 {% block title %}Quests{% endblock %}
 {% block body %}
 
-<h1>Multiplayer quests available</h1>
+<h1>Multiplayer quests</h1>
 
-<p>
 {% if request.user.is_authenticated %}
 
+<h2>In action, join ASAP!</h2>
+
 <ul class="list">
-{% for q in quests %}
+{% for q, ptq in quests if ptq is not none and ptq.quest_end is none %}
+<li class="red">
+<a href="/view/quest/{{q.id}}" class="row wave">{{q.name}}</a> (difficulty {{q.difficulty_coefficient}})</li>
+{% endfor %}
+</ul>
+
+<h2>Available to play</h2>
+
+<ul class="list">
+{% for q, ptq in quests if ptq is none %}
 <li><a href="/view/quest/{{q.id}}" class="row wave">{{q.name}}</a> (difficulty {{q.difficulty_coefficient}})</li>
 {% endfor %}
 </ul>
-	
+
+
+<h2>Done</h2>
+
+<ul class="list">
+{% for q, ptq in quests if ptq is not none and ptq.quest_end is not none %}
+<li class="green">
+<a href="/view/quest/{{q.id}}" class="row wave">{{q.name}} (done at {{ ptq.quest_end.strftime('%Y-%m-%d %H:%M') }})</a> (difficulty {{q.difficulty_coefficient}})</li>
+{% endfor %}
+</ul>
+
+
 {% else %}
-You should login to play.
+<p>You should login to play.</p>
 {% endif %}
-</p>
 {% endblock %}

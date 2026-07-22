@@ -177,16 +177,18 @@ async def quests_page(request: Request):
     # main.LocalDBSession
     db = request.state.db
 
-    query = select(Quest).where(Quest.is_active == True, Quest.quest_type == CONST_QUEST_TREASURE_QUEST )
-    result = await db.execute(query)
-    if result is None:
-        return None
-    else:
-        quests = result.scalars().all()
-        return template.TemplateResponse(
-                 request,
-                'quests.html', context={ 'quests' : quests, }
-            )
+    quests_q = select(Quest, Public_Treasure_Quest).join(
+        Public_Treasure_Quest,
+        Public_Treasure_Quest.quest_id == Quest.id,
+        isouter=True  # LEFT OUTER JOIN
+        ).where(Quest.is_active == True, Quest.quest_type == CONST_QUEST_TREASURE_QUEST )
+
+    result = await db.execute(quests_q)
+    quests = result.all()
+    return template.TemplateResponse(
+             request,
+            'quests.html', context={ 'quests' : quests, }
+        )
 
 @login_required
 async def start_public_treasure_quest( request: Request ):
@@ -201,7 +203,7 @@ async def start_public_treasure_quest( request: Request ):
     ptq_q = select( Public_Treasure_Quest ).where( Public_Treasure_Quest.quest_id == quest_id )
     ptq_e = await db.execute( ptq_q )
     ptq = ptq_e.scalars( ).first()
-    
+
     if not ptq:
         ptq = Public_Treasure_Quest( quest_id = quest_id, quest_began = datetime.now(), started_user_id = user.id )
         db.add( ptq )
@@ -483,7 +485,6 @@ async def in_play_quest(request: Request ):
 
         questions_q = select(Question, subq).outerjoin( subq, Question.id == subq.c.question_id).where( Question.quest_id == quest_id )
         questions = await db.execute( questions_q )
-
 
         pqa = None
         # we need to show the map for question
