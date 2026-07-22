@@ -48,6 +48,9 @@ Users in game:
 
 
 <div id="map"></div>
+<div class="controls">
+    <button id="layer-toggle">Switch to Google Maps</button>
+</div>
 
     <script>
         // 1. Create a local source and layer to hold the drawings
@@ -82,13 +85,27 @@ const dotLayer = new ol.layer.Vector({
     }
 });
 
+        // 1. Define the OpenStreetMap Layer
+        const osmLayer = new ol.layer.Tile({
+            source: new ol.source.OSM(),
+            visible: true // Visible by default
+        });
+
+        // 2. Define the Google Maps Layer (using XYZ tiles)
+        const googleLayer = new ol.layer.Tile({
+            source: new ol.source.XYZ({
+                url: 'https://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+                attributions: '© Google'
+            }),
+            visible: false // Hidden by default
+        });
 
         // 2. Initialize Map
         const map = new ol.Map({
             target: 'map',
             layers: [
-                new ol.layer.Tile({ source: new ol.source.OSM() }), // Base Layer
-                vectorLayer // Drawing Layer
+                osmLayer, googleLayer,
+				vectorLayer // Drawing Layer
             ],
             view: new ol.View({
                 center: ol.proj.fromLonLat([  {{start_dot_X}}, {{start_dot_Y}} ]),
@@ -97,6 +114,26 @@ const dotLayer = new ol.layer.Vector({
         });
 
 		map.addLayer(dotLayer);
+
+        // 4. Handle the Button Click Switch Logic
+        const toggleButton = document.getElementById('layer-toggle');
+
+        toggleButton.addEventListener('click', () => {
+            // Check current visibility of OSM
+            const isOsmVisible = osmLayer.getVisible();
+
+            // Swap visibilities
+            osmLayer.setVisible(!isOsmVisible);
+            googleLayer.setVisible(isOsmVisible);
+
+            // Update button text
+            if (isOsmVisible) {
+                toggleButton.innerText = "Switch to OpenStreetMap";
+            } else {
+                toggleButton.innerText = "Switch to Google Maps";
+            }
+        });
+
 
 // 2. Define the function to fetch and update dots
 function refreshDots() {
@@ -116,14 +153,14 @@ function refreshDots() {
         });
         dotSource.addFeature(feature);
       });
-		
+
 	  {% if ptq_in_play %}
-	  if (game_over) { 
+	  if (game_over) {
 		const dialog = document.getElementById("end_game_dialog");
 		const isShowing = dialog.classList.contains("active");
 		if (!isShowing) {
 		window.location.reload(); }
-	  
+
 	  };
 	  {% endif %}
 	  // refresh users list

@@ -24,7 +24,7 @@
 
 <p>
 {% if player_quest.quest_end %}
-You are done this quest with 
+You are done this quest with
 <button class="chip">
 {{player_quest.final_score}}
 </button>
@@ -141,28 +141,38 @@ You answered at {{pqa.answered_dt.strftime('%Y-%m-%d %H:%M')}}. Your answer is <
 {% endif %}
 
 <div id="map"></div>
+<div class="controls">
+    <button id="layer-toggle">Switch to Google Maps</button>
+</div>
 
     <script>
         // 1. Create a local source and layer to hold the drawings
         const vectorSource = new ol.source.Vector();
         const vectorLayer = new ol.layer.Vector({
             source: vectorSource,
-            /*style: new ol.style.Style({
-                fill: new ol.style.Fill({ color: 'rgba(255, 255, 255, 0.4)' }),
-                stroke: new ol.style.Stroke({ color: '#ffcc33', width: 3 }),
-                image: new ol.style.Circle({
-                    radius: 7,
-                    fill: new ol.style.Fill({ color: '#ffcc33' })
-                })
-            }) */
+			visible: true,
+        });
+
+        // 1. Define the OpenStreetMap Layer
+        const osmLayer = new ol.layer.Tile({
+            source: new ol.source.OSM(),
+            visible: true // Visible by default
+        });
+
+        // 2. Define the Google Maps Layer (using XYZ tiles)
+        const googleLayer = new ol.layer.Tile({
+            source: new ol.source.XYZ({
+                url: 'https://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+                attributions: '© Google'
+            }),
+            visible: false // Hidden by default
         });
 
         // 2. Initialize Map
         const map = new ol.Map({
             target: 'map',
             layers: [
-                new ol.layer.Tile({ source: new ol.source.OSM() }), // Base Layer
-                vectorLayer // Drawing Layer
+                            osmLayer, googleLayer, vectorLayer,
             ],
             view: new ol.View({
                 center: ol.proj.fromLonLat([  {{start_dot_X}}, {{start_dot_Y}} ]),
@@ -170,7 +180,24 @@ You answered at {{pqa.answered_dt.strftime('%Y-%m-%d %H:%M')}}. Your answer is <
             })
         });
 
+        // 4. Handle the Button Click Switch Logic
+        const toggleButton = document.getElementById('layer-toggle');
 
+        toggleButton.addEventListener('click', () => {
+            // Check current visibility of OSM
+            const isOsmVisible = osmLayer.getVisible();
+
+            // Swap visibilities
+            osmLayer.setVisible(!isOsmVisible);
+            googleLayer.setVisible(isOsmVisible);
+
+            // Update button text
+            if (isOsmVisible) {
+                toggleButton.innerText = "Switch to OpenStreetMap";
+            } else {
+                toggleButton.innerText = "Switch to Google Maps";
+            }
+        });
 
 {% if question_need_map_dot %}
 
