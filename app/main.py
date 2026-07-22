@@ -8,6 +8,8 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.staticfiles import StaticFiles
 from starlette.applications import Starlette
+from starlette.config import Config
+from starlette.datastructures import Secret
 
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.orm import sessionmaker
@@ -23,21 +25,19 @@ from contextlib import asynccontextmanager
 
 from .admin_views import UserAdmin, QuestAdmin, QuestionAdmin, AnswerVarAdmin
 from .models import Base, User
-from .view import login_page, logout_page, reg_new_user, home_page, view_user_profile, view_quiz_top, quizzes_page, quests_page, view_quest, play_quest, in_play_quest, handle_qqa, in_play_it_next, get_treasure_quest_dots, post_treasure_quest_dot, start_public_treasure_quest
+from .view import init_templates, login_page, logout_page, reg_new_user, home_page, view_user_profile, view_quiz_top, quizzes_page, quests_page, view_quest, play_quest, in_play_quest, handle_qqa, in_play_it_next, get_treasure_quest_dots, post_treasure_quest_dot, start_public_treasure_quest
 from .pop import pop_data, BOT_USER_NAME, BOT_USER_TITLE
 
 import mimetypes
 mimetypes.add_type('text/javascript', '.js')
 mimetypes.add_type('text/css', '.css')
 
-SECRET_KEY = 'our_webapp_secret_key'
+# Initialize the config
+config = Config(".env")
+# Use Secret for sensitive keys to prevent them from printing in logs
+SECRET_KEY = config("SECRET_KEY", cast=Secret)
 
-import os
-# Check if running on Vercel, otherwise use local path
-if os.environ.get("VERCEL"):
-    DB_URL = "sqlite+aiosqlite:////tmp/mq.db"  # Note the 4 slashes for absolute path
-else:
-    DB_URL = 'sqlite+aiosqlite:///./mq.db'
+DB_URL = 'sqlite+aiosqlite:///./mq.db'
 
 logger = logging.getLogger('uvicorn.error')
 db_engine = create_async_engine(DB_URL, connect_args={"check_same_thread": False}, ) # Required for SQLite in multi-threaded environments
@@ -48,6 +48,10 @@ AsyncSessionLocal = async_sessionmaker(
     class_=AsyncSession,
     expire_on_commit=False
 )
+
+init_templates( config( 'TEMPLATES_PATH', default = 'templates' ) )
+
+STATICS_PATH = config( 'STATICS_PATH', default = 'statics' )
 
 # Helper function to enable Write-Ahead Logging (WAL) for better concurrency
 async def init_db():
@@ -117,10 +121,9 @@ middleware = [
         AuthenticationMiddleware,
         backend=SessionAuthBackend(login_manager),
         login_manager=login_manager,
-        excluded_dirs=['/statics']
+        excluded_dirs=['/statics'] # route path, not a OS dir
     )
 ]
-
 
 app = Starlette(
     middleware=middleware,
@@ -145,7 +148,7 @@ app = Starlette(
         Route('/login', login_page, methods=['GET', 'POST'], name='login'),
         Route('/logout', logout_page, name='logout'),
 
-        Mount("/statics", StaticFiles(directory="statics"), name="statics"),
+        Mount("/statics", StaticFiles( directory = STATICS_PATH ), name="statics"),
 
     ]
 )

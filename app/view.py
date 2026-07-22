@@ -12,25 +12,24 @@ from .models import User, Quest, Question, AnswerVar, Player_Quest, Player_Quest
 from .gis import get_distance_m, random_x, random_y
 
 from starlette.templating import Jinja2Templates
-from starlette_login.login_manager import LoginManager
 
 from sqlalchemy import select, func, exists
 from sqlalchemy.orm import selectinload
 
 import markdown
 
-login_manager = LoginManager(redirect_to='login', secret_key='no_secret_here')
-template = Jinja2Templates(directory='templates' )
-
 # Register custom markdown filter
 def render_markdown(text: str) -> str:
     if not text:
         return ""
-    # 'fenced_code' allows ```python ... ``` blocks
     # 'tables' adds support for markdown tables
-    return markdown.markdown(text, extensions=['fenced_code', 'tables'])
+    return markdown.markdown(text, extensions=[ 'tables'])
 
-template.env.filters["markdown"] = render_markdown
+def init_templates( template_dir ):
+    # define the global template object
+    global template
+    template = Jinja2Templates( directory = template_dir )
+    template.env.filters["markdown"] = render_markdown
 
 async def login_page(request: Request):
     db = request.state.db
