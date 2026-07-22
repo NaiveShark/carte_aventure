@@ -395,6 +395,7 @@ async def play_treasure_quest( request: Request, db, user, quest ):
                 'start_dot_Y' : start_dot_Y,
                 'start_map_ZOOM' : start_map_ZOOM,
                 'steps_overall' : steps_overall,
+                'map_deviation' : CONST_PERMISSIBLE_DISTANCE_DEVIATION_TREASURE,
             }
         )
 
