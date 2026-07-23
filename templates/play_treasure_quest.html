@@ -49,7 +49,7 @@ Users in game:
 
 <div id="map"></div>
 <div class="controls">
-    <button id="layer-toggle">Switch to Google Maps</button>
+    <button id="layer-toggle">Switch to OpenStreetMap</button>
 </div>
 
     <script>
@@ -88,7 +88,7 @@ const dotLayer = new ol.layer.Vector({
         // 1. Define the OpenStreetMap Layer
         const osmLayer = new ol.layer.Tile({
             source: new ol.source.OSM(),
-            visible: true // Visible by default
+            visible: false // Hidden by default
         });
 
         // 2. Define the Google Maps Layer (using XYZ tiles)
@@ -97,7 +97,7 @@ const dotLayer = new ol.layer.Vector({
                 url: 'https://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
                 attributions: '© Google'
             }),
-            visible: false // Hidden by default
+            visible: true // Visible by default
         });
 
         // 2. Initialize Map
