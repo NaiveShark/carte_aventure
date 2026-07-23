@@ -7,8 +7,21 @@
     <link rel="stylesheet" href="/statics/ol/ol.css">
     <script src="/statics/ol/ol.js"></script>
     <style>
-        #map { width: 50vw; height: 50vh; }
-    </style>
+/* base */
+#map { 
+  width: 60vw; 
+  height: 50vh; 
+}
+
+/* for smartphone */
+@media (max-width: 768px) {
+  #map {
+    width: 95vw;   
+    height: 60vh;  
+    margin: 0 auto; 
+  }
+}
+	</style>
 {% endblock %}
 
 
