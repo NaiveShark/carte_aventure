@@ -16,10 +16,10 @@ class UserAdmin(ModelView, model=User):
         return user and user.is_authenticated and user.is_admin
 
 class QuestAdmin(ModelView, model=Quest):
-    column_list = [Quest.id, Quest.name, Quest.is_active]
-    column_searchable_list = [Quest.name]
-    column_sortable_list = [Quest.id]
-    form_columns = [Quest.name, Quest.description, Quest.is_active]
+    column_list = [Quest.id, Quest.name, Quest.is_active, Quest.quest_type]
+    column_searchable_list = [Quest.name, Quest.quest_type]
+    column_sortable_list = [Quest.id, Quest.quest_type]
+    form_columns = [Quest.name, Quest.description, Quest.is_active, Quest.quest_type, Quest.difficulty_coefficient, Quest.user_creator ]
     icon = "fa-solid fa-box"
 
 class QuestionAdmin(ModelView, model=Question):
