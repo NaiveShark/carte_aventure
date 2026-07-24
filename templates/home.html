@@ -1,6 +1,22 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock %}
 {% block body %}
+
+
+<article class="no-padding">
+  <div class="grid no-space">
+    <div class="s6">
+      <img class="responsive" src="/statics/i/naiveshark_banner.jpeg">
+    </div>
+    <div class="s6">
+      <div class="padding">
+        <h5>Quiz and quests</h5>
+        <p>Quiz and quests, "find the place" on the map and other stuffs await!</p>
+      </div>
+    </div>
+  </div>
+</article>
+
 {% if request.user.is_authenticated %}
 <p>Go to <a href="/quests" class="link">Quests</a>.</p>
 
